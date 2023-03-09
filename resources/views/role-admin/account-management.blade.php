@@ -58,7 +58,7 @@
                                         <td>{{ $account->role->role_name }}</td>
                                         <td>{{ $account->department->dept_name }}</td>
                                         <td class="d-flex">
-                                            <button type="button" class="btn btn-primary btn-sm" id="btn-edit-account"
+                                            <button type="button" class="btn btn-primary btn-sm mr-1" id="btn-edit-account"
                                                 data-ID="{{ $account->user_id }}" data-fullName="{{ $account->fullName }}"
                                                 data-email="{{ $account->email }}" data-role="role{{ $account->role_id }}"
                                                 data-dept="dept{{ $account->dept_id }}">Edit</button>
@@ -201,8 +201,7 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <form class="form-sample" id="form-update-account" method="POST"
-                                    action="">
+                                <form class="form-sample" id="form-update-account" method="POST" action="">
                                     @csrf
                                     <div class="row">
                                         <div class="col-md-6">
@@ -323,7 +322,7 @@
                     var formUpdateAccount = document.getElementById('form-update-account');
                     formUpdateAccount.action = "{{ route('account.update', ':id') }}"
                         .replace(':id', userID);
-                    
+
 
                     // console.log(userID + fullName + email + deptID + roleID)
                     $('#account-update-modal').modal('show');

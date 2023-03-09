@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Department;
 
 class AuthController extends Controller
 {
@@ -30,6 +31,50 @@ class AuthController extends Controller
             }
         }
         return redirect()->route('login')->with('error', 'Email or password is incorrect')->withInput($request->only('email', 'password'));
+    }
+
+    public function profile()
+    {
+        $user = Auth::user();
+        return view('auth.profile', compact('user'))->with('title', 'Profile');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $user = User::where('user_id', Auth::user()->user_id)->first();
+        $request->validate([
+            'currentPassword' => 'required',
+            'newPassword' => 'required|min:8',
+            'confirmPassword' => 'required|same:newPassword',
+        ]);
+
+        if (Hash::check($request->currentPassword, $user->password)) {
+            $user->password = Hash::make($request->newPassword);
+            $user->save();
+            return redirect()->route('profile')->with('success', 'Password has been changed');
+        } else {
+            return back()->with('error', 'Current password is incorrect');
+        }
+    }
+
+    public function changeProfile(Request $request)
+    {
+        $user = User::where('user_id', Auth::user()->user_id)->first();
+
+        $request->validate([
+            'fullname' => 'required',
+            'email' => 'required|email',
+        ]);
+
+        $checkEmailExists = User::where('email', $request->email)->where('user_id', '!=', $user->user_id)->first();
+        if ($checkEmailExists) {
+            return back()->with('errorProfile', 'Email already exists');
+        }
+        $user->fullName = $request->fullname;
+        $user->email = $request->email;
+        $user->save();
+
+        return redirect()->route('profile')->with('successProfile', 'Profile has been updated');
     }
 
     public function logout(Request $request)

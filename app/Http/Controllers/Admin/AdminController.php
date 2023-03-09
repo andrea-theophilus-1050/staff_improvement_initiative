@@ -16,6 +16,40 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class AdminController extends Controller
 {
+
+    public function department_management()
+    {
+        $accounts = User::all();
+        $depts = Department::all();
+        return view('role-admin.department-management', compact(['depts', 'accounts']))->with('title', 'Department Management');
+    }
+
+    public function createDepartment(Request $request)
+    {
+        $dept = new Department();
+        $dept->dept_name = $request->department;
+        $dept->save();
+
+        return redirect()->route('admin.department.management')->with('success', 'Department has been created');
+    }
+
+    public function updateDepartment(Request $request, $id)
+    {
+        $dept = Department::find($id);
+        $dept->dept_name = $request->department;
+        $dept->save();
+
+        return redirect()->route('admin.department.management')->with('success', 'Department has been updated');
+    }
+
+    public function deleteDepartment($id)
+    {
+        $dept = Department::find($id);
+        $dept->delete();
+
+        return redirect()->route('admin.department.management')->with('success', 'Department has been deleted');
+    }
+
     public function index()
     {
         return view('role-admin.index')->with('title', 'Admin Dashboard');

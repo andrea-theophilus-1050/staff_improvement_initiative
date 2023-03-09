@@ -32,6 +32,11 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['userRole:1'])->group(function () {
         Route::group(['prefix' => 'administrator'], function () {
             Route::get('dashboard', [AdminController::class, 'index'])->name('admin.index');
+            Route::get('department-management', [AdminController::class, 'department_management'])->name('admin.department.management');
+            Route::post('department-management/create', [AdminController::class, 'createDepartment'])->name('admin.department.store');
+            Route::post('department-management/update/{id}', [AdminController::class, 'updateDepartment'])->name('admin.department.update');
+            Route::post('department-management/delete/{id}', [AdminController::class, 'deleteDepartment'])->name('admin.department.delete');
+
             Route::get('account-management', [AdminController::class, 'account_management'])->name('admin.account.management');
             Route::post('account-management/create', [AdminController::class, 'storeAccount'])->name('account.store');
             Route::post('account-management/update/{id}', [AdminController::class, 'updateAccount'])->name('account.update');
@@ -56,6 +61,10 @@ Route::middleware(['auth'])->group(function () {
             Route::get('dashboard', [StaffController::class, 'index'])->name('staff.index');
         });
     });
+
+    Route::get('profile', [AuthController::class, 'profile'])->name('profile');
+    Route::post('change-password', [AuthController::class, 'changePassword'])->name('auth.change.password');
+    Route::post('change-profile', [AuthController::class, 'changeProfile'])->name('auth.change.profile');
 });
 
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');

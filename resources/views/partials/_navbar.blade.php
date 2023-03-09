@@ -1,8 +1,8 @@
 <!-- partial:../../partials/_navbar.html -->
 <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo mr-5" href="../../index.html"><img src="{{ asset('images/logo-greenwich.png') }}" class="mr-2"
-                alt="logo" /></a>
+        <a class="navbar-brand brand-logo mr-5" href="../../index.html"><img src="{{ asset('images/logo-greenwich.png') }}"
+                class="mr-2" alt="logo" /></a>
         <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="{{ asset('images/short-icon.jpg') }}"
                 alt="logo" /></a>
     </div>
@@ -79,9 +79,9 @@
                     <img src="../../images/faces/face28.jpg" alt="profile" />
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                    <a class="dropdown-item">
-                        <i class="ti-settings text-primary"></i>
-                        Settings
+                    <a class="dropdown-item" href="{{ route('profile') }}">
+                        <i class="mdi mdi-account-circle text-primary"></i>
+                        Profile
                     </a>
                     <a class="dropdown-item" href="{{ route('logout') }}">
                         <i class="ti-power-off text-primary"></i>
@@ -91,7 +91,7 @@
             </li>
             <li class="nav-item nav-settings d-none d-lg-flex">
                 <a class="nav-link" href="#">
-                    <i class="icon-ellipsis"></i>
+                    {{-- <i class="icon-ellipsis"></i> --}}
                 </a>
             </li>
         </ul>
