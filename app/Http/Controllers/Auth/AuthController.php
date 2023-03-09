@@ -12,12 +12,12 @@ class AuthController extends Controller
 {
     public function login_action(Request $request)
     {
-        $remember = $request->has('remember') ? true : false;
+        $remember = $request->has('remember_me') ? true : false;
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials, $remember)) {
             $user = Auth::user();
-            Auth::login($user, true);
+            Auth::login($user, $remember);
 
             if (Auth::user()->role_id == 1) {
                 return redirect()->route('admin.index');
@@ -27,7 +27,7 @@ class AuthController extends Controller
                 return redirect()->route('qa-coordinators.index');
             } else if (Auth::user()->role_id == 4) {
                 return redirect()->route('staff.index');
-            } 
+            }
         }
         return redirect()->route('login')->with('error', 'Email or password is incorrect')->withInput($request->only('email', 'password'));
     }

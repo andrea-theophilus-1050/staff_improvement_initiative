@@ -33,6 +33,9 @@ Route::middleware(['auth'])->group(function () {
         Route::group(['prefix' => 'administrator'], function () {
             Route::get('dashboard', [AdminController::class, 'index'])->name('admin.index');
             Route::get('account-management', [AdminController::class, 'account_management'])->name('admin.account.management');
+            Route::post('account-management/create', [AdminController::class, 'storeAccount'])->name('account.store');
+            Route::post('account-management/update/{id}', [AdminController::class, 'updateAccount'])->name('account.update');
+            Route::post('account-management/delete/{id}', [AdminController::class, 'deleteAccount'])->name('account.delete');
         });
     });
 

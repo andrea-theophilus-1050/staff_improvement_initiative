@@ -2,7 +2,7 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
         <li class="nav-item">
-            <a class="nav-link" href="../../index.html">
+            <a class="nav-link" href="{{ route('admin.index') }}">
                 <i class="icon-grid menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
@@ -10,7 +10,7 @@
 
         <li class="nav-item">
             <a class="nav-link" href="{{ route('admin.account.management') }}">
-                <i class="icon-grid menu-icon"></i>
+                <i class="mdi mdi-contact-mail menu-icon"></i>
                 <span class="menu-title">Account Management</span>
             </a>
         </li>
