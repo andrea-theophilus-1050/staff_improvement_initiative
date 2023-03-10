@@ -57,7 +57,7 @@ class AdminController extends Controller
 
     public function account_management()
     {
-        $accounts = User::all();
+        $accounts = User::paginate(25);
         $depts = Department::all();
         $roles = Role::all();
 

@@ -2,16 +2,23 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
         <li class="nav-item">
-            <a class="nav-link" href="../../index.html">
+            <a class="nav-link" href="{{ route('staff.index') }}">
                 <i class="icon-grid menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="../../index.html">
+            <a class="nav-link" href="{{ route('staff.topics') }}">
                 <i class="icon-grid menu-icon"></i>
-                <span class="menu-title">Staff Roles</span>
+                <span class="menu-title">Topics</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('staff.posts') }}">
+                <i class="icon-grid menu-icon"></i>
+                <span class="menu-title">Your posts</span>
             </a>
         </li>
         {{-- <li class="nav-item">

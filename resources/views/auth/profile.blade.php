@@ -31,6 +31,13 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
+                        @elseif(session('firstAccess'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>NOTE!</strong> {{ session('firstAccess') }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
                         @endif
                         <div class="form-group">
                             <label for="exampleInputPassword1">Current Password</label>
@@ -78,7 +85,7 @@
                         <div class="form-group">
                             <label for="exampleInputUsername1">Full name</label>
                             <input type="text" class="form-control" placeholder="Fullname" name="fullname"
-                                value={{ $user->fullName }}>
+                                value="{{ $user->fullName }}">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>
@@ -91,7 +98,8 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Department name</label>
-                            <input type="text" class="form-control" value="{{ $user->department->dept_name }}" disabled>
+                            <input type="text" class="form-control" value="{{ $user->department->dept_name }}"
+                                disabled>
                         </div>
                         <button type="submit" class="btn btn-primary mr-2">Update</button>
                         <button class="btn btn-secondary" type="reset">Cancel</button>

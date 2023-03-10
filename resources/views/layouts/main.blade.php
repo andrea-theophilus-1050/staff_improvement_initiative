@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="{{ asset('css/vertical-layout-light/style.css') }}">
     <!-- endinject -->
     <link rel="shortcut icon" href="{{ asset('images/short-icon.jpg') }}" />
+
+    <link rel="stylesheet" href="{{ asset('css/custom-scrollbar/style.css') }}">
 </head>
 
 <body>
@@ -50,6 +52,7 @@
             <!-- page-body-wrapper ends -->
         </div>
     </div>
+    <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="mdi mdi-arrow-up-bold"></i></button>
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="{{ asset('vendors/js/vendor.bundle.base.js') }}"></script>
@@ -65,6 +68,33 @@
     <!-- endinject -->
     <!-- Custom js for this page-->
     <!-- End custom js for this page-->
+
+    <script>
+        // Get the button:
+        var mybutton = document.getElementById("myBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button:
+        window.onscroll = function() {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document:
+        function topFunction() {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            if (scrollTop > 0) {
+                window.requestAnimationFrame(topFunction);
+                window.scrollTo(0, scrollTop - scrollTop / 8);
+            }
+        }
+    </script>
 </body>
 
 </html>

@@ -50,6 +50,7 @@ class AuthController extends Controller
 
         if (Hash::check($request->currentPassword, $user->password)) {
             $user->password = Hash::make($request->newPassword);
+            $user->password_changed = 1;
             $user->save();
             return redirect()->route('profile')->with('success', 'Password has been changed');
         } else {

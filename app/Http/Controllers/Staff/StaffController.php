@@ -11,4 +11,14 @@ class StaffController extends Controller
     {
         return view('role-staff.index')->with('title', 'Staff Dashboard');
     }
+
+    public function topics()
+    {
+        return view('role-staff.topics')->with('title', 'Topics');
+    }
+
+    public function posts()
+    {
+        return view('role-staff.posts')->with('title', 'Posts');
+    }
 }

@@ -44,21 +44,23 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 
-    Route::middleware(['userRole:2'])->group(function () {
+    Route::middleware(['userRole:2', 'passwordChanged'])->group(function () {
         Route::group(['prefix' => 'quality-assurance-manager'], function () {
             Route::get('dashboard', [QALeadersController::class, 'index'])->name('qa-leaders.index');
         });
     });
 
-    Route::middleware(['userRole:3'])->group(function () {
+    Route::middleware(['userRole:3', 'passwordChanged'])->group(function () {
         Route::group(['prefix' => 'quality-assurance-coordinators'], function () {
             Route::get('dashboard', [QACoordinatorsController::class, 'index'])->name('qa-coordinators.index');
         });
     });
 
-    Route::middleware(['userRole:4'])->group(function () {
+    Route::middleware(['userRole:4', 'passwordChanged'])->group(function () {
         Route::group(['prefix' => 'staff'], function () {
-            Route::get('dashboard', [StaffController::class, 'index'])->name('staff.index');
+            Route::get('index', [StaffController::class, 'index'])->name('staff.index');
+            Route::get('topics', [StaffController::class, 'topics'])->name('staff.topics');
+            Route::get('posts', [StaffController::class, 'posts'])->name('staff.posts');
         });
     });
 
