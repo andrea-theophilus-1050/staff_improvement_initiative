@@ -21,4 +21,6 @@ class StaffController extends Controller
     {
         return view('role-staff.posts')->with('title', 'Posts');
     }
+
+    
 }

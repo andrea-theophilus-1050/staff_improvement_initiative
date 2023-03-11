@@ -4,7 +4,7 @@
         <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <div style="display: flex; justify-content: space-between; align-items:center">
+                    <div class="d-flex justify-content-between align-items-center">
                         <h4 class="card-title">Account management</h4>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#account-add-modal">Add
                             new account</button>

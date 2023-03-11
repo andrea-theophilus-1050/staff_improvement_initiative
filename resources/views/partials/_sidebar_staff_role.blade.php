@@ -4,16 +4,16 @@
         <li class="nav-item">
             <a class="nav-link" href="{{ route('staff.index') }}">
                 <i class="icon-grid menu-icon"></i>
-                <span class="menu-title">Dashboard</span>
+                <span class="menu-title">Home</span>
             </a>
         </li>
 
-        <li class="nav-item">
+        {{-- <li class="nav-item">
             <a class="nav-link" href="{{ route('staff.topics') }}">
                 <i class="icon-grid menu-icon"></i>
                 <span class="menu-title">Topics</span>
             </a>
-        </li>
+        </li> --}}
 
         <li class="nav-item">
             <a class="nav-link" href="{{ route('staff.posts') }}">

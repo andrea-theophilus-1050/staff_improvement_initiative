@@ -46,7 +46,14 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['userRole:2', 'passwordChanged'])->group(function () {
         Route::group(['prefix' => 'quality-assurance-manager'], function () {
-            Route::get('dashboard', [QALeadersController::class, 'index'])->name('qa-leaders.index');
+            Route::get('category-management', [QALeadersController::class, 'category'])->name('qa-leaders.category.management');
+            Route::post('category-management/create', [QALeadersController::class, 'createCategory'])->name('qa-leaders.category.store');
+            Route::post('category-management/update/{id}', [QALeadersController::class, 'updateCategory'])->name('qa-leaders.category.update');
+            Route::post('category-management/delete/{id}', [QALeadersController::class, 'deleteCategory'])->name('qa-leaders.category.delete');
+
+            Route::get('topics-management', [QALeadersController::class, 'topics'])->name('qa-leaders.topics.management');
+            Route::post('topics-management/create', [QALeadersController::class, 'createTopics'])->name('qa-leaders.topics.store');
+            Route::post('topics-management/update/{id}', [QALeadersController::class, 'updateTopics'])->name('qa-leaders.topics.update');
         });
     });
 
@@ -59,7 +66,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['userRole:4', 'passwordChanged'])->group(function () {
         Route::group(['prefix' => 'staff'], function () {
             Route::get('index', [StaffController::class, 'index'])->name('staff.index');
-            Route::get('topics', [StaffController::class, 'topics'])->name('staff.topics');
+            Route::get('topics/idea-posts', [StaffController::class, 'topics'])->name('staff.topics.idea.posts');
             Route::get('posts', [StaffController::class, 'posts'])->name('staff.posts');
         });
     });
