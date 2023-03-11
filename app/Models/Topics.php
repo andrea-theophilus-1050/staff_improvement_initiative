@@ -18,7 +18,8 @@ class Topics extends Model
         'topic_description',
         'category_id',
         'firstClosureDate',
-        'finalClosureDate'
+        'finalClosureDate',
+        'status',
     ];
 
     public function category()

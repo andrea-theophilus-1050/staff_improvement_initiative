@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('topic_id')->references('topic_id')->on('topics');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('user_id')->on('users');
-            $table->string('status')->nullable();
+            $table->string('status')->default(0);
             $table->timestamps();
         });
     }

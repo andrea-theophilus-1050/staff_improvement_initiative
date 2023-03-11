@@ -52,7 +52,7 @@ class AdminController extends Controller
 
     public function index()
     {
-        return view('role-admin.index')->with('title', 'Admin Dashboard');
+        return view('role-admin.topics-management')->with('title', 'Admin Dashboard');
     }
 
     public function account_management()

@@ -40,31 +40,21 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th style="position: sticky; left: 0; z-index: 1; background: white">Action</th>
+
                                     <th>Category</th>
                                     <th>Topic name</th>
                                     <th>Topic Description</th>
                                     <th>First closure date</th>
                                     <th>Final closure date</th>
                                     {{-- <th>Ideas count</th> --}}
-                                    <th>Action</th>
+
                                 </tr>
                             </thead>
                             <tbody>
-
                                 @foreach ($topics as $topic)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $topic->category->category_name }}</td>
-                                        <td>{{ $topic->topic_name }}</td>
-                                        <td style=" white-space: normal; line-height: 1.5; text-align: justify">
-                                            {{ $topic->topic_description }}</td>
-                                        <td class="font-weight-bold">
-                                            {{ date('M-d-Y h:i:s a', strtotime($topic->firstClosureDate)) }}</td>
-                                        <td class="font-weight-bold">
-                                            {{ date('M-d-Y h:i:s a', strtotime($topic->finalClosureDate)) }}</td>
-                                        {{-- <td class="text-center font-weight-bold">{{ $topic->ideas_count }}</td> --}}
-                                        <td>
+                                        <td style="position: sticky; left: 0; z-index: 1; background: white">
                                             <button type="button" class="btn btn-primary btn-sm" id="topic-edit-modal"
                                                 data-id="{{ $topic->topic_id }}" data-topicName="{{ $topic->topic_name }}"
                                                 data-description="{{ $topic->topic_description }}"
@@ -75,6 +65,21 @@
                                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                                 data-target="#topic-delete-modal">Delete</button>
                                         </td>
+
+                                        <td title="{{ $topic->category->category_name }}"
+                                            style="white-space: no-wrap; overflow: hidden; text-overflow:ellipsis; max-width: 150px; line-height: 1.5; text-align: justify">
+                                            {{ $topic->category->category_name }}</td>
+                                        <td>
+                                            {{ $topic->topic_name }}</td>
+                                        <td title="{{ $topic->topic_description }}"
+                                            style=" white-space: no-wrap; overflow: hidden; text-overflow:ellipsis; max-width: 150px; line-height: 1.5; text-align: justify">
+                                            {{ $topic->topic_description }}</td>
+                                        <td class="font-weight-bold">
+                                            {{ date('M-d-Y h:i:s a', strtotime($topic->firstClosureDate)) }}</td>
+                                        <td class="font-weight-bold">
+                                            {{ date('M-d-Y h:i:s a', strtotime($topic->finalClosureDate)) }}</td>
+                                        {{-- <td class="text-center font-weight-bold">{{ $topic->ideas_count }}</td> --}}
+
                                     </tr>
                                 @endforeach
                                 {{-- <tr>
@@ -98,7 +103,7 @@
                             </tbody>
                         </table>
                         <div class="d-flex justify-content-center align-items-center">
-                            {{-- paginate --}}
+                            {{ $topics->links() }}
                         </div>
                     </div>
                 </div>

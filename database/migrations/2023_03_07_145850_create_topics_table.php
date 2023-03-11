@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('topics', function (Blueprint $table) {
             $table->id('topic_id');
             $table->string('topic_name');
-            $table->string('topic_description');
+            $table->text('topic_description');
             $table->string('firstClosureDate');
             $table->string('finalClosureDate');
+            $table->tinyInteger('status')->default(0);
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('category_id')->on('categories');
             $table->timestamps();

@@ -56,7 +56,7 @@ class QALeadersController extends Controller
 
     public function topics()
     {
-        $topics = Topics::all();
+        $topics = Topics::orderBy('created_at', 'desc')->paginate(20);
         $categories = Category::all();
 
         return view('role-qa-leaders.topics', compact(['topics', 'categories']))->with('title', 'QA Leaders');
