@@ -104,7 +104,7 @@
                                     </div>
                                     <p class="card-text" style="font-size: 15px">{{ $post->content }}</p>
                                     <a href="#" class="btn btn-outline-info btn-icon-text  mt-3">
-                                        my-document.docx
+                                        {{-- {{ Illuminate\Support\Str::limit('testhelloworldblabla', 10, '...') . '.' . 'csv' }} --}}
                                         <i class="ti-download btn-icon-append"></i>
                                     </a>
                                 </div>
@@ -112,44 +112,53 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-9 d-flex">
-                                    <form method="POST"
+                                    <form id="like-form-{{ $post->post_id }}" data-post-id="{{ $post->post_id }}"
+                                        method="POST"
                                         action="{{ route('staff.posts.like.dislike', [$post->post_id, 'liked']) }}">
                                         @csrf
                                         @if (collect($post->like_dislike)->where('status', 'liked')->where('post_id', $post->post_id)->where('user_id', auth()->user()->user_id)->count() > 0)
-                                            <button type="submit"
+                                            <button type="submit" id="like-button-{{ $post->post_id }}"
                                                 class="btn btn-primary btn-sm d-flex justify-content-center align-items-center">
                                                 <i class="mdi mdi-thumb-up"></i>
-                                                &nbsp;&nbsp;{{ collect($post->like_dislike)->where('status', 'liked')->count() }}
-                                                Like
+                                                &nbsp;&nbsp;
+                                                <b id="like-count-{{ $post->post_id }}">
+                                                    {{ collect($post->like_dislike)->where('status', 'liked')->count() }}
+                                                </b>&nbsp;&nbsp;Like
                                             </button>
                                         @else
-                                            <button type="submit"
+                                            <button type="submit" id="like-button-{{ $post->post_id }}"
                                                 class="btn btn-outline-primary btn-sm d-flex justify-content-center align-items-center">
                                                 <i class="mdi mdi-thumb-up"></i>
-                                                &nbsp;&nbsp;{{ collect($post->like_dislike)->where('status', 'liked')->count() }}
-                                                Like
+                                                &nbsp;&nbsp;
+                                                <b id="like-count-{{ $post->post_id }}">
+                                                    {{ collect($post->like_dislike)->where('status', 'liked')->count() }}
+                                                </b>&nbsp;&nbsp;Like
                                             </button>
                                         @endif
                                     </form>
-                                    <form method="POST"
+                                    <form id="dislike-form-{{ $post->post_id }}" data-post-id="{{ $post->post_id }}"
+                                        method="POST"
                                         action="{{ route('staff.posts.like.dislike', [$post->post_id, 'disliked']) }}">
                                         @csrf
                                         @if (collect($post->like_dislike)->where('status', 'disliked')->where('post_id', $post->post_id)->where('user_id', auth()->user()->user_id)->count() > 0)
-                                            <button type="submit"
+                                            <button type="submit" id="dislike-button-{{ $post->post_id }}"
                                                 class="btn btn-danger btn-sm d-flex justify-content-center align-items-center ml-2">
                                                 <i class="mdi mdi-thumb-down"></i>
-                                                &nbsp;&nbsp;{{ collect($post->like_dislike)->where('status', 'disliked')->count() }}
-                                                Dislike
+                                                &nbsp;&nbsp;
+                                                <b id="dislike-count-{{ $post->post_id }}">
+                                                    {{ collect($post->like_dislike)->where('status', 'disliked')->count() }}
+                                                </b>&nbsp;&nbsp;Dislike
                                             </button>
                                         @else
-                                            <button type="submit"
+                                            <button type="submit" id="dislike-button-{{ $post->post_id }}"
                                                 class="btn btn-outline-danger btn-sm d-flex justify-content-center align-items-center ml-2">
                                                 <i class="mdi mdi-thumb-down"></i>
-                                                &nbsp;&nbsp;{{ collect($post->like_dislike)->where('status', 'disliked')->count() }}
-                                                Dislike
+                                                &nbsp;&nbsp;
+                                                <b id="dislike-count-{{ $post->post_id }}">
+                                                    {{ collect($post->like_dislike)->where('status', 'disliked')->count() }}
+                                                </b>&nbsp;&nbsp;Dislike
                                             </button>
                                         @endif
-
                                     </form>
                                     <button
                                         class="btn btn-outline-success btn-sm d-flex justify-content-center align-items-center ml-2"
@@ -289,6 +298,56 @@
                 btnSubmitIdea.disabled = false;
             } else {
                 btnSubmitIdea.disabled = true;
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var likeForms = document.querySelectorAll('form[id^="like-form-"]');
+            var dislikeForms = document.querySelectorAll('form[id^="dislike-form-"]');
+            var i;
+
+            // Add event listener for each like form
+            for (i = 0; i < likeForms.length; i++) {
+                likeForms[i].addEventListener("submit", function(event) {
+                    event.preventDefault(); // prevent form from submitting normally
+                    var postId = this.dataset.postId; // get the post ID
+                    var formData = new FormData(this); // get the form data
+                    var request = new XMLHttpRequest();
+                    request.open("POST", this.action);
+                    request.onreadystatechange = function() {
+                        if (this.readyState === 4 && this.status === 200) {
+                            // update the like count on the page for the specific post
+                            document.getElementById('like-count-' + postId).innerHTML = JSON.parse(
+                                this.responseText).likeCount;
+                            document.getElementById('dislike-count-' + postId).innerHTML = JSON.parse(
+                                this.responseText).dislikeCount;
+                        }
+                    };
+                    request.send(formData);
+                });
+            }
+
+            // Add event listener for each dislike form
+            for (i = 0; i < dislikeForms.length; i++) {
+                dislikeForms[i].addEventListener("submit", function(event) {
+                    event.preventDefault(); // prevent form from submitting normally
+                    var postId = this.dataset.postId; // get the post ID
+                    var formData = new FormData(this); // get the form data
+                    var request = new XMLHttpRequest();
+                    request.open("POST", this.action);
+                    request.onreadystatechange = function() {
+                        if (this.readyState === 4 && this.status === 200) {
+                            // update the dislike count on the page for the specific post
+                            document.getElementById('dislike-count-' + postId).innerHTML = JSON.parse(
+                                this.responseText).dislikeCount;
+                            document.getElementById('like-count-' + postId).innerHTML = JSON.parse(
+                                this.responseText).likeCount;
+                        }
+                    };
+                    request.send(formData);
+                });
             }
         });
     </script>

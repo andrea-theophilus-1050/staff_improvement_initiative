@@ -46,7 +46,7 @@ class StaffController extends Controller
         $post->topic_id = $id;
         $post->user_id = auth()->user()->user_id;
         $post->anonymous = $request->anonymous;
-        $post->save();     
+        $post->save();
 
         return redirect()->route('staff.topics.idea.posts', $id)->with('success', 'Post has been submitted');
     }
@@ -88,6 +88,15 @@ class StaffController extends Controller
             }
         }
 
-        return back()->with('success', 'Like/Dislike has been submitted');
+        $likeCount = PostsLikeDislike::where('post_id', $postID)->where('status', 'liked')->count();
+        $dislikeCount = PostsLikeDislike::where('post_id', $postID)->where('status', 'disliked')->count();
+
+        return response()->json([
+            'success' => true,
+            'likeCount' => $likeCount,
+            'dislikeCount' => $dislikeCount,
+        ]);
+
+        // return back()->with('success', 'Like/Dislike has been submitted');
     }
 }

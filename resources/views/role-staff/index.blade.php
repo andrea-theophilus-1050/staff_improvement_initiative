@@ -94,18 +94,6 @@
 
 
                                 </div>
-                                {{--     <button type="button" class="btn btn-social-icon btn-outline-facebook"><i
-                                class="ti-facebook"></i></button>
-                        <button type="button" class="btn btn-social-icon btn-outline-youtube"><i
-                                class="ti-youtube"></i></button>
-                        <button type="button" class="btn btn-social-icon btn-outline-twitter"><i
-                                class="ti-twitter-alt"></i></button>
-                        <button type="button" class="btn btn-social-icon btn-outline-dribbble"><i
-                                class="ti-dribbble"></i></button>
-                        <button type="button" class="btn btn-social-icon btn-outline-linkedin"><i
-                                class="ti-linkedin"></i></button>
-                        <button type="button" class="btn btn-social-icon btn-outline-google"><i
-                                class="ti-google"></i></button> --}}
                             </div>
                         </div>
                     </div>
@@ -132,7 +120,8 @@
             card.addEventListener('click', () => {
                 var topicID = card.querySelector('#topicID').innerHTML;
 
-                window.location.href = "{{ route('staff.topics.idea.posts', ':id') }}".replace(':id', topicID);
+                window.location.href = "{{ route('staff.topics.idea.posts', ':id') }}".replace(':id',
+                    topicID);
             });
         });
     </script>
