@@ -1,19 +1,5 @@
 @extends('layouts.main')
 @section('content')
-    {{-- <div class="row">
-        <div class="col-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card-body">
-                            Idea Topics
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
     <div class="row">
         <div class="col-md-4 mb-4">
             <div class="card mb-4">
@@ -66,11 +52,14 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    <h6>Related Posts:</h6>
+                    <h6>Other Topics:</h6>
                     <ul class="list-styled">
-                        <li><a href="#">Related Post 1</a></li>
-                        <li><a href="#">Related Post 2</a></li>
-                        <li><a href="#">Related Post 3</a></li>
+                        @foreach ($relatedTopic as $topic)
+                            <li><a
+                                    href="{{ route('staff.topics.idea.posts', $topic->topic_id) }}">{{ $topic->topic_name }}</a>
+                            </li>
+                        @endforeach
+
                     </ul>
                 </div>
             </div>
@@ -95,8 +84,8 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-9 d-flex">
-                                    <form
-                                        method="POST"action="{{ route('staff.posts.like.dislike', [$id, $post->post_id, 'liked']) }}">
+                                    <form method="POST"
+                                        action="{{ route('staff.posts.like.dislike', [$post->post_id, 'liked']) }}">
                                         @csrf
                                         @if (collect($post->like_dislike)->where('status', 'liked')->where('post_id', $post->post_id)->where('user_id', auth()->user()->user_id)->count() > 0)
                                             <button type="submit"
@@ -114,8 +103,8 @@
                                             </button>
                                         @endif
                                     </form>
-                                    <form
-                                        method="POST"action="{{ route('staff.posts.like.dislike', [$id, $post->post_id, 'disliked']) }}">
+                                    <form method="POST"
+                                        action="{{ route('staff.posts.like.dislike', [$post->post_id, 'disliked']) }}">
                                         @csrf
                                         @if (collect($post->like_dislike)->where('status', 'disliked')->where('post_id', $post->post_id)->where('user_id', auth()->user()->user_id)->count() > 0)
                                             <button type="submit"
@@ -161,7 +150,7 @@
                                         </div>
                                     @endforeach
                                     <form method="POST" id="comment-form-{{ $post->post_id }}"
-                                        action="{{ route('staff.posts.comments.submit', [$post->post_id, $id]) }}">
+                                        action="{{ route('staff.posts.comments.submit', [$post->post_id]) }}">
                                         @csrf
                                         <div class="form-group">
                                             <label for="comment-text">Add a comment:</label>
@@ -200,13 +189,12 @@
                                     </ul>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-                    <div class="d-flex justify-content-center align-items-center">
-                        {{ $posts->links() }}
-                    </div>
                 @endforeach
+                <div class="d-flex justify-content-center align-items-center">
+                    {{ $posts->links() }}
+                </div>
             @else
                 <div class="row mt-5">
                     <div class="col-12 grid-margin stretch-card">
@@ -219,7 +207,6 @@
                 </div>
             @endif
         </div>
-
     </div>
 
     {{-- NOTE: terms and conditions modal --}}

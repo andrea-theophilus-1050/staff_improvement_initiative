@@ -66,12 +66,12 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['userRole:4', 'passwordChanged'])->group(function () {
         Route::group(['prefix' => 'staff'], function () {
             Route::get('index', [StaffController::class, 'index'])->name('staff.index');
-            Route::get('topics/idea-posts/{id}', [StaffController::class, 'topics'])->name('staff.topics.idea.posts');
-            Route::get('posts', [StaffController::class, 'posts'])->name('staff.posts');
+            Route::get('topics/idea-posts/{id}', [StaffController::class, 'topicIdeaPosts'])->name('staff.topics.idea.posts');
+            Route::get('your-posts', [StaffController::class, 'ownPosts'])->name('staff.posts');
 
             Route::post('posts/create/{id}', [StaffController::class, 'createPost'])->name('staff.posts.submit.idea');
-            Route::post('posts/comment/submit/{postID}/{topicID}', [StaffController::class, 'submitComment'])->name('staff.posts.comments.submit');
-            Route::post('posts/like-dislike/{topicID}/{postID}/{status}', [StaffController::class, 'likeDislike'])->name('staff.posts.like.dislike');
+            Route::post('posts/comment/submit/{postID}', [StaffController::class, 'submitComment'])->name('staff.posts.comments.submit');
+            Route::post('posts/like-dislike/{postID}/{status}', [StaffController::class, 'likeDislike'])->name('staff.posts.like.dislike');
         });
     });
 

@@ -17,16 +17,20 @@ class StaffController extends Controller
         return view('role-staff.index', compact(['topics']))->with('title', 'Staff Dashboard');
     }
 
-    public function topics($id)
+    public function topicIdeaPosts($id)
     {
         $posts = IdeaPosts::where('topic_id', $id)->orderBy('created_at', 'desc')->paginate(5);
         $topicTitle = Topics::where('topic_id', $id)->first();
-        return view('role-staff.topics', compact(['posts', 'id', 'topicTitle']))->with('title', 'Topics');
+        $relatedTopic = Topics::where('topic_id', '!=', $id)->orderBy('created_at', 'desc')->paginate(5);
+        return view('role-staff.topics', compact(['posts', 'id', 'topicTitle', 'relatedTopic']))->with('title', 'Topics');
     }
 
-    public function posts()
+    public function ownPosts()
     {
-        return view('role-staff.posts')->with('title', 'Posts');
+        $ownPosts = IdeaPosts::where('user_id', auth()->user()->user_id)->orderBy('created_at', 'desc')->paginate(5);
+        return view('role-staff.own-posts', compact(['ownPosts']))->with('title', 'Posts');
+
+        // dd($ownPosts);
     }
 
     public function createPost(Request $request, $id)
@@ -60,7 +64,7 @@ class StaffController extends Controller
     //     return redirect()->route('staff.topics.idea.posts', $topicID)->with('success', 'Comment has been submitted');
     // }
 
-    public function submitComment(Request $request, $postID, $topicID)
+    public function submitComment(Request $request, $postID)
     {
         $request->validate([
             'commentContent' => 'required',
@@ -72,10 +76,10 @@ class StaffController extends Controller
         $comment->user_id = auth()->user()->user_id;
         $comment->save();
 
-        return redirect()->route('staff.topics.idea.posts', $topicID)->with('success', 'Comment has been submitted');
+        return back()->with('success', 'Comment has been submitted');
     }
 
-    public function likeDislike($topicID, $postID, $status)
+    public function likeDislike($postID, $status)
     {
         $likeDislike = PostsLikeDislike::where('post_id', $postID)->where('user_id', auth()->user()->user_id)->first();
 
@@ -97,6 +101,6 @@ class StaffController extends Controller
             }
         }
 
-        return redirect()->route('staff.topics.idea.posts', $topicID)->with('success', 'Like/Dislike has been submitted');
+        return back()->with('success', 'Like/Dislike has been submitted');
     }
 }
