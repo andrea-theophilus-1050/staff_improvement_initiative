@@ -11,6 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\Department;
 use App\Models\Role;
+use App\Models\PostsLikeDislike;
 
 class User extends Authenticatable
 {
@@ -55,6 +56,13 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class, 'role_id');
     }
+
+    public function like_dislike()
+    {
+        return $this->hasMany(PostsLikeDislike::class, 'user_id');
+    }
+
+
 
     // protected  function role(): Attribute
     // {

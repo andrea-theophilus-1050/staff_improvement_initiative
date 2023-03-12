@@ -71,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::post('posts/create/{id}', [StaffController::class, 'createPost'])->name('staff.posts.submit.idea');
             Route::post('posts/comment/submit/{postID}/{topicID}', [StaffController::class, 'submitComment'])->name('staff.posts.comments.submit');
+            Route::post('posts/like-dislike/{topicID}/{postID}/{status}', [StaffController::class, 'likeDislike'])->name('staff.posts.like.dislike');
         });
     });
 

@@ -7,6 +7,7 @@ use App\Models\IdeaPosts;
 use Illuminate\Http\Request;
 use App\Models\Topics;
 use App\Models\Comments;
+use App\Models\PostsLikeDislike;
 
 class StaffController extends Controller
 {
@@ -71,9 +72,31 @@ class StaffController extends Controller
         $comment->user_id = auth()->user()->user_id;
         $comment->save();
 
-        return response()->json([
-            'success' => true,
-            'comment' => $comment
-        ]);
+        return redirect()->route('staff.topics.idea.posts', $topicID)->with('success', 'Comment has been submitted');
+    }
+
+    public function likeDislike($topicID, $postID, $status)
+    {
+        $likeDislike = PostsLikeDislike::where('post_id', $postID)->where('user_id', auth()->user()->user_id)->first();
+
+        if ($likeDislike == null) {
+            $likeDislike = new PostsLikeDislike();
+            $likeDislike->post_id = $postID;
+            $likeDislike->user_id = auth()->user()->user_id;
+            $likeDislike->status = $status;
+            $likeDislike->save();
+        } else {
+            if ($status == "liked" && $likeDislike->status == "disliked") {
+                $likeDislike->status = "liked";
+                $likeDislike->save();
+            } else if ($status == "disliked" && $likeDislike->status == "liked") {
+                $likeDislike->status = "disliked";
+                $likeDislike->save();
+            } else {
+                $likeDislike->delete();
+            }
+        }
+
+        return redirect()->route('staff.topics.idea.posts', $topicID)->with('success', 'Like/Dislike has been submitted');
     }
 }

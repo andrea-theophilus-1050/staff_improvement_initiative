@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Topics;
 use App\Models\Comments;
+use App\Models\PostsLikeDislike;
 
 class IdeaPosts extends Model
 {
@@ -30,5 +31,10 @@ class IdeaPosts extends Model
     public function comments()
     {
         return $this->hasMany(Comments::class, 'post_id', 'post_id');
+    }
+
+    public function like_dislike()
+    {
+        return $this->hasMany(PostsLikeDislike::class, 'post_id', 'post_id');
     }
 }
