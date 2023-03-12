@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\Topics;
 use App\Models\Comments;
 use App\Models\PostsLikeDislike;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class StaffController extends Controller
 {
@@ -21,7 +23,7 @@ class StaffController extends Controller
     {
         $posts = IdeaPosts::where('topic_id', $id)->orderBy('created_at', 'desc')->paginate(5);
         $topicTitle = Topics::where('topic_id', $id)->first();
-        $relatedTopic = Topics::where('topic_id', '!=', $id)->orderBy('created_at', 'desc')->paginate(5);
+        $relatedTopic = Topics::where('topic_id', '!=', $id)->orderBy('created_at', 'desc')->take(5)->get();
         return view('role-staff.topics', compact(['posts', 'id', 'topicTitle', 'relatedTopic']))->with('title', 'Topics');
     }
 
@@ -40,29 +42,14 @@ class StaffController extends Controller
         // ]);
 
         $post = new IdeaPosts();
-        // $post->title = $request->title;
         $post->content = $request->content;
         $post->topic_id = $id;
         $post->user_id = auth()->user()->user_id;
-        $post->save();
+        $post->anonymous = $request->anonymous;
+        $post->save();     
 
         return redirect()->route('staff.topics.idea.posts', $id)->with('success', 'Post has been submitted');
     }
-
-    // public function submitComment(Request $request, $postID, $topicID)
-    // {
-    //     $request->validate([
-    //         'commentContent' => 'required',
-    //     ]);
-
-    //     $comment = new Comments();
-    //     $comment->comment_content = $request->commentContent;
-    //     $comment->post_id = $postID;
-    //     $comment->user_id = auth()->user()->user_id;
-    //     $comment->save();
-
-    //     return redirect()->route('staff.topics.idea.posts', $topicID)->with('success', 'Comment has been submitted');
-    // }
 
     public function submitComment(Request $request, $postID)
     {

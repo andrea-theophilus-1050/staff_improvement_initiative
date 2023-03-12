@@ -11,7 +11,7 @@
                             <h5 class="card-title" style="text-transform: none">Submit your idea here</h5>
                         </div>
                     </div>
-                    <form method="POST" action="{{ route('staff.posts.submit.idea', $id) }}">
+                    <form method="POST" action="{{ route('staff.posts.submit.idea', $id) }}" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="topicName" class="font-weight-bold">Topic:</label>
@@ -32,8 +32,25 @@
                         <div class="form-group">
                             <label for="idea-description">Your supported files: <i style="color: blue; font-size: 12px">(Not
                                     required)</i></label>
-                            <input type="file" class="form-control" id="idea-description"
+                            <input type="file" class="form-control" id="idea-file" name="idea_file"
                                 placeholder="Enter description">
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-between">
+                            <label for=""><b>Anonymous</b></label>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="anonymous" id="anonymous"
+                                        value="1" checked>
+                                    Yes
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="anonymous" id="anonymous"
+                                        value="0">
+                                    No
+                                </label>
+                            </div>
                         </div>
                         <div class="form-check form-check-flat form-check-primary d-flex">
                             <label class="form-check-label">
@@ -69,18 +86,29 @@
                 @foreach ($posts as $post)
                     <div class="card mb-4">
                         <div class="card-body">
-                            <div class="media mb-5">
+                            <div class="media mb-4">
                                 <img src="{{ asset('img/default-avt.jpg') }}" class="mr-3" alt="Profile Image"
                                     style="height: 50px; width: 50px">
                                 <div class="media-body">
-                                    <h5 class="card-title">Anonymous</h5>
+                                    <h5 class="card-title">
+                                        @if ($post->anonymous == 1)
+                                            <i>(Anonymous)</i>
+                                        @else
+                                            {{ $post->user->fullName }}
+                                        @endif
+                                    </h5>
                                     <div class="mb-2" style="font-size: 12px">
                                         <i class="mdi mdi-calendar-clock"></i>&nbsp;&nbsp;Created on
                                         {{ date('F d, Y', strtotime($post->created_at)) }} at
                                         {{ date('h:i A', strtotime($post->created_at)) }}
                                     </div>
                                     <p class="card-text" style="font-size: 15px">{{ $post->content }}</p>
+                                    <a href="#" class="btn btn-outline-info btn-icon-text  mt-3">
+                                        my-document.docx
+                                        <i class="ti-download btn-icon-append"></i>
+                                    </a>
                                 </div>
+
                             </div>
                             <div class="row">
                                 <div class="col-sm-9 d-flex">
@@ -158,35 +186,6 @@
                                         </div>
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </form>
-                                </div>
-                            </div>
-                            <div class="row mt-5">
-                                <div class="col-sm-2">
-                                    <h6>Attachments:</h6>
-                                </div>
-                                <div class="col-sm-8">
-                                    <ul class="list-unstyled d-flex flex-row">
-                                        <li class="mr-3">
-                                            <a href="#">File 1</a>
-                                            {{-- <button class="btn btn-sm btn-outline-primary ml-2 ">
-                                        <i class="mdi mdi-download"></i>
-                                        Download
-                                    </button> --}}
-                                        </li>
-                                        <li class="mr-3">
-                                            <a href="#">File 2</a>
-                                            {{-- <button class="btn btn-sm btn-outline-primary ml-2 ">
-                                        <i class="mdi mdi-download"></i>
-                                        Download
-                                    </button> --}}
-                                        </li>
-                                        <li><a href="#">File 3</a>
-                                            {{-- <button class="btn btn-sm btn-outline-primary ml-2 ">
-                                        <i class="mdi mdi-download"></i>
-                                        Download
-                                    </button> --}}
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>

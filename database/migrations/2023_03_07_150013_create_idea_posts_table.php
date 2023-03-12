@@ -15,13 +15,12 @@ return new class extends Migration
     {
         Schema::create('idea_posts', function (Blueprint $table) {
             $table->id('post_id');
-            $table->string('title');
-            $table->text('content');            
+            $table->text('content');
             $table->unsignedBigInteger('topic_id');
             $table->foreign('topic_id')->references('topic_id')->on('topics');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('user_id')->on('users');
-            $table->string('status')->default(0);
+            $table->tinyInteger('anonymous')->default(0); // 0 = false, 1 = true
             $table->timestamps();
         });
     }
