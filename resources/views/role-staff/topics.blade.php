@@ -5,8 +5,13 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="media mb-2">
-                        <img src="{{ asset('img/default-avt.jpg') }}" class="mr-3" alt="Profile Image"
-                            style="height: 30px; width: 30px">
+                        @if (auth()->user()->avatar == null)
+                            <img src="{{ asset('img/default-avt.jpg') }}" class="mr-3" alt="Profile Image"
+                                style="height: 30px; width: 30px">
+                        @else
+                            <img src="{{ asset('img/avatar/' . auth()->user()->avatar) }}" class="mr-3" alt="Profile Image"
+                                style="height: 30px; width: 30px">
+                        @endif
                         <div class="media-body">
                             <h5 class="card-title" style="text-transform: none">Submit your idea here</h5>
                         </div>
@@ -39,9 +44,10 @@
                                     placeholder="Enter description" style="line-height:1.5"></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="idea-description">Your supported files: <i
-                                        style="color: blue; font-size: 12px">(Not
-                                        required)</i></label>
+                                <label for="idea-description">Your supported files:
+                                    <i style="color: blue; font-size: 12px">
+                                        (Not required)
+                                    </i></label>
                                 <input type="file" class="form-control" id="idea-file" name="idea_file"
                                     placeholder="Enter description">
                             </div>
@@ -50,14 +56,14 @@
                                 <div class="form-check">
                                     <label class="form-check-label">
                                         <input type="radio" class="form-check-input" name="anonymous" id="anonymous"
-                                            value="1" checked>
+                                            value="1">
                                         Yes
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <label class="form-check-label">
                                         <input type="radio" class="form-check-input" name="anonymous" id="anonymous"
-                                            value="0">
+                                            value="0" checked>
                                         No
                                     </label>
                                 </div>
@@ -98,8 +104,13 @@
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="media mb-4">
-                                <img src="{{ asset('img/default-avt.jpg') }}" class="mr-3" alt="Profile Image"
-                                    style="height: 50px; width: 50px">
+                                @if ($post->anonymous == 1 || $post->user->avatar == null)
+                                    <img src="{{ asset('img/default-avt.jpg') }}" class="mr-3" alt="Profile Image"
+                                        style="height: 50px; width: 50px">
+                                @else
+                                    <img src="{{ asset('img/avatar/' . $post->user->avatar) }}" class="mr-3"
+                                        alt="Profile Image" style="height: 50px; width: 50px">
+                                @endif
                                 <div class="media-body">
                                     <h5 class="card-title">
                                         @if ($post->anonymous == 1)
@@ -189,14 +200,28 @@
                                     @foreach (collect($post->comments) as $comment)
                                         <div class="card mb-2" style="background: #f5f7ff">
                                             <div class="card-body">
-
                                                 <div class="media">
-                                                    <img src="{{ asset('img/default-avt.jpg') }}"
-                                                        style="width: 30px; height: 30px" class="mr-3"
-                                                        alt="Profile Image">
+                                                    @if ($comment->anonymous == 1 || $comment->user->avatar == null)
+                                                        <img src="{{ asset('img/default-avt.jpg') }}"
+                                                            style="width: 30px; height: 30px" class="mr-3"
+                                                            alt="Profile Image">
+                                                    @else
+                                                        <img src="{{ asset('img/avatar/' . $comment->user->avatar) }}"
+                                                            style="width: 30px; height: 30px" class="mr-3"
+                                                            alt="Profile Image">
+                                                    @endif
 
                                                     <div class="media-body">
-                                                        <p class="card-text">{{ $comment->comment_content }}</p>
+                                                        <p class="card-text">
+                                                            <b>
+                                                                @if ($comment->anonymous == 1)
+                                                                    <i>(Anonymous):</i>
+                                                                @else
+                                                                    {{ $comment->user->fullName }}:
+                                                                @endif
+                                                            </b>
+                                                            &nbsp;&nbsp;{{ $comment->comment_content }}
+                                                        </p>
                                                     </div>
                                                 </div>
                                                 <div class="media ml-5 mt-3">
@@ -218,7 +243,27 @@
                                         @csrf
                                         <div class="form-group">
                                             <label for="comment-text">Add a comment:</label>
-                                            <textarea class="form-control" id="comment-text-{{ $post->post_id }}" name="commentContent" rows="3" required></textarea>
+                                            <textarea class="form-control" id="comment-text-{{ $post->post_id }}" name="commentContent" rows="3"
+                                                required></textarea>
+                                        </div>
+                                        <div
+                                            class="form-group col-md-4 col-sm-12 d-flex justify-content-between align-items-center">
+                                            <label for=""><b>Anonymous</b></label>
+                                            <div class="form-check">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input"
+                                                        name="commentAnonymous" id="commentAnonymous" value="1">
+                                                    Yes
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input"
+                                                        name="commentAnonymous" id="commentAnonymous" value="0"
+                                                        checked>
+                                                    No
+                                                </label>
+                                            </div>
                                         </div>
                                         <div class="form-group row">
                                             <button type="submit" class="btn btn-primary btn-sm ml-3">Submit</button>
@@ -436,11 +481,11 @@
                             const innerHTML = `
                                             <div class="card-body">
                                                 <div class="media">
-                                                    <img src="{{ asset('img/default-avt.jpg') }}"
+                                                    <img src="{{ asset('img/avatar/${JSON.parse(this.responseText).commentAvatar}') }}"
                                                         style="width: 30px; height: 30px" class="mr-3"
                                                         alt="Profile Image">
                                                     <div class="media-body">
-                                                        <p class="card-text">${JSON.parse(this.responseText).newComment}</p>
+                                                        <p class="card-text"><b>${JSON.parse(this.responseText).commentFullname}:&nbsp;&nbsp;</b>${JSON.parse(this.responseText).newComment}</p>
                                                     </div>
                                                 </div>
                                                 <div class="media ml-5 mt-3">

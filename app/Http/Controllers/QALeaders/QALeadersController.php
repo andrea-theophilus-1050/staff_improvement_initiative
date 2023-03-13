@@ -85,7 +85,7 @@ class QALeadersController extends Controller
         foreach ($notifyUsers as $user) {
             DB::table('notification')->insert([
                 'user_id' => $user->user_id,
-                'notify_content' => 'New topic has been created: "'. $topic->topic_name . '"',
+                'notify_content' => $topic->topic_name,
                 'url' => $topic->topic_id,
                 'type_notification' => 'topicNew',
                 'created_at' => now(),

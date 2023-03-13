@@ -65,9 +65,9 @@
                                                     data-finalClosureDate="{{ $topic->finalClosureDate }}"
                                                     data-categoryID="category{{ $topic->category->category_id }}">Edit</button>
                                             @else
-                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                data-target="#topic-delete-modal"><i
-                                                    class="mdi mdi-delete"></i></button>
+                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                    data-target="#topic-delete-modal"><i
+                                                        class="mdi mdi-delete"></i></button>
                                                 @if ($topic->ideaPosts->count() != 0)
                                                     <button type="button" class="btn btn-primary btn-sm"><i
                                                             class="mdi mdi-download"></i></button>
@@ -184,8 +184,8 @@
                                             <div class="form-group row">
                                                 <label class="col-sm-3 col-form-label">Topic description</label>
                                                 <div class="col-sm-9">
-                                                    <textarea name="description" id="description" value="{{ old('description') }}" class="form-control" cols="30"
-                                                        rows="10"></textarea>
+                                                    <textarea name="description" id="description" class="form-control" cols="30" rows="10"
+                                                        style="line-height: 1.5">{{ old('description') }}</textarea>
                                                 </div>
                                             </div>
                                         </div>

@@ -27,7 +27,6 @@
         @include('partials._navbar')
         <!-- partial -->
         <div class="container-fluid page-body-wrapper">
-            @include('partials._setting-panel')
 
             @if (Auth::user()->role_id == 1)
                 @include('partials._sidebar_admin_role')

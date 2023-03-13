@@ -73,8 +73,16 @@ class AuthController extends Controller
         }
         $user->fullName = $request->fullname;
         $user->email = $request->email;
-        $user->save();
 
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move(public_path('img/avatar/'), $filename);
+            $user->avatar = $filename;
+        }
+
+        $user->save();
         return redirect()->route('profile')->with('successProfile', 'Profile has been updated');
     }
 

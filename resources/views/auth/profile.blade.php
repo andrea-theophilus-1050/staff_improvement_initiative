@@ -65,7 +65,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Account information</h4>
-                    <form class="forms-sample" method="POST" action="{{ route('auth.change.profile') }}">
+                    <form class="forms-sample" method="POST" action="{{ route('auth.change.profile') }}" enctype="multipart/form-data">
                         @csrf
                         @if (session('successProfile'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -101,6 +101,13 @@
                             <input type="text" class="form-control" value="{{ $user->department->dept_name }}"
                                 disabled>
                         </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Avatar</label>
+                            <input class="form-control" type="file" name="avatar" id="avatar"
+                                onchange="previewImage(avatar, preview_avatar)" accept="image/*">
+                            <img src="" id="preview_avatar" alt="" width="40%"
+                                style="margin-top: 10px">
+                        </div>
                         <button type="submit" class="btn btn-primary mr-2">Update</button>
                         <button class="btn btn-secondary" type="reset">Cancel</button>
                     </form>
@@ -108,4 +115,17 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // NOTE: Preview image before upload (id_card_front, id_card_back)
+        function previewImage(input, preview) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $(preview).attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 @endsection

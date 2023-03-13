@@ -82,7 +82,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('change-password', [AuthController::class, 'changePassword'])->name('auth.change.password');
     Route::post('change-profile', [AuthController::class, 'changeProfile'])->name('auth.change.profile');
 
-    Route::get('notification-handler/{type}/{id}', [NotifyController::class, 'notificationHandlerTopic'])->name('notification.handler.new-topic');
+    Route::get('notification-handler/{type}/{url}/{notifyID}', [NotifyController::class, 'notificationHandlerTopic'])->name('notification.handler.new-topic');
 });
 
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');

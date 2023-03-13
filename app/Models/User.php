@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\Department;
 use App\Models\Role;
 use App\Models\PostsLikeDislike;
+use App\Models\Comments;
+use App\Models\Notification;
 
 class User extends Authenticatable
 {
@@ -62,6 +64,15 @@ class User extends Authenticatable
         return $this->hasMany(PostsLikeDislike::class, 'user_id');
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comments::class, 'user_id');
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
 
 
     // protected  function role(): Attribute

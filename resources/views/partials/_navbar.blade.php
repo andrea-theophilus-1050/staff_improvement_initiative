@@ -1,9 +1,9 @@
 <!-- partial:../../partials/_navbar.html -->
 <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo mr-5" href="../../index.html"><img src="{{ asset('images/logo-greenwich.png') }}"
+        <a class="navbar-brand brand-logo mr-5"><img src="{{ asset('images/logo-greenwich.png') }}"
                 class="mr-2" alt="logo" /></a>
-        <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="{{ asset('images/short-icon.jpg') }}"
+        <a class="navbar-brand brand-logo-mini"><img src="{{ asset('images/short-icon.jpg') }}"
                 alt="logo" /></a>
     </div>
     <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
@@ -26,9 +26,9 @@
 
         {{-- NOTE: get notifications from DB --}}
         @php
-            $notifications = Illuminate\Support\Facades\DB::table('notification')
-                ->where('user_id', auth()->user()->user_id)
-                ->orderBy('created_at', 'desc')
+            $notifications = Auth::user()
+                ->notifications()
+                ->latest('created_at')
                 ->get();
         @endphp
         {{-- NOTE: get notifications from DB --}}
@@ -49,14 +49,32 @@
                     <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
 
                     {{-- NOTE: notification part NOTE: --}}
-                    @if (auth()->user()->role_id == 4)
-                        @foreach ($notifications as $notification)
+                    @foreach ($notifications as $notification)
+                        @if ($notification->user->role_id == 4)
+                            {{-- NOTE: Role staff --}}
                             @if ($notification->type_notification == 'topicNew')
-                                <a href="{{ route('notification.handler.new-topic', ['topicNew', $notification->url]) }}"
+                                <a href="{{ route('notification.handler.new-topic', ['topicNew', $notification->url, $notification->id]) }}"
                                     class="dropdown-item preview-item">
                                     <div class="preview-thumbnail">
-                                        <div class="preview-icon bg-info">
-                                            <i class="mdi mdi-bell-ring mx-0"></i>
+                                        <div class="preview-icon bg-facebook">
+                                            <i class="mdi mdi-bookmark-plus mx-0"></i>
+                                        </div>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <h6 class="preview-subject font-weight-normal">
+                                            New topic has been created: "{{ $notification->notify_content }}"</h6>
+                                        <p class="font-weight-light small-text mb-0 text-muted">
+                                            {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}
+                                        </p>
+
+                                    </div>
+                                </a>
+                            @elseif ($notification->type_notification == 'comment')
+                                <a href="{{ route('notification.handler.new-topic', ['comment', $notification->url, $notification->id]) }}"
+                                    class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-secondary">
+                                            <i class="mdi mdi-comment-alert mx-0"></i>
                                         </div>
                                     </div>
                                     <div class="preview-item-content">
@@ -69,8 +87,26 @@
                                     </div>
                                 </a>
                             @endif
-                        @endforeach
-                    @endif
+                        @elseif($notification->user->role_id == 3)
+                            {{-- NOTE: Role QA Coordinators --}}
+                            <a href="{{ route('notification.handler.new-topic', ['postIdeas', $notification->url, $notification->id]) }}"
+                                class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-facebook">
+                                        <i class="mdi mdi-bookmark-plus mx-0"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <h6 class="preview-subject font-weight-normal">
+                                        {{ $notification->notify_content }}</h6>
+                                    <p class="font-weight-light small-text mb-0 text-muted">
+                                        {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}
+                                    </p>
+
+                                </div>
+                            </a>
+                        @endif
+                    @endforeach
                     {{-- NOTE: notification part NOTE: --}}
 
 
@@ -78,7 +114,11 @@
             </li>
             <li class="nav-item nav-profile dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                    <img src="{{ asset('img/default-avt.jpg') }}" alt="profile" />
+                    @if (auth()->user()->avatar == null)
+                        <img src="{{ asset('img/default-avt.jpg') }}" alt="profile" />
+                    @else
+                        <img src="{{ asset('img/avatar/' . auth()->user()->avatar) }}" alt="profile" />
+                    @endif
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                     <a class="dropdown-item" href="{{ route('profile') }}">
@@ -91,11 +131,7 @@
                     </a>
                 </div>
             </li>
-            <li class="nav-item nav-settings d-none d-lg-flex">
-                <a class="nav-link" href="#">
-                    {{-- <i class="icon-ellipsis"></i> --}}
-                </a>
-            </li>
+            
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
             data-toggle="offcanvas">

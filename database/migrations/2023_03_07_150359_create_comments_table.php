@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('user_id')->on('users');
             $table->foreign('post_id')->references('post_id')->on('idea_posts');
             $table->text('comment_content');
+            $table->tinyInteger('anonymous')->default(0);
             $table->timestamps();
         });
     }

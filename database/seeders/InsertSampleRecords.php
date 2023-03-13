@@ -38,7 +38,7 @@ class InsertSampleRecords extends Seeder
         // insert into tb users
         DB::table('users')->insert([
             [
-                'fullName' => 'admin',
+                'fullName' => 'Alexander Hamilton',
                 'email' => 'admin@gmail.com',
                 'password' => Hash::make('12345678'),
                 'password_changed' => 1,
@@ -48,7 +48,7 @@ class InsertSampleRecords extends Seeder
                 'updated_at' => now()
             ],
             [
-                'fullName' => 'QA Leaders',
+                'fullName' => 'Victoria Montgomery',
                 'email' => 'qaleaders@gmail.com',
                 'password' => Hash::make('12345678'),
                 'password_changed' => 1,
@@ -58,7 +58,7 @@ class InsertSampleRecords extends Seeder
                 'updated_at' => now()
             ],
             [
-                'fullName' => 'QA coordinators 1',
+                'fullName' => 'Nathaniel Harrison',
                 'email' => 'qacoordinators1@gmail.com',
                 'password' => Hash::make('12345678'),
                 'password_changed' => 1,
@@ -68,7 +68,7 @@ class InsertSampleRecords extends Seeder
                 'updated_at' => now()
             ],
             [
-                'fullName' => 'QA coordinators 2',
+                'fullName' => 'Elizabeth Fitzgerald',
                 'email' => 'qacoordinators2@gmail.com',
                 'password' => Hash::make('12345678'),
                 'password_changed' => 1,
@@ -78,7 +78,7 @@ class InsertSampleRecords extends Seeder
                 'updated_at' => now()
             ],
             [
-                'fullName' => 'QA coordinators 3',
+                'fullName' => 'Benjamin Kensington',
                 'email' => 'qacoordinators3@gmail.com',
                 'password' => Hash::make('12345678'),
                 'password_changed' => 1,
@@ -88,7 +88,7 @@ class InsertSampleRecords extends Seeder
                 'updated_at' => now()
             ],
             [
-                'fullName' => 'Staffs 1',
+                'fullName' => 'Gabrielle Winchester',
                 'email' => 'staff1@gmail.com',
                 'password' => Hash::make('12345678'),
                 'password_changed' => 1,
@@ -98,7 +98,7 @@ class InsertSampleRecords extends Seeder
                 'updated_at' => now()
             ],
             [
-                'fullName' => 'Staffs 2',
+                'fullName' => 'Theodore Sinclair',
                 'email' => 'staff2@gmail.com',
                 'password' => Hash::make('12345678'),
                 'password_changed' => 1,
@@ -108,8 +108,28 @@ class InsertSampleRecords extends Seeder
                 'updated_at' => now()
             ],
             [
-                'fullName' => 'Staffs 3',
+                'fullName' => 'Isabella Harrington',
                 'email' => 'staff3@gmail.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => 4,
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'fullName' => 'Maximilian Jefferson',
+                'email' => 'staff4@gmail.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => 4,
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'fullName' => 'Alexandra Kensington',
+                'email' => 'staff5@gmail.com',
                 'password' => Hash::make('12345678'),
                 'password_changed' => 1,
                 'dept_id' => 4,
@@ -162,80 +182,5 @@ class InsertSampleRecords extends Seeder
                 'description' => 'Fostering a positive and supportive workplace culture can improve employee satisfaction, productivity, and retention.'
             ],
         ]);
-
-        // insert into tb topics
-        // DB::table('topics')->insert([
-        //     [
-        //         'topic_name' => 'Academic',
-        //         'category_id' => 1,
-        //         'firstClosureDate' => '2021-03-07',
-        //         'finalClosureDate' => '2021-03-07',
-        //     ],
-        //     [
-        //         'topic_name' => 'Support',
-        //         'category_id' => 2,
-        //         'firstClosureDate' => '2021-03-07',
-        //         'finalClosureDate' => '2021-03-07',
-        //     ],
-        //     [
-        //         'topic_name' => 'Marketing',
-        //         'category_id' => 3,
-        //         'firstClosureDate' => '2021-03-07',
-        //         'finalClosureDate' => '2021-03-07',
-        //     ],
-        //     [
-        //         'topic_name' => 'IT',
-        //         'category_id' => 4,
-        //         'firstClosureDate' => '2021-03-07',
-        //         'finalClosureDate' => '2021-03-07',
-        //     ],
-        //     [
-        //         'topic_name' => 'HR',
-        //         'category_id' => 5,
-        //         'firstClosureDate' => '2021-03-07',
-        //         'finalClosureDate' => '2021-03-07',
-        //     ],
-        //     [
-        //         'topic_name' => 'Finance',
-        //         'category_id' => 6,
-        //         'firstClosureDate' => '2021-03-07',
-        //         'finalClosureDate' => '2021-03-07',
-        //     ],
-        // ]);
-
-        // insert into tb idea posts
-        // DB::table('idea_posts')->insert([
-        //     [
-        //         'title' => 'Academic 1',
-        //         'content' => 'Academic',
-        //         'user_id' => 1,
-        //         'topic_id' => 1,
-        //         'created_at' => now(),
-        //     ],
-
-        //     [
-        //         'title' => 'Academic 2',
-        //         'content' => 'lorem ipsum dolor sit amet more text here',
-        //         'user_id' => 2,
-        //         'topic_id' => 2,
-        //         'created_at' => now(),
-        //     ],
-
-        //     [
-        //         'title' => 'Academic 3',
-        //         'content' => 'lorem ipsum dolor sit amet more text here',
-        //         'user_id' => 1,
-        //         'topic_id' => 1,
-        //         'created_at' => now(),
-        //     ],
-
-        //     [
-        //         'title' => 'Academic 4',
-        //         'content' => 'lorem ipsum dolor sit amet more text here',
-        //         'user_id' => 3,
-        //         'topic_id' => 3,
-        //         'created_at' => now(),
-        //     ],
-        // ]);
     }
 }

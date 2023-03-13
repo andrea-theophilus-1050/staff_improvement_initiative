@@ -15,6 +15,7 @@ class Comments extends Model
 
     protected $fillable = [
         'comment_content',
+        'anonymous',
         'post_id',
         'user_id',
     ];
@@ -22,5 +23,10 @@ class Comments extends Model
     public function ideaPost()
     {
         return $this->belongsTo(IdeaPosts::class, 'post_id', 'post_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 }
