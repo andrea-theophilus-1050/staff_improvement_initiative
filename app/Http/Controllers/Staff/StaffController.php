@@ -53,8 +53,8 @@ class StaffController extends Controller
         $post->user_id = auth()->user()->user_id;
         $post->anonymous = $request->anonymous;
         $post->save();
-        
-        if($request->hasFile('idea_file')){
+
+        if ($request->hasFile('idea_file')) {
             $file = $request->file('idea_file');
             $filename = time() . '.' . $file->getClientOriginalExtension();
 
@@ -157,5 +157,18 @@ class StaffController extends Controller
             'dislikeCount' => $dislikeCount,
             'userStatus' => $userStatus
         ]);
+    }
+
+    public function downloadFile($id)
+    {
+        $document = Documents::where('doc_id', $id)->first();
+
+        if (!$document) {
+            abort(404);
+        }
+
+        // $path = Storage::disk('public')->path('idea_files/' . $document->doc_name);
+        $path = storage_path('app/public/idea_files/' . $document->doc_name);
+        return response()->download($path, $document->doc_name);
     }
 }

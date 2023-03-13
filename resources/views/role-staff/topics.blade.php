@@ -118,6 +118,8 @@
                                         @else
                                             {{ $post->user->fullName }}
                                         @endif
+
+
                                     </h5>
                                     <div class="mb-2" style="font-size: 12px">
                                         <i class="mdi mdi-calendar-clock"></i>&nbsp;&nbsp;Created on
@@ -125,10 +127,15 @@
                                         {{ date('h:i A', strtotime($post->created_at)) }}
                                     </div>
                                     <p class="card-text" style="font-size: 15px">{{ $post->content }}</p>
-                                    <a href="#" class="btn btn-outline-info btn-icon-text  mt-3">
-                                        {{-- {{ Illuminate\Support\Str::limit('testhelloworldblabla', 10, '...') . '.' . 'csv' }} --}}
-                                        <i class="ti-download btn-icon-append"></i>
-                                    </a>
+                                    
+                                    @if ($post->documents->count() != 0)
+                                        <a href="{{ route('download.idea.file', [collect($post->documents)->pluck('doc_id')->first()]) }}"
+                                            class="btn btn-info btn-icon-text  mt-3">
+                                            <i class="ti-file btn-icon-append"></i>
+                                            Download
+                                            <i class="ti-download btn-icon-append ml-5"></i>
+                                        </a>
+                                    @endif
                                 </div>
 
                             </div>
