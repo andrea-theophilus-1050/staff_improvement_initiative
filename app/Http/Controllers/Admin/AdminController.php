@@ -5,14 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Mail\AccountInformationNotification;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Department;
 use App\Models\Role;
-use App\Mail\AccountInformationNotification;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Symfony\Component\HttpFoundation\RequestStack;
+use App\Models\Topics;
 
 class AdminController extends Controller
 {
@@ -50,10 +49,6 @@ class AdminController extends Controller
         return redirect()->route('admin.department.management')->with('success', 'Department has been deleted');
     }
 
-    public function index()
-    {
-        return view('role-admin.topics-management')->with('title', 'Admin Dashboard');
-    }
 
     public function account_management()
     {
@@ -130,5 +125,21 @@ class AdminController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('admin.account.management')->with('error', 'Account cannot be deleted');
         }
+    }
+
+    public function topics()
+    {
+        $topics = Topics::orderBy('created_at', 'desc')->paginate(10);
+        return view('role-admin.topics-management', compact(['topics']))->with('title', 'Admin Dashboard');
+    }
+
+    public function updateDeadline(Request $request, $id)
+    {
+        $topic = Topics::find($id);
+        $topic->firstClosureDate = $request->firstClosureDate;
+        $topic->finalClosureDate = $request->finalClosureDate;
+        $topic->save();
+
+        return redirect()->route('admin.index')->with('success', 'Deadline has been updated');
     }
 }

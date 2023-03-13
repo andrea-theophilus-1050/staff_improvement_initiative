@@ -16,6 +16,7 @@ class StaffController extends Controller
     public function index()
     {
         $topics = Topics::orderBy('created_at', 'desc')->paginate(10);
+
         return view('role-staff.index', compact(['topics']))->with('title', 'Staff Dashboard');
     }
 
@@ -65,7 +66,7 @@ class StaffController extends Controller
 
         $commentCount = Comments::where('post_id', $postID)->count();
 
-        return response()->json(['newComment' => $comment->comment_content, 'commentCount' => $commentCount, 'commentCreated_at' => $comment->created_at->format('F d, Y - h:i:s a')]);
+        return response()->json(['newComment' => $comment->comment_content, 'commentCount' => $commentCount, 'commentCreated_at' => \Carbon\Carbon::parse($comment->created_at)->diffForHumans()]);
     }
 
     public function likeDislike($postID, $status)

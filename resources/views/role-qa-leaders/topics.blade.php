@@ -36,41 +36,58 @@
                                 </button>
                             </div>
                         @endif
-
                         <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th style="position: sticky; left: 0; z-index: 1; background: white">Action</th>
-
+                                    <th>Status</th>
                                     <th>Category</th>
                                     <th>Topic name</th>
+                                    <th>Ideas count</th>
                                     <th>Topic Description</th>
                                     <th>First closure date</th>
                                     <th>Final closure date</th>
-                                    {{-- <th>Ideas count</th> --}}
-
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($topics as $topic)
                                     <tr>
                                         <td style="position: sticky; left: 0; z-index: 1; background: white">
-                                            <button type="button" class="btn btn-primary btn-sm" id="topic-edit-modal"
-                                                data-id="{{ $topic->topic_id }}" data-topicName="{{ $topic->topic_name }}"
-                                                data-description="{{ $topic->topic_description }}"
-                                                data-firstClosureDate="{{ $topic->firstClosureDate }}"
-                                                data-finalClosureDate="{{ $topic->finalClosureDate }}"
-                                                data-categoryID="category{{ $topic->category->category_id }}">Edit</button>
 
+                                            @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($topic->firstClosureDate)))
+                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                    data-target="#topic-delete-modal">Delete</button>
+                                                <button type="button" class="btn btn-primary btn-sm" id="topic-edit-modal"
+                                                    data-id="{{ $topic->topic_id }}"
+                                                    data-topicName="{{ $topic->topic_name }}"
+                                                    data-description="{{ $topic->topic_description }}"
+                                                    data-firstClosureDate="{{ $topic->firstClosureDate }}"
+                                                    data-finalClosureDate="{{ $topic->finalClosureDate }}"
+                                                    data-categoryID="category{{ $topic->category->category_id }}">Edit</button>
+                                            @else
                                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                data-target="#topic-delete-modal">Delete</button>
+                                                data-target="#topic-delete-modal"><i
+                                                    class="mdi mdi-delete"></i></button>
+                                                @if ($topic->ideaPosts->count() != 0)
+                                                    <button type="button" class="btn btn-primary btn-sm"><i
+                                                            class="mdi mdi-download"></i></button>
+                                                @endif
+                                            @endif
+
+                                        </td>
+                                        <td class="text-center font-weight-bold">
+                                            @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($topic->firstClosureDate)))
+                                                <span class="badge badge-danger text-black font-weight-bold">Closed</span>
+                                            @else
+                                                <span class="badge badge-success">Opening</span>
+                                            @endif
                                         </td>
 
                                         <td title="{{ $topic->category->category_name }}"
                                             style="white-space: no-wrap; overflow: hidden; text-overflow:ellipsis; max-width: 150px; line-height: 1.5; text-align: justify">
                                             {{ $topic->category->category_name }}</td>
-                                        <td>
-                                            {{ $topic->topic_name }}</td>
+                                        <td>{{ $topic->topic_name }}</td>
+                                        <td class="text-center font-weight-bold">{{ $topic->ideaPosts->count() }}</td>
                                         <td title="{{ $topic->topic_description }}"
                                             style=" white-space: no-wrap; overflow: hidden; text-overflow:ellipsis; max-width: 150px; line-height: 1.5; text-align: justify">
                                             {{ $topic->topic_description }}</td>
@@ -78,28 +95,8 @@
                                             {{ date('M-d-Y h:i:s a', strtotime($topic->firstClosureDate)) }}</td>
                                         <td class="font-weight-bold">
                                             {{ date('M-d-Y h:i:s a', strtotime($topic->finalClosureDate)) }}</td>
-                                        {{-- <td class="text-center font-weight-bold">{{ $topic->ideas_count }}</td> --}}
-
                                     </tr>
                                 @endforeach
-                                {{-- <tr>
-                                    <td>1</td>
-                                    <td>Category name</td>
-                                    <td>Topic name</td>
-                                    <td style=" white-space: normal; line-height: 1.5; text-align: justify">
-                                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatibus ipsam
-                                        recusandae beatae accusantium quibusdam temporibus ab repellendus natus ut tempora,
-                                        qui minus dicta dolor quo? Ab beatae fugit necessitatibus porro!</td>
-                                    <td class="text-center font-weight-bold">March 20, 2023</td>
-                                    <td class="text-center font-weight-bold">March 20, 2023</td>
-                                    <td class="text-center font-weight-bold">100</td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                            data-target="#topic-edit-modal">Edit</button>
-                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                            data-target="#topic-delete-modal">Delete</button>
-                                    </td>
-                                </tr> --}}
                             </tbody>
                         </table>
                         <div class="d-flex justify-content-center align-items-center">
@@ -358,6 +355,4 @@
             });
         });
     </script>
-
-
 @endsection

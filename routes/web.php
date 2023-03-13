@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\NotifyController;
 use App\Http\Controllers\QALeaders\QALeadersController;
 use App\Http\Controllers\QACoordinators\QACoordinatorsController;
 use App\Http\Controllers\Staff\StaffController;
@@ -31,7 +32,6 @@ Route::post('login', [AuthController::class, 'login_action'])->name('login.actio
 Route::middleware(['auth'])->group(function () {
     Route::middleware(['userRole:1'])->group(function () {
         Route::group(['prefix' => 'administrator'], function () {
-            Route::get('dashboard', [AdminController::class, 'index'])->name('admin.index');
             Route::get('department-management', [AdminController::class, 'department_management'])->name('admin.department.management');
             Route::post('department-management/create', [AdminController::class, 'createDepartment'])->name('admin.department.store');
             Route::post('department-management/update/{id}', [AdminController::class, 'updateDepartment'])->name('admin.department.update');
@@ -41,6 +41,9 @@ Route::middleware(['auth'])->group(function () {
             Route::post('account-management/create', [AdminController::class, 'storeAccount'])->name('account.store');
             Route::post('account-management/update/{id}', [AdminController::class, 'updateAccount'])->name('account.update');
             Route::post('account-management/delete/{id}', [AdminController::class, 'deleteAccount'])->name('account.delete');
+
+            Route::get('topics-management', [AdminController::class, 'topics'])->name('admin.index');
+            Route::post('topic-update-deadline/{id}', [AdminController::class, 'updateDeadline'])->name('topic.update.deadline');
         });
     });
 
@@ -59,7 +62,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['userRole:3', 'passwordChanged'])->group(function () {
         Route::group(['prefix' => 'quality-assurance-coordinators'], function () {
-            Route::get('dashboard', [QACoordinatorsController::class, 'index'])->name('qa-coordinators.index');
+            Route::get('home', [QACoordinatorsController::class, 'index'])->name('qa-coordinators.index');
         });
     });
 
@@ -78,6 +81,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('profile', [AuthController::class, 'profile'])->name('profile');
     Route::post('change-password', [AuthController::class, 'changePassword'])->name('auth.change.password');
     Route::post('change-profile', [AuthController::class, 'changeProfile'])->name('auth.change.profile');
+
+    Route::get('notification-handler/{type}/{id}', [NotifyController::class, 'notificationHandlerTopic'])->name('notification.handler.new-topic');
 });
 
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');

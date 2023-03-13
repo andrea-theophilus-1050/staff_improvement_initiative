@@ -23,55 +23,57 @@
                 </div>
             </li>
         </ul>
+
+        {{-- NOTE: get notifications from DB --}}
+        @php
+            $notifications = Illuminate\Support\Facades\DB::table('notification')
+                ->where('user_id', auth()->user()->user_id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        @endphp
+        {{-- NOTE: get notifications from DB --}}
+
         <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item dropdown">
                 <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
                     data-toggle="dropdown">
                     <i class="icon-bell mx-0"></i>
-                    <span class="count"></span>
+                    {{-- NOTE: count --}}
+                    @if ($notifications->count() > 0)
+                        <span class="count"></span>
+                    @endif
+                    {{-- NOTE: count --}}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
                     aria-labelledby="notificationDropdown">
                     <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-success">
-                                <i class="ti-info-alt mx-0"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <h6 class="preview-subject font-weight-normal">Application Error</h6>
-                            <p class="font-weight-light small-text mb-0 text-muted">
-                                Just now
-                            </p>
-                        </div>
-                    </a>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-warning">
-                                <i class="ti-settings mx-0"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <h6 class="preview-subject font-weight-normal">Settings</h6>
-                            <p class="font-weight-light small-text mb-0 text-muted">
-                                Private message
-                            </p>
-                        </div>
-                    </a>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-info">
-                                <i class="ti-user mx-0"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <h6 class="preview-subject font-weight-normal">New user registration</h6>
-                            <p class="font-weight-light small-text mb-0 text-muted">
-                                2 days ago
-                            </p>
-                        </div>
-                    </a>
+
+                    {{-- NOTE: notification part NOTE: --}}
+                    @if (auth()->user()->role_id == 4)
+                        @foreach ($notifications as $notification)
+                            @if ($notification->type_notification == 'topicNew')
+                                <a href="{{ route('notification.handler.new-topic', ['topicNew', $notification->url]) }}"
+                                    class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-info">
+                                            <i class="mdi mdi-bell-ring mx-0"></i>
+                                        </div>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <h6 class="preview-subject font-weight-normal">
+                                            {{ $notification->notify_content }}</h6>
+                                        <p class="font-weight-light small-text mb-0 text-muted">
+                                            {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}
+                                        </p>
+
+                                    </div>
+                                </a>
+                            @endif
+                        @endforeach
+                    @endif
+                    {{-- NOTE: notification part NOTE: --}}
+
+
                 </div>
             </li>
             <li class="nav-item nav-profile dropdown">

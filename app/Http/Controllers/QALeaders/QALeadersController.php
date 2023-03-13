@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Topics;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class QALeadersController extends Controller
 {
@@ -78,6 +80,18 @@ class QALeadersController extends Controller
         $topic->firstClosureDate = $request->firstClosureDate;
         $topic->finalClosureDate = $request->finalClosureDate;
         $topic->save();
+
+        $notifyUsers = User::where('role_id', 4)->get();
+        foreach ($notifyUsers as $user) {
+            DB::table('notification')->insert([
+                'user_id' => $user->user_id,
+                'notify_content' => 'New topic has been created: "'. $topic->topic_name . '"',
+                'url' => $topic->topic_id,
+                'type_notification' => 'topicNew',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
 
         return redirect()->route('qa-leaders.topics.management')->with('success', 'Topic has been created');
     }

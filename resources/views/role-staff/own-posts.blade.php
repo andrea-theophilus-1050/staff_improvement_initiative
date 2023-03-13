@@ -28,51 +28,15 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-9 d-flex">
-                                    <form method="POST"
-                                        action="{{ route('staff.posts.like.dislike', [$post->post_id, 'liked']) }}">
-                                        @csrf
-                                        @if (collect($post->like_dislike)->where('status', 'liked')->where('post_id', $post->post_id)->where('user_id', auth()->user()->user_id)->count() > 0)
-                                            <button type="submit"
-                                                class="btn btn-primary btn-sm d-flex justify-content-center align-items-center">
-                                                <i class="mdi mdi-thumb-up"></i>
-                                                &nbsp;&nbsp;{{ collect($post->like_dislike)->where('status', 'liked')->count() }}
-                                                Like
-                                            </button>
-                                        @else
-                                            <button type="submit"
-                                                class="btn btn-outline-primary btn-sm d-flex justify-content-center align-items-center">
-                                                <i class="mdi mdi-thumb-up"></i>
-                                                &nbsp;&nbsp;{{ collect($post->like_dislike)->where('status', 'liked')->count() }}
-                                                Like
-                                            </button>
-                                        @endif
-                                    </form>
-                                    <form method="POST"
-                                        action="{{ route('staff.posts.like.dislike', [$post->post_id, 'disliked']) }}">
-                                        @csrf
-                                        @if (collect($post->like_dislike)->where('status', 'disliked')->where('post_id', $post->post_id)->where('user_id', auth()->user()->user_id)->count() > 0)
-                                            <button type="submit"
-                                                class="btn btn-danger btn-sm d-flex justify-content-center align-items-center ml-2">
-                                                <i class="mdi mdi-thumb-down"></i>
-                                                &nbsp;&nbsp;{{ collect($post->like_dislike)->where('status', 'disliked')->count() }}
-                                                Dislike
-                                            </button>
-                                        @else
-                                            <button type="submit"
-                                                class="btn btn-outline-danger btn-sm d-flex justify-content-center align-items-center ml-2">
-                                                <i class="mdi mdi-thumb-down"></i>
-                                                &nbsp;&nbsp;{{ collect($post->like_dislike)->where('status', 'disliked')->count() }}
-                                                Dislike
-                                            </button>
-                                        @endif
-
-                                    </form>
-                                    <button
+                                    <div class="mr-3" style="color: blue"><i class="mdi mdi-thumb-up"></i> {{ collect($post->like_dislike)->where('status', 'liked')->count() }} &nbsp;&nbsp;Like</div>
+                                    <div class="mr-3" style="color: red"><i class="mdi mdi-thumb-down"></i> {{ collect($post->like_dislike)->where('status', 'disliked')->count() }}&nbsp;&nbsp;Dislike</div>
+                                    <div class="mr-3" style="color: green"><i class="mdi mdi-comment"></i> <a href="javascript:;" data-toggle="collapse" data-target="#post-comment{{ $post->post_id }}">{{ $post->comments->count() }}&nbsp;&nbsp;Comment</a></div>
+                                    {{-- <button
                                         class="btn btn-outline-success btn-sm d-flex justify-content-center align-items-center ml-2"
                                         data-toggle="collapse" data-target="#post-comment{{ $post->post_id }}">
                                         <i class="mdi mdi-comment"></i>
                                         &nbsp;&nbsp;{{ $post->comments->count() }} Comment
-                                    </button>
+                                    </button> --}}
                                 </div>
                             </div>
                             <hr>
@@ -93,44 +57,6 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                    <form method="POST" id="comment-form-{{ $post->post_id }}"
-                                        action="{{ route('staff.posts.comments.submit', $post->post_id) }}">
-                                        @csrf
-                                        <div class="form-group">
-                                            <label for="comment-text">Add a comment:</label>
-                                            <textarea class="form-control" id="comment-text" name="commentContent" rows="3"></textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row mt-5">
-                                <div class="col-sm-2">
-                                    <h6>Attachments:</h6>
-                                </div>
-                                <div class="col-sm-8">
-                                    <ul class="list-unstyled d-flex flex-row">
-                                        <li class="mr-3">
-                                            <a href="#">File 1</a>
-                                            {{-- <button class="btn btn-sm btn-outline-primary ml-2 ">
-                                    <i class="mdi mdi-download"></i>
-                                    Download
-                                </button> --}}
-                                        </li>
-                                        <li class="mr-3">
-                                            <a href="#">File 2</a>
-                                            {{-- <button class="btn btn-sm btn-outline-primary ml-2 ">
-                                    <i class="mdi mdi-download"></i>
-                                    Download
-                                </button> --}}
-                                        </li>
-                                        <li><a href="#">File 3</a>
-                                            {{-- <button class="btn btn-sm btn-outline-primary ml-2 ">
-                                    <i class="mdi mdi-download"></i>
-                                    Download
-                                </button> --}}
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>

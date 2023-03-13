@@ -13,6 +13,14 @@
                     </div>
                     <form method="POST" action="{{ route('staff.posts.submit.idea', $id) }}" enctype="multipart/form-data">
                         @csrf
+                        @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($topicTitle->firstClosureDate)))
+                            <div class="form-group">
+                                <h5 class="font-weight-bold text-center"
+                                    style="background: red; color: white; padding: 10px; border-radius: 10px">
+                                    The topic has expired for submission of ideas
+                                </h5>
+                            </div>
+                        @endif
                         <div class="form-group">
                             <label for="topicName" class="font-weight-bold">Topic:</label>
                             <textarea class="form-control" rows="3" id="topicName" placeholder="Enter title" readonly
@@ -24,46 +32,49 @@
                             <textarea class="form-control" rows="10" id="topicDesc" placeholder="Enter title" readonly
                                 style="line-height: 1.5">{{ $topicTitle->topic_description }}</textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="idea-description">Your idea:</label>
-                            <textarea class="form-control" id="content" name="content" rows="10" name="idea_content"
-                                placeholder="Enter description" style="line-height:1.5"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="idea-description">Your supported files: <i style="color: blue; font-size: 12px">(Not
-                                    required)</i></label>
-                            <input type="file" class="form-control" id="idea-file" name="idea_file"
-                                placeholder="Enter description">
-                        </div>
-                        <div class="form-group d-flex align-items-center justify-content-between">
-                            <label for=""><b>Anonymous</b></label>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" name="anonymous" id="anonymous"
-                                        value="1" checked>
-                                    Yes
-                                </label>
+                        @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($topicTitle->firstClosureDate)))
+                            <div class="form-group">
+                                <label for="idea-description">Your idea:</label>
+                                <textarea class="form-control" id="content" name="content" rows="10" name="idea_content"
+                                    placeholder="Enter description" style="line-height:1.5"></textarea>
                             </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" name="anonymous" id="anonymous"
-                                        value="0">
-                                    No
-                                </label>
+                            <div class="form-group">
+                                <label for="idea-description">Your supported files: <i
+                                        style="color: blue; font-size: 12px">(Not
+                                        required)</i></label>
+                                <input type="file" class="form-control" id="idea-file" name="idea_file"
+                                    placeholder="Enter description">
                             </div>
-                        </div>
-                        <div class="form-check form-check-flat form-check-primary d-flex">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" id="checkbox-agree">
-                                I agree to the
-                            </label>
-                            <a href="javasript:;" data-target="#terms-conditions" data-toggle="modal"
-                                class="form-check-label">terms and conditions</a>
-                        </div>
+                            <div class="form-group d-flex align-items-center justify-content-between">
+                                <label for=""><b>Anonymous</b></label>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="anonymous" id="anonymous"
+                                            value="1" checked>
+                                        Yes
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="anonymous" id="anonymous"
+                                            value="0">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-check form-check-flat form-check-primary d-flex">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" id="checkbox-agree">
+                                    I agree to the
+                                </label>
+                                <a href="javasript:;" data-target="#terms-conditions" data-toggle="modal"
+                                    class="form-check-label">terms and conditions</a>
+                            </div>
 
-                        <div class="form-group mt-3">
-                            <button type="submit" class="btn btn-primary" id="btn-submit-idea" disabled>Submit</button>
-                        </div>
+                            <div class="form-group mt-3">
+                                <button type="submit" class="btn btn-primary" id="btn-submit-idea" disabled>Submit</button>
+                            </div>
+                        @endif
                     </form>
                 </div>
             </div>
@@ -111,7 +122,7 @@
 
                             </div>
                             <div class="row">
-                                <div class="col-sm-9 d-flex">
+                                <div class="col-lg-12 col-md-12 col-sm-3 d-flex">
                                     <form id="like-form-{{ $post->post_id }}" data-post-id="{{ $post->post_id }}"
                                         method="POST"
                                         action="{{ route('staff.posts.like.dislike', [$post->post_id, 'liked']) }}">
@@ -175,7 +186,7 @@
                             <div id="post-comment{{ $post->post_id }}" class="collapse">
                                 <h6>Comments:</h6>
                                 <div id="comments-section-{{ $post->post_id }}">
-                                @foreach (collect($post->comments) as $comment)
+                                    @foreach (collect($post->comments) as $comment)
                                         <div class="card mb-2" style="background: #f5f7ff">
                                             <div class="card-body">
 
@@ -191,24 +202,33 @@
                                                 <div class="media ml-5 mt-3">
                                                     <div class="mb-2 pull-right" style="font-size: 10px">
                                                         <i
-                                                            class="mdi mdi-calendar-clock"></i>&nbsp;&nbsp;{{ date('F d, Y - h:i:s a', strtotime($comment->created_at)) }}
+                                                            class="mdi mdi-calendar-clock"></i>&nbsp;&nbsp;{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}
                                                     </div>
                                                 </div>
 
                                             </div>
                                         </div>
-                                        @endforeach
-                                    </div>
-                                <form method="POST" id="comment-form-{{ $post->post_id }}"
-                                    data-post-id="{{ $post->post_id }}"
-                                    action="{{ route('staff.posts.comments.submit', [$post->post_id]) }}">
-                                    @csrf
-                                    <div class="form-group">
-                                        <label for="comment-text">Add a comment:</label>
-                                        <textarea class="form-control" id="comment-text-{{ $post->post_id }}" name="commentContent" rows="3"></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </form>
+                                    @endforeach
+                                </div>
+                                @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($topicTitle->finalClosureDate)))
+                                    <hr>
+                                    <form method="POST" id="comment-form-{{ $post->post_id }}"
+                                        data-post-id="{{ $post->post_id }}"
+                                        action="{{ route('staff.posts.comments.submit', [$post->post_id]) }}">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="comment-text">Add a comment:</label>
+                                            <textarea class="form-control" id="comment-text-{{ $post->post_id }}" name="commentContent" rows="3" required></textarea>
+                                        </div>
+                                        <div class="form-group row">
+                                            <button type="submit" class="btn btn-primary btn-sm ml-3">Submit</button>
+                                            <button class="btn btn-outline-success btn-sm ml-2" data-toggle="collapse"
+                                                data-target="#post-comment{{ $post->post_id }}">
+                                                Hide
+                                            </button>
+                                        </div>
+                                    </form>
+                                @endif
                             </div>
                         </div>
                     </div>
