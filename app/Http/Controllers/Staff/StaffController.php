@@ -63,7 +63,9 @@ class StaffController extends Controller
         $comment->user_id = auth()->user()->user_id;
         $comment->save();
 
-        return back()->with('success', 'Comment has been submitted');
+        $commentCount = Comments::where('post_id', $postID)->count();
+
+        return response()->json(['newComment' => $comment->comment_content, 'commentCount' => $commentCount, 'commentCreated_at' => $comment->created_at->format('F d, Y - h:i:s a')]);
     }
 
     public function likeDislike($postID, $status)
@@ -91,12 +93,18 @@ class StaffController extends Controller
         $likeCount = PostsLikeDislike::where('post_id', $postID)->where('status', 'liked')->count();
         $dislikeCount = PostsLikeDislike::where('post_id', $postID)->where('status', 'disliked')->count();
 
+        // get the current user's status for this post
+        $userStatus = null;
+        $likeDislike = PostsLikeDislike::where('post_id', $postID)->where('user_id', auth()->user()->user_id)->first();
+        if ($likeDislike) {
+            $userStatus = $likeDislike->status;
+        }
+
+
         return response()->json([
-            'success' => true,
             'likeCount' => $likeCount,
             'dislikeCount' => $dislikeCount,
+            'userStatus' => $userStatus
         ]);
-
-        // return back()->with('success', 'Like/Dislike has been submitted');
     }
 }
