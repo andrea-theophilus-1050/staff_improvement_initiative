@@ -13,12 +13,12 @@ class AuthController extends Controller
 {
     public function login_action(Request $request)
     {
-        $remember = $request->has('remember_me') ? true : false;
+        
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials, $remember)) {
+        if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            Auth::login($user, $remember);
+            Auth::login($user);
 
             if (Auth::user()->role_id == 1) {
                 return redirect()->route('admin.index');

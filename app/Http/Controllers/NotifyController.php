@@ -19,6 +19,10 @@ class NotifyController extends Controller
             $post = IdeaPosts::where('post_id', $url)->first();
             return view('role-staff.single-post', compact(['post']))->with('title', 'Single Post');
         }
+        if ($type == 'QACoordinator-newTopic') {
+            Notification::where('id', $notifyID)->delete();
+            return redirect()->route('staff.topics.idea.posts', $url);
+        }
         if ($type == "postIdeas") {
             Notification::where('id', $notifyID)->delete();
             $post = IdeaPosts::where('post_id', $url)->first();

@@ -14,13 +14,15 @@ use App\Models\Documents;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use ZipArchive;
 
 
 class StaffController extends Controller
 {
     public function index()
     {
-        $topics = Topics::orderBy('created_at', 'desc')->paginate(10);
+        $topics = Topics::orderBy('created_at', 'desc')->get();
 
         return view('role-staff.index', compact(['topics']))->with('title', 'Staff Dashboard');
     }
@@ -43,9 +45,9 @@ class StaffController extends Controller
 
     public function createPost(Request $request, $id)
     {
-        // $request->validate([
-        //     'content' => 'required',
-        // ]);
+        $request->validate([
+            'content' => 'required',
+        ]);
 
         $post = new IdeaPosts();
         $post->content = $request->content;
@@ -55,14 +57,19 @@ class StaffController extends Controller
         $post->save();
 
         if ($request->hasFile('idea_file')) {
-            $file = $request->file('idea_file');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
+            foreach ($request->file('idea_file') as $file) {
+                if ($post->anonymous == 1) {
+                    $filename = time() . ' - ' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+                } else {
+                    $filename = $post->user->fullName . ' - Post_' . $post->post_id . ' - ' . Str::random(5) . '.' . $file->getClientOriginalExtension();
+                }
 
-            $file->storeAs('public/idea_files', $filename);
-            Documents::create([
-                'doc_name' => $filename,
-                'post_id' => $post->post_id,
-            ]);
+                $file->storeAs('public/idea_files', $filename);
+                Documents::create([
+                    'doc_name' => $filename,
+                    'post_id' => $post->post_id,
+                ]);
+            }
         }
 
         $notifyForQACoordinator = User::where('role_id', 3)->where('dept_id', auth()->user()->dept_id)->get();
@@ -78,6 +85,7 @@ class StaffController extends Controller
         }
 
         return redirect()->route('staff.topics.idea.posts', $id)->with('success', 'Post has been submitted');
+        // dd($request->all());
     }
 
     public function submitComment(Request $request, $postID)
@@ -113,7 +121,11 @@ class StaffController extends Controller
             $comment->avatar = "default-avt.jpg";
         } else {
             $comment->fullname = $comment->user->fullName;
-            $comment->avatar = $comment->user->avatar;
+            if ($comment->user->avatar == null) {
+                $comment->avatar = "default-avt.jpg";
+            } else {
+                $comment->avatar = $comment->user->avatar;
+            }
         }
 
         return response()->json(['newComment' => $comment->comment_content, 'commentCount' => $commentCount, 'commentCreated_at' => \Carbon\Carbon::parse($comment->created_at)->diffForHumans(), 'commentFullname' => $comment->fullname, 'commentAvatar' => $comment->avatar]);
@@ -157,18 +169,5 @@ class StaffController extends Controller
             'dislikeCount' => $dislikeCount,
             'userStatus' => $userStatus
         ]);
-    }
-
-    public function downloadFile($id)
-    {
-        $document = Documents::where('doc_id', $id)->first();
-
-        if (!$document) {
-            abort(404);
-        }
-
-        // $path = Storage::disk('public')->path('idea_files/' . $document->doc_name);
-        $path = storage_path('app/public/idea_files/' . $document->doc_name);
-        return response()->download($path, $document->doc_name);
     }
 }

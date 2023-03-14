@@ -22,6 +22,15 @@
                                 {{ $post->topic->topic_description }}</p>
                             <hr>
                             <p class="card-text" style="font-size: 15px">{{ $post->content }}</p>
+
+                            @if ($post->documents->count() != 0)
+                                <a href="{{ route('download.idea.file', $post->post_id) }}"
+                                    class="btn btn-info btn-icon-text  mt-3">
+                                    <i class="ti-file btn-icon-append"></i>
+                                    Download file (as .zip)
+                                    <i class="ti-download btn-icon-append ml-5"></i>
+                                </a>
+                            @endif
                         </div>
                     </div>
                     <div class="row">

@@ -9,9 +9,9 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ route('qa-coordinators.topics') }}">
                 <i class="icon-grid menu-icon"></i>
-                <span class="menu-title">QA Coordinators Roles</span>
+                <span class="menu-title">Topics</span>
             </a>
         </li>
         {{-- <li class="nav-item">

@@ -1,28 +1,14 @@
 <!-- partial:../../partials/_navbar.html -->
 <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo mr-5"><img src="{{ asset('images/logo-greenwich.png') }}"
-                class="mr-2" alt="logo" /></a>
-        <a class="navbar-brand brand-logo-mini"><img src="{{ asset('images/short-icon.jpg') }}"
+        <a class="navbar-brand brand-logo mr-5"><img src="{{ asset('images/logo-greenwich.png') }}" class="mr-2"
                 alt="logo" /></a>
+        <a class="navbar-brand brand-logo-mini"><img src="{{ asset('images/short-icon.jpg') }}" alt="logo" /></a>
     </div>
     <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
             <span class="icon-menu"></span>
         </button>
-        <ul class="navbar-nav mr-lg-2">
-            <li class="nav-item nav-search d-none d-lg-block">
-                <div class="input-group">
-                    <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-                        <span class="input-group-text" id="search">
-                            <i class="icon-search"></i>
-                        </span>
-                    </div>
-                    <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now"
-                        aria-label="search" aria-describedby="search">
-                </div>
-            </li>
-        </ul>
 
         {{-- NOTE: get notifications from DB --}}
         @php
@@ -53,7 +39,7 @@
                         @if ($notification->user->role_id == 4)
                             {{-- NOTE: Role staff --}}
                             @if ($notification->type_notification == 'topicNew')
-                                <a href="{{ route('notification.handler.new-topic', ['topicNew', $notification->url, $notification->id]) }}"
+                                <a href="{{ route('notification.handler', ['topicNew', $notification->url, $notification->id]) }}"
                                     class="dropdown-item preview-item">
                                     <div class="preview-thumbnail">
                                         <div class="preview-icon bg-facebook">
@@ -62,7 +48,7 @@
                                     </div>
                                     <div class="preview-item-content">
                                         <h6 class="preview-subject font-weight-normal">
-                                            New topic has been created: "{{ $notification->notify_content }}"</h6>
+                                            {{ $notification->notify_content }}</h6>
                                         <p class="font-weight-light small-text mb-0 text-muted">
                                             {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}
                                         </p>
@@ -70,7 +56,7 @@
                                     </div>
                                 </a>
                             @elseif ($notification->type_notification == 'comment')
-                                <a href="{{ route('notification.handler.new-topic', ['comment', $notification->url, $notification->id]) }}"
+                                <a href="{{ route('notification.handler', ['comment', $notification->url, $notification->id]) }}"
                                     class="dropdown-item preview-item">
                                     <div class="preview-thumbnail">
                                         <div class="preview-icon bg-secondary">
@@ -86,10 +72,27 @@
 
                                     </div>
                                 </a>
+                            @elseif ($notification->type_notification == 'QACoordinator-newTopic')
+                                <a href="{{ route('notification.handler', ['QACoordinator-newTopic', $notification->url, $notification->id]) }}"
+                                    class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-dark">
+                                            <i class="mdi mdi-comment-alert mx-0"></i>
+                                        </div>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <h6 class="preview-subject font-weight-normal">
+                                            {{ $notification->notify_content }}</h6>
+                                        <p class="font-weight-light small-text mb-0 text-muted">
+                                            {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}
+                                        </p>
+
+                                    </div>
+                                </a>
                             @endif
                         @elseif($notification->user->role_id == 3)
                             {{-- NOTE: Role QA Coordinators --}}
-                            <a href="{{ route('notification.handler.new-topic', ['postIdeas', $notification->url, $notification->id]) }}"
+                            <a href="{{ route('notification.handler', ['postIdeas', $notification->url, $notification->id]) }}"
                                 class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
                                     <div class="preview-icon bg-facebook">
@@ -131,7 +134,7 @@
                     </a>
                 </div>
             </li>
-            
+
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
             data-toggle="offcanvas">

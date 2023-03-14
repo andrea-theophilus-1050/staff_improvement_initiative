@@ -36,7 +36,7 @@
                                 </button>
                             </div>
                         @endif
-                        <table class="table table-hover">
+                        <table class="table table-hover" id="topic-table">
                             <thead>
                                 <tr>
                                     <th style="position: sticky; left: 0; z-index: 1; background: white">Action</th>
@@ -51,7 +51,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($topics as $topic)
-                                    <tr>
+                                    <tr data-href="{{ route('qa-leaders.idea.posts', $topic->topic_id) }}">
                                         <td style="position: sticky; left: 0; z-index: 1; background: white">
 
                                             @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($topic->firstClosureDate)))
@@ -352,6 +352,32 @@
                     // console.log(userID + fullName + email + deptID + roleID)
                     $('#topic-update-modal').modal('show');
                 });
+            });
+        });
+
+        var rows = document.querySelectorAll('#topic-table tbody tr');
+        rows.forEach(function(row) {
+            // NOTE: Add a mouseover event listener to change the background color and cursor style
+            row.addEventListener('mouseover', function() {
+                row.style.backgroundColor = '#f2f2f2';
+                row.style.cursor = 'pointer';
+            });
+
+            // NOTE: Add a mouseout event listener to reset the background color
+            row.addEventListener('mouseout', function() {
+                row.style.backgroundColor = '';
+            });
+
+            // NOTE: Add a click event listener to redirect to the URL in the data-href attribute
+            var cells = row.querySelectorAll('td');
+            var href = row.getAttribute('data-href');
+
+            cells.forEach(function(cell) {
+                if (!cell.querySelector('button')) {
+                    cell.addEventListener('click', function() {
+                        window.location.href = href;
+                    });
+                }
             });
         });
     </script>

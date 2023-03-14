@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\DownloadFileController;
 use App\Http\Controllers\NotifyController;
 use App\Http\Controllers\QALeaders\QALeadersController;
 use App\Http\Controllers\QACoordinators\QACoordinatorsController;
@@ -57,12 +58,17 @@ Route::middleware(['auth'])->group(function () {
             Route::get('topics-management', [QALeadersController::class, 'topics'])->name('qa-leaders.topics.management');
             Route::post('topics-management/create', [QALeadersController::class, 'createTopics'])->name('qa-leaders.topics.store');
             Route::post('topics-management/update/{id}', [QALeadersController::class, 'updateTopics'])->name('qa-leaders.topics.update');
+
+            Route::get('idea-posts/{id}', [QALeadersController::class, 'ideaPosts'])->name('qa-leaders.idea.posts');
         });
     });
 
     Route::middleware(['userRole:3', 'passwordChanged'])->group(function () {
         Route::group(['prefix' => 'quality-assurance-coordinators'], function () {
-            Route::get('home', [QACoordinatorsController::class, 'index'])->name('qa-coordinators.index');
+            Route::get('staff-management', [QACoordinatorsController::class, 'index'])->name('qa-coordinators.index');
+            Route::get('topics', [QACoordinatorsController::class, 'topics'])->name('qa-coordinators.topics');
+            Route::get('topics/idea-posts/{id}', [QACoordinatorsController::class, 'topicIdeaPosts'])->name('qa-coordinators.topics.idea.posts');
+            Route::get('send-notification/{id}', [QACoordinatorsController::class, 'sendNotification'])->name('qa-coordinators.send.notify');
         });
     });
 
@@ -75,15 +81,15 @@ Route::middleware(['auth'])->group(function () {
             Route::post('posts/create/{id}', [StaffController::class, 'createPost'])->name('staff.posts.submit.idea');
             Route::post('posts/comment/submit/{postID}', [StaffController::class, 'submitComment'])->name('staff.posts.comments.submit');
             Route::post('posts/like-dislike/{postID}/{status}', [StaffController::class, 'likeDislike'])->name('staff.posts.like.dislike');
-            Route::get('download-file/{id}', [StaffController::class, 'downloadFile'])->name('download.idea.file');
         });
     });
-
+    
     Route::get('profile', [AuthController::class, 'profile'])->name('profile');
     Route::post('change-password', [AuthController::class, 'changePassword'])->name('auth.change.password');
     Route::post('change-profile', [AuthController::class, 'changeProfile'])->name('auth.change.profile');
-
-    Route::get('notification-handler/{type}/{url}/{notifyID}', [NotifyController::class, 'notificationHandlerTopic'])->name('notification.handler.new-topic');
+    
+    Route::get('notification-handler/{type}/{url}/{notifyID}', [NotifyController::class, 'notificationHandlerTopic'])->name('notification.handler');
+    Route::get('download-file/{id}', [DownloadFileController::class, 'downloadFile'])->name('download.idea.file');
 });
 
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');

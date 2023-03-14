@@ -39,17 +39,26 @@
                         </div>
                         @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($topicTitle->firstClosureDate)))
                             <div class="form-group">
+                                {{-- alert --}}
+                                @if($errors->any())
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <strong>Error! </strong>{{ $errors->first() }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                @endif
                                 <label for="idea-description">Your idea:</label>
                                 <textarea class="form-control" id="content" name="content" rows="10" name="idea_content"
-                                    placeholder="Enter description" style="line-height:1.5"></textarea>
+                                    placeholder="Enter description" style="line-height:1.5" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="idea-description">Your supported files:
                                     <i style="color: blue; font-size: 12px">
                                         (Not required)
                                     </i></label>
-                                <input type="file" class="form-control" id="idea-file" name="idea_file"
-                                    placeholder="Enter description">
+                                <input type="file" class="form-control" id="idea-file" name="idea_file[]"
+                                    placeholder="Enter description" multiple>
                             </div>
                             <div class="form-group d-flex align-items-center justify-content-between">
                                 <label for=""><b>Anonymous</b></label>
@@ -127,12 +136,12 @@
                                         {{ date('h:i A', strtotime($post->created_at)) }}
                                     </div>
                                     <p class="card-text" style="font-size: 15px">{{ $post->content }}</p>
-                                    
+
                                     @if ($post->documents->count() != 0)
-                                        <a href="{{ route('download.idea.file', [collect($post->documents)->pluck('doc_id')->first()]) }}"
+                                        <a href="{{ route('download.idea.file', $post->post_id) }}"
                                             class="btn btn-info btn-icon-text  mt-3">
                                             <i class="ti-file btn-icon-append"></i>
-                                            Download
+                                            Download file (as .zip)
                                             <i class="ti-download btn-icon-append ml-5"></i>
                                         </a>
                                     @endif

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\QALeaders;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\IdeaPosts;
 use App\Models\Topics;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -85,7 +86,7 @@ class QALeadersController extends Controller
         foreach ($notifyUsers as $user) {
             DB::table('notification')->insert([
                 'user_id' => $user->user_id,
-                'notify_content' => $topic->topic_name,
+                'notify_content' => 'New topic has been created: "' . $topic->topic_name . '"',
                 'url' => $topic->topic_id,
                 'type_notification' => 'topicNew',
                 'created_at' => now(),
@@ -114,5 +115,12 @@ class QALeadersController extends Controller
         $topic->save();
 
         return redirect()->route('qa-leaders.topics.management')->with('success', 'Topic has been updated');
+    }
+
+
+    public function ideaPosts($id)
+    {
+        $posts = IdeaPosts::where('topic_id', $id)->orderBy('created_at', 'desc')->paginate(20);
+        return view('role-qa-leaders.idea-posts', compact(['posts']))->with('title', 'Idea Posts');
     }
 }

@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'role_id');
     }
 
+    public function posts()
+    {
+        return $this->hasMany(IdeaPosts::class, 'user_id');
+    }
+    
     public function like_dislike()
     {
         return $this->hasMany(PostsLikeDislike::class, 'user_id');
@@ -73,6 +78,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class, 'user_id');
     }
+
 
 
     // protected  function role(): Attribute

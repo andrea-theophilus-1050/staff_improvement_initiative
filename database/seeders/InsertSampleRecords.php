@@ -139,6 +139,23 @@ class InsertSampleRecords extends Seeder
             ],
         ]);
 
+        $departments = range(1, 6);
+
+        for ($i = 1; $i <= 20; $i++) {
+            $user = [
+                'fullName' => 'User ' . $i,
+                'email' => 'user' . $i . '@example.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            DB::table('users')->insert($user);
+        }
+
         // insert into tb category
         DB::table('categories')->insert([
             [

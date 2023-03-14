@@ -2,20 +2,26 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            @if ($ownPosts->count() != 0)
-                @foreach ($ownPosts as $post)
+            @if ($posts->count() != 0)
+                @foreach ($posts as $post)
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="media mb-5">
-                                @if (auth()->user()->avatar == null)
+                                @if ($post->anonymous == 1 || $post->user->avatar == null)
                                     <img src="{{ asset('img/default-avt.jpg') }}" style="width: 30px; height: 30px"
                                         class="mr-3" alt="Profile Image">
                                 @else
-                                    <img src="{{ asset('img/avatar/' . auth()->user()->avatar) }}"
+                                    <img src="{{ asset('img/avatar/' . $post->user->avatar) }}"
                                         style="width: 30px; height: 30px" class="mr-3" alt="Profile Image">
                                 @endif
                                 <div class="media-body">
-                                    <h5 class="card-title">You</h5>
+                                    <h5 class="card-title">
+                                        @if ($post->anonymous == 1)
+                                            <i>(Anonymous)</i>
+                                        @else
+                                            {{ $post->user->fullName }}
+                                        @endif
+                                    </h5>
                                     <div class="mb-2" style="font-size: 12px">
                                         <i class="mdi mdi-calendar-clock"></i>&nbsp;&nbsp;Created on
                                         {{ date('F d, Y', strtotime($post->created_at)) }} at
@@ -41,42 +47,22 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-9 d-flex">
-                                    <button type="submit" id="like-button-{{ $post->post_id }}"
-                                        class="btn btn-primary btn-sm d-flex justify-content-center align-items-center"
-                                        disabled>
-                                        <i class="mdi mdi-thumb-up"></i>
-                                        &nbsp;&nbsp;
-                                        <b id="like-count-{{ $post->post_id }}">
-                                            {{ collect($post->like_dislike)->where('status', 'liked')->count() }}
-                                        </b>&nbsp;&nbsp;Like
-                                    </button>
-
-                                    <button type="submit" id="dislike-button-{{ $post->post_id }}"
-                                        class="btn btn-danger btn-sm d-flex justify-content-center align-items-center ml-2"
-                                        disabled>
-                                        <i class="mdi mdi-thumb-down"></i>
-                                        &nbsp;&nbsp;
-                                        <b id="dislike-count-{{ $post->post_id }}">
-                                            {{ collect($post->like_dislike)->where('status', 'disliked')->count() }}
-                                        </b>&nbsp;&nbsp;Dislike
-                                    </button>
-
-
-                                    <button
-                                        class="btn btn-outline-success btn-sm d-flex justify-content-center align-items-center ml-2"
-                                        data-toggle="collapse" data-target="#post-comment{{ $post->post_id }}">
-                                        <i class="mdi mdi-comment"></i>
-                                        &nbsp;&nbsp;
-                                        <b id="comment-count-{{ $post->post_id }}">
-                                            {{ $post->comments->count() }}
-                                        </b>&nbsp;&nbsp; Comment
-                                    </button>
+                                    <div class="mr-3" style="color: blue"><i class="mdi mdi-thumb-up"></i>
+                                        {{ collect($post->like_dislike)->where('status', 'liked')->count() }}
+                                        &nbsp;&nbsp;Like</div>
+                                    <div class="mr-3" style="color: red"><i class="mdi mdi-thumb-down"></i>
+                                        {{ collect($post->like_dislike)->where('status', 'disliked')->count() }}&nbsp;&nbsp;Dislike
+                                    </div>
+                                    <div class="mr-3" style="color: green"><i class="mdi mdi-comment"></i> <a
+                                            href="javascript:;" data-toggle="collapse"
+                                            data-target="#post-comment{{ $post->post_id }}">{{ $post->comments->count() }}&nbsp;&nbsp;Comment</a>
+                                    </div>
                                     {{-- <button
-                                        class="btn btn-outline-success btn-sm d-flex justify-content-center align-items-center ml-2"
-                                        data-toggle="collapse" data-target="#post-comment{{ $post->post_id }}">
-                                        <i class="mdi mdi-comment"></i>
-                                        &nbsp;&nbsp;{{ $post->comments->count() }} Comment
-                                    </button> --}}
+                                    class="btn btn-outline-success btn-sm d-flex justify-content-center align-items-center ml-2"
+                                    data-toggle="collapse" data-target="#post-comment{{ $post->post_id }}">
+                                    <i class="mdi mdi-comment"></i>
+                                    &nbsp;&nbsp;{{ $post->comments->count() }} Comment
+                                </button> --}}
                                 </div>
                             </div>
                             <hr>
@@ -124,7 +110,7 @@
                     </div>
                 @endforeach
                 <div class="d-flex justify-content-center align-items-center">
-                    {{ $ownPosts->links() }}
+                    {{ $posts->links() }}
                 </div>
             @else
                 <div class="row mt-5">
@@ -139,4 +125,5 @@
             @endif
         </div>
     </div>
+
 @endsection
