@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PostsLikeDislike;
+use App\Models\IdeaPosts;
+use App\Models\Comments;
+use App\Models\Notification;
+
 
 class LikeDislikeController extends Controller
 {
@@ -45,5 +49,50 @@ class LikeDislikeController extends Controller
             'dislikeCount' => $dislikeCount,
             'userStatus' => $userStatus
         ]);
+    }
+
+    public function submitComment(Request $request, $postID)
+    {
+        $request->validate([
+            'commentContent' => 'required',
+        ]);
+
+        $comment = new Comments();
+        $comment->comment_content = $request->commentContent;
+        $comment->post_id = $postID;
+        $comment->anonymous = $request->commentAnonymous;
+        $comment->user_id = auth()->user()->user_id;
+        $comment->save();
+
+        $notifyForPostsUser = IdeaPosts::where('post_id', $postID)->first();
+
+        if (auth()->user()->user_id != $notifyForPostsUser->user_id) {
+            $checkExists = Notification::where('user_id', $notifyForPostsUser->user_id)->where('url', $postID)->where('type_notification', 'comment')->first();
+            if ($checkExists != null) {
+                $checkExists->delete();
+            }
+
+            $notify = new Notification();
+            $notify->user_id = $notifyForPostsUser->user_id;
+            $notify->notify_content = 'Someone commented on your post';
+            $notify->url = $postID;
+            $notify->type_notification = 'comment';
+            $notify->save();
+        }
+        $commentCount = Comments::where('post_id', $postID)->count();
+
+        if ($comment->anonymous == 1) {
+            $comment->fullname = "<i>(Anonymous)</i>";
+            $comment->avatar = "default-avt.jpg";
+        } else {
+            $comment->fullname = $comment->user->fullName;
+            if ($comment->user->avatar == null) {
+                $comment->avatar = "default-avt.jpg";
+            } else {
+                $comment->avatar = $comment->user->avatar;
+            }
+        }
+
+        return response()->json(['newComment' => $comment->comment_content, 'commentCount' => $commentCount, 'commentCreated_at' => \Carbon\Carbon::parse($comment->created_at)->diffForHumans(), 'commentFullname' => $comment->fullname, 'commentAvatar' => $comment->avatar]);
     }
 }

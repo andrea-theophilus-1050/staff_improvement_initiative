@@ -44,8 +44,8 @@
                                     <th>#</th>
                                     <th>Fullname</th>
                                     <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Department</th>
+                                    <th class="text-center">Role</th>
+                                    <th class="text-center">Department</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -55,9 +55,20 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $account->fullName }}</td>
                                         <td>{{ $account->email }}</td>
-                                        <td>{{ $account->role->role_name }}</td>
-                                        <td>{{ $account->department->dept_name }}</td>
-                                        <td class="d-flex">
+                                        <td class="text-center">
+                                            @if ($account->role_id == 1)
+                                                <span class="badge badge-success">{{ $account->role->role_name }}</span>
+                                            @elseif($account->role_id == 2)
+                                                <span class="badge badge-warning">{{ $account->role->role_name }}</span>
+                                            @elseif($account->role_id == 3)
+                                                <span class="badge badge-info">{{ $account->role->role_name }}</span>
+                                            @elseif($account->role_id == 4)
+                                                {{ $account->role->role_name }}
+                                            @endif
+
+                                        </td>
+                                        <td class="text-center">{{ $account->department->dept_name }}</td>
+                                        <td class="d-flex text-center">
                                             <button type="button" class="btn btn-primary btn-sm mr-1" id="btn-edit-account"
                                                 data-ID="{{ $account->user_id }}" data-fullName="{{ $account->fullName }}"
                                                 data-email="{{ $account->email }}" data-role="role{{ $account->role_id }}"

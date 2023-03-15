@@ -120,7 +120,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div id="post-comment{{ $post->post_id }}" class="collapse">
+                        <div id="post-comment{{ $post->post_id }}" class="collapse" style="transition: height 0.5s ease-out; overflow: hidden">
                             <h6>Comments:</h6>
                             @foreach (collect($post->comments) as $comment)
                                 <div class="card mb-2" style="background: #f5f7ff">

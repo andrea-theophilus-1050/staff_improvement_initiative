@@ -5,8 +5,13 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="media mb-5">
-                        <img src="{{ asset('img/default-avt.jpg') }}" class="mr-3" alt="Profile Image"
-                            style="height: 50px; width: 50px">
+                        @if ($post->user->avatar == null)
+                            <img src="{{ asset('img/default-avt.jpg') }}" class="mr-3" alt="Profile Image"
+                                style="height: 50px; width: 50px">
+                        @else
+                            <img src="{{ asset('img/avatar/' . $post->user->avatar) }}" class="mr-3" alt="Profile Image"
+                                style="height: 50px; width: 50px">
+                        @endif
                         <div class="media-body">
                             <h5 class="card-title">You</h5>
                             <div class="mb-2" style="font-size: 12px">
@@ -38,7 +43,7 @@
 
                             @include('components.like-dislike-btn')
 
-                            
+
                             {{-- <button
                                     class="btn btn-outline-success btn-sm d-flex justify-content-center align-items-center ml-2"
                                     data-toggle="collapse" data-target="#post-comment{{ $post->post_id }}">

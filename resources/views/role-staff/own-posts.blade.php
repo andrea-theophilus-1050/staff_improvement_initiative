@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                             <hr>
-                            <div id="post-comment{{ $post->post_id }}" class="collapse">
+                            <div id="post-comment{{ $post->post_id }}" class="collapse" style="transition: height 0.5s ease-out; overflow: hidden">
                                 <h6>Comments:</h6>
                                 <div id="comments-section-{{ $post->post_id }}">
                                     @foreach (collect($post->comments) as $comment)

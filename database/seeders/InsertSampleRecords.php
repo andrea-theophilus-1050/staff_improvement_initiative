@@ -19,8 +19,8 @@ class InsertSampleRecords extends Seeder
 
         // insert into tb role
         DB::table('role')->insert([
-            ['role_name' => 'admin'],
-            ['role_name' => 'QA Leaders'],
+            ['role_name' => 'Administrator'],
+            ['role_name' => 'QA Managers'],
             ['role_name' => 'QA coordinators'],
             ['role_name' => 'Staffs']
         ]);
@@ -35,6 +35,10 @@ class InsertSampleRecords extends Seeder
             ['dept_name' => 'Finance']
         ]);
 
+
+        $departments = range(1, 6);
+        $avt = range(1, 27);
+
         // insert into tb users
         DB::table('users')->insert([
             [
@@ -45,7 +49,8 @@ class InsertSampleRecords extends Seeder
                 'dept_id' => 1,
                 'role_id' => 1,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
             ],
             [
                 'fullName' => 'Victoria Montgomery',
@@ -55,7 +60,8 @@ class InsertSampleRecords extends Seeder
                 'dept_id' => 1,
                 'role_id' => 2,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
             ],
             [
                 'fullName' => 'Nathaniel Harrison',
@@ -65,7 +71,8 @@ class InsertSampleRecords extends Seeder
                 'dept_id' => 2,
                 'role_id' => 3,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
             ],
             [
                 'fullName' => 'Elizabeth Fitzgerald',
@@ -75,7 +82,8 @@ class InsertSampleRecords extends Seeder
                 'dept_id' => 3,
                 'role_id' => 3,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
             ],
             [
                 'fullName' => 'Benjamin Kensington',
@@ -85,7 +93,8 @@ class InsertSampleRecords extends Seeder
                 'dept_id' => 4,
                 'role_id' => 3,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
             ],
             [
                 'fullName' => 'Gabrielle Winchester',
@@ -95,7 +104,8 @@ class InsertSampleRecords extends Seeder
                 'dept_id' => 2,
                 'role_id' => 4,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
             ],
             [
                 'fullName' => 'Theodore Sinclair',
@@ -105,7 +115,8 @@ class InsertSampleRecords extends Seeder
                 'dept_id' => 3,
                 'role_id' => 4,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
             ],
             [
                 'fullName' => 'Isabella Harrington',
@@ -115,7 +126,8 @@ class InsertSampleRecords extends Seeder
                 'dept_id' => 4,
                 'role_id' => 4,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
             ],
             [
                 'fullName' => 'Maximilian Jefferson',
@@ -125,7 +137,8 @@ class InsertSampleRecords extends Seeder
                 'dept_id' => 4,
                 'role_id' => 4,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
             ],
             [
                 'fullName' => 'Alexandra Kensington',
@@ -135,26 +148,267 @@ class InsertSampleRecords extends Seeder
                 'dept_id' => 4,
                 'role_id' => 4,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
             ],
-        ]);
 
-        $departments = range(1, 6);
-
-        for ($i = 1; $i <= 20; $i++) {
-            $user = [
-                'fullName' => 'User ' . $i,
-                'email' => 'user' . $i . '@example.com',
+            [
+                'fullName' => 'Elizabeth Townsend',
+                'email' => 'elizabethtownsend@email.com',
                 'password' => Hash::make('12345678'),
                 'password_changed' => 1,
                 'dept_id' => $departments[array_rand($departments)],
                 'role_id' => 4,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ];
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
 
-            DB::table('users')->insert($user);
-        }
+            [
+                'fullName' => 'Alexander Harrison',
+                'email' => 'alexanderharrison@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Samantha Fitzgerald',
+                'email' => 'samanthafitzgerald@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Benjamin Whitmore',
+                'email' => 'benjaminwhitmore@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Gabrielle Sinclair',
+                'email' => 'gabriellesinclair@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Theodore Anderson',
+                'email' => 'theodoreanderson@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Isabella Montgomery',
+                'email' => 'isabellamontgomery@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Nathaniel Hartman',
+                'email' => 'nathanielhartman@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Charlotte McLeod',
+                'email' => 'charlottemcleod@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Maximilian Mercer',
+                'email' => 'maximilianmercer@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Penelope Donovan',
+                'email' => 'penelopedonovan@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Nicholas Atwood',
+                'email' => 'nicholasatwood@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Victoria Blackburn',
+                'email' => 'victoriablackburn@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Frederick Tate',
+                'email' => 'fredericktate@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Annabelle Greene',
+                'email' => 'annabellegreene@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Harrison Langley',
+                'email' => 'harrisonlangley@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Lillian Banks',
+                'email' => 'lillianbanks@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Timothy Bradford',
+                'email' => 'timothybradford@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Alexandra Barrett',
+                'email' => 'alexandrabarrett@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+
+            [
+                'fullName' => 'Christopher Gallagher',
+                'email' => 'christophergallagher@email.com',
+                'password' => Hash::make('12345678'),
+                'password_changed' => 1,
+                'dept_id' => $departments[array_rand($departments)],
+                'role_id' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'avatar' => 'avt' . array_rand($avt) . '.png',
+            ],
+        ]);
+
+
+
+        // for ($i = 1; $i <= 20; $i++) {
+        //     $user = [
+        //         'fullName' => 'User ' . $i,
+        //         'email' => 'user' . $i . '@example.com',
+        //         'password' => Hash::make('12345678'),
+        //         'password_changed' => 1,
+        //         'dept_id' => $departments[array_rand($departments)],
+        //         'role_id' => 4,
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ];
+
+        //     DB::table('users')->insert($user);
+        // }
 
         // insert into tb category
         DB::table('categories')->insert([

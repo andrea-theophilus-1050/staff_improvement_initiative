@@ -52,7 +52,7 @@ class AdminController extends Controller
 
     public function account_management()
     {
-        $accounts = User::paginate(25);
+        $accounts = User::where('user_id', '!=', auth()->user()->user_id)->orderBy('role_id', 'asc')->paginate(25);
         $depts = Department::all();
         $roles = Role::all();
 

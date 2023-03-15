@@ -1,4 +1,4 @@
-<div id="post-comment{{ $post->post_id }}" class="collapse">
+<div id="post-comment{{ $post->post_id }}" class="collapse" style="transition: height 0.5s ease-out; overflow: hidden">
     <h6>Comments:</h6>
     <div id="comments-section-{{ $post->post_id }}">
         @foreach (collect($post->comments) as $comment)
@@ -65,7 +65,7 @@
             </div>
             <div class="form-group row">
                 <button type="submit" class="btn btn-primary btn-sm ml-3">Submit</button>
-                <button class="btn btn-outline-success btn-sm ml-2" data-toggle="collapse"
+                <button type="button" class="btn btn-outline-success btn-sm ml-2" data-toggle="collapse"
                     data-target="#post-comment{{ $post->post_id }}">
                     Hide
                 </button>

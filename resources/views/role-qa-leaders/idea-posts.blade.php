@@ -12,10 +12,10 @@
                 <div class="card-body">
 
                     <a class="btn btn-primary btn-icon-text"
-                        href="{{ route('qa-leaders.download.all.files', $posts[0]->topic_id) }}">Download all files (.zip)
+                        href="{{ route('qa-leaders.download.all.files', $onTopic->topic_id) }}">Download all files (.zip)
                         <i class="ti-download btn-icon-append ml-3"></i></a>
                     <a class="btn btn-success btn-icon-text mt-2"
-                        href="{{ route('qa-leaders.export.csv', $posts[0]->topic_id) }}">Export ideas (.csv) <i
+                        href="{{ route('qa-leaders.export.csv', $onTopic->topic_id) }}">Export ideas (.csv) <i
                             class="ti-file btn-icon-append ml-3"></i></a>
                 </div>
             </div>
@@ -27,7 +27,7 @@
             <div class="card mb-4 shadow text-center h4 font-weight-bold">
                 <div class="card-body">
                     List of TOP Ideas
-                    <a class="btn btn-success btn-icon-text" href="{{ route('list.of.top-ideas', $posts[0]->topic_id) }}">
+                    <a class="btn btn-success btn-icon-text" href="{{ route('list.of.top-ideas', $onTopic->topic_id) }}">
                         <i class="ti-file btn-icon-append ml-3"></i></a>
                 </div>
             </div>

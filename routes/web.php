@@ -92,7 +92,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('change-password', [AuthController::class, 'changePassword'])->name('auth.change.password');
     Route::post('change-profile', [AuthController::class, 'changeProfile'])->name('auth.change.profile');
 
-    Route::post('posts/comment/submit/{postID}', [StaffController::class, 'submitComment'])->name('staff.posts.comments.submit');
+    Route::post('posts/comment/submit/{postID}', [LikeDislikeController::class, 'submitComment'])->name('staff.posts.comments.submit');
     Route::post('posts/like-dislike/{postID}/{status}', [LikeDislikeController::class, 'likeDislike'])->name('posts.like.dislike');
 
     Route::get('notification-handler/{type}/{url}/{notifyID}', [NotifyController::class, 'notificationHandlerTopic'])->name('notification.handler');
