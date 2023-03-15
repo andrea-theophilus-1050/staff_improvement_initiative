@@ -68,10 +68,6 @@
                                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                                     data-target="#topic-delete-modal"><i
                                                         class="mdi mdi-delete"></i></button>
-                                                @if ($topic->ideaPosts->count() != 0)
-                                                    <button type="button" class="btn btn-primary btn-sm"><i
-                                                            class="mdi mdi-download"></i></button>
-                                                @endif
                                             @endif
 
                                         </td>

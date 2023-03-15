@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\IdeaPosts;
+use App\Models\PostsLikeDislike;
 use App\Models\Topics;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -124,4 +125,7 @@ class QALeadersController extends Controller
         $onTopic = Topics::where('topic_id', $id)->first();
         return view('role-qa-leaders.idea-posts', compact(['posts', 'onTopic']))->with('title', 'Idea Posts');
     }
+
+
+    
 }

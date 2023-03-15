@@ -9,6 +9,7 @@ use App\Http\Controllers\NotifyController;
 use App\Http\Controllers\QALeaders\QALeadersController;
 use App\Http\Controllers\QACoordinators\QACoordinatorsController;
 use App\Http\Controllers\Staff\StaffController;
+use App\Http\Controllers\TopIdeasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,9 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('idea-posts/{id}', [QALeadersController::class, 'ideaPosts'])->name('qa-leaders.idea.posts');
             Route::get('download-all-files/{id}', [DownloadFileController::class, 'downloadAllFiles'])->name('qa-leaders.download.all.files');
+            Route::get('exportCSV/{topicID}', [DownloadFileController::class, 'exportCSV'])->name('qa-leaders.export.csv');
+
+            Route::get('test/{id}', [QALeadersController::class, 'top3'])->name('test.top.3');
         });
     });
 
@@ -93,6 +97,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('notification-handler/{type}/{url}/{notifyID}', [NotifyController::class, 'notificationHandlerTopic'])->name('notification.handler');
     Route::get('download-file/{id}', [DownloadFileController::class, 'downloadFile'])->name('download.idea.file');
+    Route::get('list-of-top-ideas/{topicID}', [TopIdeasController::class, 'listOfTopIdeas'])->name('list.of.top-ideas');
 });
 
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');

@@ -1,8 +1,41 @@
 @extends('layouts.main')
 @section('content')
     <div class="row">
-        <a href="{{ route('qa-leaders.download.all.files', $posts[0]->topic_id) }}">Download all files</a>
-        <div class="col-md-12">
+        <div class="col-md-3 mb-4">
+            <div class="card mb-4 shadow text-center h4 font-weight-bold">
+                {{-- alert --}}
+                @if (session('errorDownload'))
+                    <script>
+                        alert('No files to download');
+                    </script>
+                @endif
+                <div class="card-body">
+
+                    <a class="btn btn-primary btn-icon-text"
+                        href="{{ route('qa-leaders.download.all.files', $posts[0]->topic_id) }}">Download all files (.zip)
+                        <i class="ti-download btn-icon-append ml-3"></i></a>
+                    <a class="btn btn-success btn-icon-text mt-2"
+                        href="{{ route('qa-leaders.export.csv', $posts[0]->topic_id) }}">Export ideas (.csv) <i
+                            class="ti-file btn-icon-append ml-3"></i></a>
+                </div>
+            </div>
+            <div class="card mb-4 shadow text-center h4 font-weight-bold">
+                <div class="card-body">
+                    <b style="font-weight: normal">Number of ideas:</b> {{ $posts->count() }}
+                </div>
+            </div>
+            <div class="card mb-4 shadow text-center h4 font-weight-bold">
+                <div class="card-body">
+                    List of TOP Ideas
+                    <a class="btn btn-success btn-icon-text" href="{{ route('list.of.top-ideas', $posts[0]->topic_id) }}">
+                        <i class="ti-file btn-icon-append ml-3"></i></a>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-9">
             @if ($posts->count() != 0)
                 @foreach ($posts as $post)
                     <div class="card mb-4">
