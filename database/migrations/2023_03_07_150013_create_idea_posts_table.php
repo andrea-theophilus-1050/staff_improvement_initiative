@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id('post_id');
             $table->text('content');
             $table->unsignedBigInteger('topic_id');
-            $table->foreign('topic_id')->references('topic_id')->on('topics');
+            $table->foreign('topic_id')->references('topic_id')->on('topics')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('user_id')->on('users');
+            $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->tinyInteger('anonymous')->default(0); // 0 = false, 1 = true
             $table->timestamps();
         });

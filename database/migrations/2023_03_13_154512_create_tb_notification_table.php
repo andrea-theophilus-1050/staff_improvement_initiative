@@ -20,7 +20,7 @@ return new class extends Migration
             $table->tinyInteger('status')->default(0); // 0: unread, 1: read
             $table->string('url')->nullable();
             $table->string('type_notification')->nullable();
-            $table->foreign('user_id')->references('user_id')->on('users');
+            $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

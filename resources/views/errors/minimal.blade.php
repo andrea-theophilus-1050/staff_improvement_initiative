@@ -18,6 +18,7 @@
     <!-- endinject -->
     <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" />
 </head>
+
 <body>
     <div class="container-scroller">
         <div class="container-fluid page-body-wrapper full-page-wrapper">
@@ -35,12 +36,14 @@
                         </div>
                         <div class="row mt-5">
                             <div class="col-12 text-center mt-xl-2">
-                                <a class="text-white font-weight-medium" href="{{ route('login') }}">Back to home</a>
+                                <a class="text-white font-weight-medium" href="#" onclick="window.history.back();">Back to
+                                    home</a>
                             </div>
                         </div>
                         <div class="row mt-5">
                             <div class="col-12 mt-xl-2">
-                                <p class="text-white font-weight-medium text-center">Copyright &copy; {{ now()->format('Y') }} All rights
+                                <p class="text-white font-weight-medium text-center">Copyright &copy;
+                                    {{ now()->format('Y') }} All rights
                                     reserved.</p>
                             </div>
                         </div>

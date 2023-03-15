@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('doc_id');
             $table->string('doc_name');
             $table->unsignedBigInteger('post_id');
-            $table->foreign('post_id')->references('post_id')->on('idea_posts');
+            $table->foreign('post_id')->references('post_id')->on('idea_posts')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

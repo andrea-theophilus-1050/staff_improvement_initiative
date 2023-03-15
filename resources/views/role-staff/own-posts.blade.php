@@ -41,36 +41,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-9 d-flex">
-                                    <button type="submit" id="like-button-{{ $post->post_id }}"
-                                        class="btn btn-primary btn-sm d-flex justify-content-center align-items-center"
-                                        disabled>
-                                        <i class="mdi mdi-thumb-up"></i>
-                                        &nbsp;&nbsp;
-                                        <b id="like-count-{{ $post->post_id }}">
-                                            {{ collect($post->like_dislike)->where('status', 'liked')->count() }}
-                                        </b>&nbsp;&nbsp;Like
-                                    </button>
-
-                                    <button type="submit" id="dislike-button-{{ $post->post_id }}"
-                                        class="btn btn-danger btn-sm d-flex justify-content-center align-items-center ml-2"
-                                        disabled>
-                                        <i class="mdi mdi-thumb-down"></i>
-                                        &nbsp;&nbsp;
-                                        <b id="dislike-count-{{ $post->post_id }}">
-                                            {{ collect($post->like_dislike)->where('status', 'disliked')->count() }}
-                                        </b>&nbsp;&nbsp;Dislike
-                                    </button>
-
-
-                                    <button
-                                        class="btn btn-outline-success btn-sm d-flex justify-content-center align-items-center ml-2"
-                                        data-toggle="collapse" data-target="#post-comment{{ $post->post_id }}">
-                                        <i class="mdi mdi-comment"></i>
-                                        &nbsp;&nbsp;
-                                        <b id="comment-count-{{ $post->post_id }}">
-                                            {{ $post->comments->count() }}
-                                        </b>&nbsp;&nbsp; Comment
-                                    </button>
+                                    @include('components.like-dislike-btn')
                                     {{-- <button
                                         class="btn btn-outline-success btn-sm d-flex justify-content-center align-items-center ml-2"
                                         data-toggle="collapse" data-target="#post-comment{{ $post->post_id }}">
@@ -81,8 +52,8 @@
                             </div>
                             <hr>
                             <div id="post-comment{{ $post->post_id }}" class="collapse">
-                                <div id="comments-section">
-                                    <h6>Comments:</h6>
+                                <h6>Comments:</h6>
+                                <div id="comments-section-{{ $post->post_id }}">
                                     @foreach (collect($post->comments) as $comment)
                                         <div class="card mb-2" style="background: #f5f7ff">
                                             <div class="card-body">
@@ -96,6 +67,7 @@
                                                             style="width: 30px; height: 30px" class="mr-3"
                                                             alt="Profile Image">
                                                     @endif
+
                                                     <div class="media-body">
                                                         <p class="card-text">
                                                             <b>
@@ -115,10 +87,48 @@
                                                             class="mdi mdi-calendar-clock"></i>&nbsp;&nbsp;{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                     @endforeach
                                 </div>
+                                @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($post->topic->finalClosureDate)))
+                                    <hr>
+                                    <form method="POST" id="comment-form-{{ $post->post_id }}"
+                                        data-post-id="{{ $post->post_id }}"
+                                        action="{{ route('staff.posts.comments.submit', [$post->post_id]) }}">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="comment-text">Add a comment:</label>
+                                            <textarea class="form-control" id="comment-text-{{ $post->post_id }}" name="commentContent" rows="3" required></textarea>
+                                        </div>
+                                        <div
+                                            class="form-group col-md-4 col-sm-12 d-flex justify-content-between align-items-center">
+                                            <label for=""><b>Anonymous</b></label>
+                                            <div class="form-check">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="commentAnonymous"
+                                                        id="commentAnonymous" value="1">
+                                                    Yes
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="commentAnonymous"
+                                                        id="commentAnonymous" value="0" checked>
+                                                    No
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <button type="submit" class="btn btn-primary btn-sm ml-3">Submit</button>
+                                            <button class="btn btn-outline-success btn-sm ml-2" data-toggle="collapse"
+                                                data-target="#post-comment{{ $post->post_id }}">
+                                                Hide
+                                            </button>
+                                        </div>
+                                    </form>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -139,4 +149,6 @@
             @endif
         </div>
     </div>
+
+    <script src="{{ asset('javascript/handle-like-cmt.js') }}"></script>
 @endsection

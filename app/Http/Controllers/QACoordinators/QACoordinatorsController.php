@@ -31,9 +31,9 @@ class QACoordinatorsController extends Controller
             ->where('topic_id', $id)
             ->where('users.dept_id', auth()->user()->dept_id)
             ->orderBy('idea_posts.created_at', 'desc')->paginate(5);
-        $topicTitle = Topics::where('topic_id', $id)->first();
+        $onTopic = Topics::where('topic_id', $id)->first();
         $staffs = User::where('role_id', 4)->where('dept_id', auth()->user()->dept_id)->get();
-        return view('role-qa-coordinators.staff-idea-posts', compact(['posts', 'id', 'topicTitle', 'staffs']))->with('title', 'Topics');
+        return view('role-qa-coordinators.staff-idea-posts', compact(['posts', 'id', 'onTopic', 'staffs']))->with('title', 'Topics');
     }
 
     public function sendNotification($id)
