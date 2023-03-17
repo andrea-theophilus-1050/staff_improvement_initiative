@@ -44,7 +44,8 @@
             @csrf
             <div class="form-group">
                 <label for="comment-text">Add a comment:</label>
-                <textarea class="form-control" id="comment-text-{{ $post->post_id }}" name="commentContent" rows="3" required></textarea>
+                {{-- <textarea class="form-control" id="comment-text-{{ $post->post_id }}" name="commentContent" rows="3" required></textarea> --}}
+                <input type="text" class="form-control" id="comment-text-{{ $post->post_id }}" name="commentContent"required>
             </div>
             <div class="form-group col-md-4 col-sm-12 d-flex justify-content-between align-items-center">
                 <label for=""><b>Anonymous</b></label>

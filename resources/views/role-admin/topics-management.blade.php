@@ -115,7 +115,7 @@
                                                 <div class="col-sm-9">
                                                     <input type="datetime-local" id="firstClosureDate_edit"
                                                         name="firstClosureDate" class="form-control"
-                                                        value="{{ old('firstClosureDate') }}">
+                                                        value="{{ old('firstClosureDate') }}" required>
 
                                                 </div>
                                             </div>
@@ -137,7 +137,7 @@
                                                 <div class="col-sm-9">
                                                     <input class="form-control" type="datetime-local"
                                                         name="finalClosureDate" id="finalClosureDate_edit"
-                                                        value="{{ old('finalClosureDate') }}" />
+                                                        value="{{ old('finalClosureDate') }}" required/>
                                                 </div>
                                             </div>
                                         </div>

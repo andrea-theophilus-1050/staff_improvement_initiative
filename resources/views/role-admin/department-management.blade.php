@@ -103,7 +103,7 @@
                                     <label class="col-sm-4 col-form-label">Department name</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="department"
-                                            value="{{ old('department') }}" />
+                                            value="{{ old('department') }}" required/>
                                     </div>
                                 </div>
                             </div>
@@ -144,7 +144,7 @@
                                     <label class="col-sm-4 col-form-label">Department name</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="department" id="dept-name"
-                                            value="{{ old('department') }}" />
+                                            value="{{ old('department') }}" required/>
                                     </div>
                                 </div>
                             </div>

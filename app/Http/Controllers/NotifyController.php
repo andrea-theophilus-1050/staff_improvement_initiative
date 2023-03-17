@@ -38,5 +38,17 @@ class NotifyController extends Controller
             $onTopic = Topics::where('topic_id', $post->topic_id)->first();
             return view('role-qa-coordinators.staff-single-post', compact(['post', 'onTopic']))->with('title', 'Single Post');
         }
+
+        // handle notify for QA Coordinators when QA Managers create a new topic
+        if ($type = "NewTopicFromQALeaders") {
+            Notification::where('id', $notifyID)->delete();
+            return redirect()->route('qa-coordinators.topics.idea.posts', $url);
+        }
+    }
+
+    public function clearNotification($userID)
+    {
+        Notification::where('user_id', $userID)->delete();
+        return redirect()->back();
     }
 }

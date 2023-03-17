@@ -60,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('topics-management', [QALeadersController::class, 'topics'])->name('qa-leaders.topics.management');
             Route::post('topics-management/create', [QALeadersController::class, 'createTopics'])->name('qa-leaders.topics.store');
             Route::post('topics-management/update/{id}', [QALeadersController::class, 'updateTopics'])->name('qa-leaders.topics.update');
+            Route::post('delete-topic/{id}', [QALeadersController::class, 'deleteTopics'])->name('qa-leaders.delete.topic');
 
             Route::get('idea-posts/{id}', [QALeadersController::class, 'ideaPosts'])->name('qa-leaders.idea.posts');
             Route::get('download-all-files/{id}', [DownloadFileController::class, 'downloadAllFiles'])->name('qa-leaders.download.all.files');
@@ -96,6 +97,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('posts/like-dislike/{postID}/{status}', [LikeDislikeController::class, 'likeDislike'])->name('posts.like.dislike');
 
     Route::get('notification-handler/{type}/{url}/{notifyID}', [NotifyController::class, 'notificationHandlerTopic'])->name('notification.handler');
+    Route::get('clear-notification/{userID}', [NotifyController::class, 'clearNotification'])->name('clear.all.notify');
     Route::get('download-file/{id}', [DownloadFileController::class, 'downloadFile'])->name('download.idea.file');
     Route::get('list-of-top-ideas/{topicID}', [TopIdeasController::class, 'listOfTopIdeas'])->name('list.of.top-ideas');
 });

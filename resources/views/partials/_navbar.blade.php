@@ -32,7 +32,16 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
                     aria-labelledby="notificationDropdown">
-                    <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications
+                            ({{ $notifications->count() }})</p>
+                            
+                        @if ($notifications->count() > 0)
+                            <a href="{{ route('clear.all.notify', auth()->user()->user_id) }}"
+                                class="mb-0 font-weight-normal float-right dropdown-header"
+                                onclick="return confirm('Are you sure to delete all notifications?')">Clear all</a>
+                        @endif
+                    </div>
 
                     {{-- NOTE: notification part NOTE: --}}
                     @foreach ($notifications as $notification)
@@ -91,23 +100,42 @@
                                 </a>
                             @endif
                         @elseif($notification->user->role_id == 3)
-                            {{-- NOTE: Role QA Coordinators --}}
-                            <a href="{{ route('notification.handler', ['postIdeas', $notification->url, $notification->id]) }}"
-                                class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <div class="preview-icon bg-facebook">
-                                        <i class="mdi mdi-bookmark-plus mx-0"></i>
+                            @if ($notification->type_notification == 'postIdeas')
+                                {{-- NOTE: Role QA Coordinators --}}
+                                <a href="{{ route('notification.handler', ['postIdeas', $notification->url, $notification->id]) }}"
+                                    class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-facebook">
+                                            <i class="mdi mdi-bookmark-plus mx-0"></i>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="preview-item-content">
-                                    <h6 class="preview-subject font-weight-normal">
-                                        {{ $notification->notify_content }}</h6>
-                                    <p class="font-weight-light small-text mb-0 text-muted">
-                                        {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}
-                                    </p>
+                                    <div class="preview-item-content">
+                                        <h6 class="preview-subject font-weight-normal">
+                                            {{ $notification->notify_content }}</h6>
+                                        <p class="font-weight-light small-text mb-0 text-muted">
+                                            {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}
+                                        </p>
 
-                                </div>
-                            </a>
+                                    </div>
+                                </a>
+                            @elseif ($notification->type_notification == 'NewTopicFromQALeaders')
+                                <a href="{{ route('notification.handler', ['NewTopicFromQALeaders', $notification->url, $notification->id]) }}"
+                                    class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-facebook">
+                                            <i class="mdi mdi-bookmark-plus mx-0"></i>
+                                        </div>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <h6 class="preview-subject font-weight-normal">
+                                            {{ $notification->notify_content }}</h6>
+                                        <p class="font-weight-light small-text mb-0 text-muted">
+                                            {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}
+                                        </p>
+
+                                    </div>
+                                </a>
+                            @endif
                         @endif
                     @endforeach
                     {{-- NOTE: notification part NOTE: --}}

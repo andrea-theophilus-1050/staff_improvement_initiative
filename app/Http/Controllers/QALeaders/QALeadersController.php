@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\IdeaPosts;
+use App\Models\Notification;
 use App\Models\PostsLikeDislike;
 use App\Models\Topics;
 use App\Models\User;
@@ -83,16 +84,35 @@ class QALeadersController extends Controller
         $topic->finalClosureDate = $request->finalClosureDate;
         $topic->save();
 
-        $notifyUsers = User::where('role_id', 4)->get();
+        $notifyUsers = User::where('role_id', '!=', 2)->where('role_id', '!=', 1)->get();
         foreach ($notifyUsers as $user) {
-            DB::table('notification')->insert([
-                'user_id' => $user->user_id,
-                'notify_content' => 'New topic has been created: "' . $topic->topic_name . '"',
-                'url' => $topic->topic_id,
-                'type_notification' => 'topicNew',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            // DB::table('notification')->insert([
+            //     'user_id' => $user->user_id,
+            //     'notify_content' => 'New topic has been created: "' . $topic->topic_name . '"',
+            //     'url' => $topic->topic_id,
+            //     'type_notification' => 'topicNew',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ]);
+            if ($user->role_id == 4) {
+                Notification::insert([
+                    'user_id' => $user->user_id,
+                    'notify_content' => 'New topic has been created: "' . $topic->topic_name . '"',
+                    'url' => $topic->topic_id,
+                    'type_notification' => 'topicNew',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            } elseif ($user->role_id == 3) {
+                Notification::insert([
+                    'user_id' => $user->user_id,
+                    'notify_content' => 'New topic has been created: "' . $topic->topic_name . '"',
+                    'url' => $topic->topic_id,
+                    'type_notification' => 'NewTopicFromQALeaders',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
         }
 
         return redirect()->route('qa-leaders.topics.management')->with('success', 'Topic has been created');
@@ -118,6 +138,20 @@ class QALeadersController extends Controller
         return redirect()->route('qa-leaders.topics.management')->with('success', 'Topic has been updated');
     }
 
+    public function deleteTopics($id)
+    {
+        $topic = Topics::where('topic_id', $id)->first();
+        $topic->delete();
+
+        Notification::where('url', $id)
+            ->where(function ($query) {
+                $query->where('type_notification', 'topicNew')
+                    ->orWhere('type_notification', 'NewTopicFromQALeaders');
+            })->delete();
+
+        return redirect()->back()->with('success', 'Topic has been deleted');
+    }
+
 
     public function ideaPosts($id)
     {
@@ -125,7 +159,4 @@ class QALeadersController extends Controller
         $onTopic = Topics::where('topic_id', $id)->first();
         return view('role-qa-leaders.idea-posts', compact(['posts', 'onTopic']))->with('title', 'Idea Posts');
     }
-
-
-    
 }

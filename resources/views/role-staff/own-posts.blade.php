@@ -51,7 +51,8 @@
                                 </div>
                             </div>
                             <hr>
-                            <div id="post-comment{{ $post->post_id }}" class="collapse" style="transition: height 0.5s ease-out; overflow: hidden">
+                            <div id="post-comment{{ $post->post_id }}" class="collapse"
+                                style="transition: height 0.5s ease-out; overflow: hidden">
                                 <h6>Comments:</h6>
                                 <div id="comments-section-{{ $post->post_id }}">
                                     @foreach (collect($post->comments) as $comment)
@@ -100,7 +101,8 @@
                                         @csrf
                                         <div class="form-group">
                                             <label for="comment-text">Add a comment:</label>
-                                            <textarea class="form-control" id="comment-text-{{ $post->post_id }}" name="commentContent" rows="3" required></textarea>
+                                            <input class="form-control" id="comment-text-{{ $post->post_id }}"
+                                                name="commentContent" rows="3" required>
                                         </div>
                                         <div
                                             class="form-group col-md-4 col-sm-12 d-flex justify-content-between align-items-center">

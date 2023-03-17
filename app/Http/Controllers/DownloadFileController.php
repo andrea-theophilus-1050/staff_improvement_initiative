@@ -58,46 +58,49 @@ class DownloadFileController extends Controller
     public function exportCSV($topicID)
     {
         $data = IdeaPosts::where('topic_id', $topicID)->orderBy('created_at', 'desc')->get();
-        $filename = $data[0]->topic->topic_name . ".csv";
 
-        $headers = [
-            'Content-type' => 'text/csv',
-            'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
-            'Pragma' => 'no-cache',
-            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
-            'Expires' => '0',
+        if ($data->count() != 0) {
+            $filename = $data[0]->topic->topic_name . ".csv";
+            $headers = [
+                'Content-type' => 'text/csv',
+                'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
+                'Pragma' => 'no-cache',
+                'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+                'Expires' => '0',
 
-        ];
+            ];
 
-        $callback = function () use ($data) {
-            $file = fopen('php://output', 'w');
+            $callback = function () use ($data) {
+                $file = fopen('php://output', 'w');
 
-            fputcsv($file, ['Full name', 'Department', 'Content', 'Created_at', 'Like count', 'Dislike count', 'Comments']);
+                fputcsv($file, ['Full name', 'Department', 'Content', 'Created_at', 'Like count', 'Dislike count', 'Comments']);
 
-            foreach ($data as $row) {
-                $comments = [];
-                if ($row->comments->count() > 0) {
-                    foreach ($row->comments as $cmt) {
-                        array_push($comments, $cmt->comment_content);
+                foreach ($data as $row) {
+                    $comments = [];
+                    if ($row->comments->count() > 0) {
+                        foreach ($row->comments as $cmt) {
+                            array_push($comments, $cmt->comment_content);
+                        }
                     }
+
+                    $fullname = $row->anonymous == 1 ? '(Anonymous)' : $row->user->fullName;
+
+                    fputcsv($file, [
+                        $fullname,
+                        $row->user->department->dept_name,
+                        $row->content,
+                        $row->created_at,
+                        collect($row->like_dislike)->where('status', 'liked')->count(),
+                        collect($row->like_dislike)->where('status', 'disliked')->count(),
+                        implode(" || ", $comments),
+                    ]);
                 }
 
-                $fullname = $row->anonymous == 1 ? '(Anonymous)' : $row->user->fullName;
-
-                fputcsv($file, [
-                    $fullname,
-                    $row->user->department->dept_name,
-                    $row->content,
-                    $row->created_at,
-                    collect($row->like_dislike)->where('status', 'liked')->count(),
-                    collect($row->like_dislike)->where('status', 'disliked')->count(),
-                    implode(" || ", $comments),
-                ]);
-            }
-
-            fclose($file);
-        };
-
-        return Response::stream($callback, 200, $headers);
+                fclose($file);
+            };
+            return Response::stream($callback, 200, $headers);
+        } else {
+            return back()->with('errorDownload', 'No ideas to export');
+        }
     }
 }

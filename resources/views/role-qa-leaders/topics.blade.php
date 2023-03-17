@@ -55,19 +55,26 @@
                                         <td style="position: sticky; left: 0; z-index: 1; background: white">
 
                                             @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($topic->firstClosureDate)))
-                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                    data-target="#topic-delete-modal">Delete</button>
-                                                <button type="button" class="btn btn-primary btn-sm" id="topic-edit-modal"
-                                                    data-id="{{ $topic->topic_id }}"
-                                                    data-topicName="{{ $topic->topic_name }}"
-                                                    data-description="{{ $topic->topic_description }}"
-                                                    data-firstClosureDate="{{ $topic->firstClosureDate }}"
-                                                    data-finalClosureDate="{{ $topic->finalClosureDate }}"
-                                                    data-categoryID="category{{ $topic->category->category_id }}">Edit</button>
+                                                <form method="POST"
+                                                    action="{{ route('qa-leaders.delete.topic', $topic->topic_id) }}">
+                                                    @csrf
+                                                    <button type="submit" type="button" class="btn btn-danger btn-sm"
+                                                        onclick="return confirm('Are you sure to delete this topic?')">Delete</button>
+                                                    <button type="button" class="btn btn-primary btn-sm"
+                                                        id="topic-edit-modal" data-id="{{ $topic->topic_id }}"
+                                                        data-topicName="{{ $topic->topic_name }}"
+                                                        data-description="{{ $topic->topic_description }}"
+                                                        data-firstClosureDate="{{ $topic->firstClosureDate }}"
+                                                        data-finalClosureDate="{{ $topic->finalClosureDate }}"
+                                                        data-categoryID="category{{ $topic->category->category_id }}">Edit</button>
+                                                </form>
                                             @else
-                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                    data-target="#topic-delete-modal"><i
-                                                        class="mdi mdi-delete"></i></button>
+                                                <form method="POST"
+                                                    action="{{ route('qa-leaders.delete.topic', $topic->topic_id) }}">
+                                                    @csrf
+                                                    <button type="submit" type="button" class="btn btn-danger btn-sm"
+                                                        onclick="return confirm('Are you sure to delete this topic?')">Delete</button>
+                                                </form>
                                             @endif
 
                                         </td>
@@ -147,7 +154,7 @@
                                                 <div class="col-sm-9">
                                                     <input type="datetime-local" id="firstClosureDate"
                                                         name="firstClosureDate" class="form-control"
-                                                        value="{{ old('firstClosureDate') }}">
+                                                        value="{{ old('firstClosureDate') }}" required>
 
                                                 </div>
                                             </div>
@@ -159,7 +166,7 @@
                                                 <label class="col-sm-3 col-form-label">Topic name</label>
                                                 <div class="col-sm-9">
                                                     <input class="form-control" type="text" name="topicName"
-                                                        id="topicName" value="{{ old('topicName') }}" />
+                                                        id="topicName" value="{{ old('topicName') }}" required />
                                                 </div>
                                             </div>
                                         </div>
@@ -170,7 +177,7 @@
                                                 <div class="col-sm-9">
                                                     <input class="form-control" type="datetime-local"
                                                         name="finalClosureDate" id="finalClosureDate"
-                                                        value="{{ old('finalClosureDate') }}" />
+                                                        value="{{ old('finalClosureDate') }}" required />
                                                 </div>
                                             </div>
                                         </div>
@@ -181,7 +188,7 @@
                                                 <label class="col-sm-3 col-form-label">Topic description</label>
                                                 <div class="col-sm-9">
                                                     <textarea name="description" id="description" class="form-control" cols="30" rows="10"
-                                                        style="line-height: 1.5">{{ old('description') }}</textarea>
+                                                        style="line-height: 1.5" required>{{ old('description') }}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -253,7 +260,7 @@
                                                 <div class="col-sm-9">
                                                     <input type="datetime-local" id="firstClosureDate_edit"
                                                         name="firstClosureDate" class="form-control"
-                                                        value="{{ old('firstClosureDate') }}">
+                                                        value="{{ old('firstClosureDate') }}" required>
 
                                                 </div>
                                             </div>
@@ -265,7 +272,7 @@
                                                 <label class="col-sm-3 col-form-label">Topic name</label>
                                                 <div class="col-sm-9">
                                                     <input class="form-control" type="text" name="topicName"
-                                                        id="topicName_edit" value="{{ old('topicName') }}" />
+                                                        id="topicName_edit" value="{{ old('topicName') }}" required />
                                                 </div>
                                             </div>
                                         </div>
@@ -276,7 +283,7 @@
                                                 <div class="col-sm-9">
                                                     <input class="form-control" type="datetime-local"
                                                         name="finalClosureDate" id="finalClosureDate_edit"
-                                                        value="{{ old('finalClosureDate') }}" />
+                                                        value="{{ old('finalClosureDate') }}" required />
                                                 </div>
                                             </div>
                                         </div>
@@ -287,7 +294,7 @@
                                                 <label class="col-sm-3 col-form-label">Topic description</label>
                                                 <div class="col-sm-9">
                                                     <textarea name="description" id="description_edit" value="{{ old('description') }}" class="form-control"
-                                                        cols="30" rows="10"></textarea>
+                                                        cols="30" rows="10" required></textarea>
                                                 </div>
                                             </div>
                                         </div>

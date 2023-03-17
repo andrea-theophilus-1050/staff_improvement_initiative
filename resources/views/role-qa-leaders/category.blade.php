@@ -105,7 +105,7 @@
                                     <label class="col-sm-4 col-form-label">Category name</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="categoryName" id="categoryName"
-                                            value="{{ old('categoryName') }}" />
+                                            value="{{ old('categoryName') }}" required/>
                                     </div>
                                 </div>
                             </div>
@@ -157,7 +157,7 @@
                                     <label class="col-sm-4 col-form-label">Category name</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="categoryName"
-                                            id="categoryName_edit" value="{{ old('categoryName') }}" />
+                                            id="categoryName_edit" value="{{ old('categoryName') }}" required/>
                                     </div>
                                 </div>
                             </div>

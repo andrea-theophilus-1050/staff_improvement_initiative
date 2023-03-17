@@ -53,11 +53,11 @@
                                 @endif
                                 <div class="form-group">
                                     <input type="email" class="form-control form-control-lg" id="email"
-                                        name="email" placeholder="Email" value="{{ old('email') }}" autofocus>
+                                        name="email" placeholder="Email" value="{{ old('email') }}" autofocus required>
                                 </div>
                                 <div class="form-group">
                                     <input type="password" class="form-control form-control-lg" id="password"
-                                        name="password" placeholder="Password" value="{{ old('password') }}">
+                                        name="password" placeholder="Password" value="{{ old('password') }}" required>
                                 </div>
                                 {{-- <div class="my-2 d-flex justify-content-between align-items-center">
                                     <div class="form-check">

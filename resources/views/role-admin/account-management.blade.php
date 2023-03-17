@@ -116,7 +116,7 @@
                                                 <label class="col-sm-3 col-form-label">Full name</label>
                                                 <div class="col-sm-9">
                                                     <input type="text" class="form-control" name="fullname"
-                                                        value="{{ old('fullname') }}" />
+                                                        value="{{ old('fullname') }}" required/>
                                                 </div>
                                             </div>
                                         </div>
@@ -125,7 +125,7 @@
                                                 <label class="col-sm-3 col-form-label">Email</label>
                                                 <div class="col-sm-9">
                                                     <input type="text" class="form-control" name="email"
-                                                        value="{{ old('email') }}" />
+                                                        value="{{ old('email') }}" required/>
                                                 </div>
                                             </div>
                                         </div>
@@ -154,7 +154,7 @@
                                                 <label class="col-sm-3 col-form-label">Password</label>
                                                 <div class="col-sm-9">
                                                     <input class="form-control" type="text" name="password"
-                                                        value="{{ old('password') }}" />
+                                                        value="{{ old('password') }}" required/>
                                                 </div>
                                             </div>
                                         </div>
@@ -223,7 +223,7 @@
                                                 <label class="col-sm-3 col-form-label">Full name</label>
                                                 <div class="col-sm-9">
                                                     <input type="text" class="form-control" name="fullname"
-                                                        id="fullname_edit" value="{{ old('fullname') }}" />
+                                                        id="fullname_edit" value="{{ old('fullname') }}" required/>
                                                 </div>
                                             </div>
                                         </div>
@@ -232,7 +232,7 @@
                                                 <label class="col-sm-3 col-form-label">Email</label>
                                                 <div class="col-sm-9">
                                                     <input type="text" class="form-control" name="email"
-                                                        id="email_edit" value="{{ old('email') }}" />
+                                                        id="email_edit" value="{{ old('email') }}" required/>
                                                 </div>
                                             </div>
                                         </div>

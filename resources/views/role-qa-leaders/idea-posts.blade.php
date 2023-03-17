@@ -4,19 +4,30 @@
         <div class="col-md-3 mb-4">
             <div class="card mb-4 shadow text-center h4 font-weight-bold">
                 {{-- alert --}}
-                @if (session('errorDownload'))
+                {{-- @if (session('errorDownload'))
                     <script>
                         alert('No files to download');
                     </script>
-                @endif
+                @endif --}}
                 <div class="card-body">
+                    {{-- alert --}}
 
+                    @if (session('errorDownload'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Error!</strong> {{ session('errorDownload') }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
                     <a class="btn btn-primary btn-icon-text"
                         href="{{ route('qa-leaders.download.all.files', $onTopic->topic_id) }}">Download all files (.zip)
                         <i class="ti-download btn-icon-append ml-3"></i></a>
                     <a class="btn btn-success btn-icon-text mt-2"
                         href="{{ route('qa-leaders.export.csv', $onTopic->topic_id) }}">Export ideas (.csv) <i
                             class="ti-file btn-icon-append ml-3"></i></a>
+
+
                 </div>
             </div>
             <div class="card mb-4 shadow text-center h4 font-weight-bold">
@@ -26,9 +37,9 @@
             </div>
             <div class="card mb-4 shadow text-center h4 font-weight-bold">
                 <div class="card-body">
-                    List of TOP Ideas
-                    <a class="btn btn-success btn-icon-text" href="{{ route('list.of.top-ideas', $onTopic->topic_id) }}">
-                        <i class="ti-file btn-icon-append ml-3"></i></a>
+                    <a class="btn btn-success btn-icon-text"
+                        href="{{ route('list.of.top-ideas', $onTopic->topic_id) }}">List of TOP Ideas
+                        <i class="ti-stats-up btn-icon-append ml-3"></i></a>
                 </div>
             </div>
         </div>
