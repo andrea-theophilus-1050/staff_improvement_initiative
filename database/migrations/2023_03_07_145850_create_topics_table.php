@@ -20,8 +20,6 @@ return new class extends Migration
             $table->string('firstClosureDate');
             $table->string('finalClosureDate');
             $table->tinyInteger('status')->default(0);
-            $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('category_id')->on('categories')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -17,16 +17,10 @@ class Topics extends Model
     protected $fillable = [
         'topic_name',
         'topic_description',
-        'category_id',
         'firstClosureDate',
         'finalClosureDate',
         'status',
     ];
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class, 'category_id', 'category_id');
-    }
 
     public function ideaPosts()
     {

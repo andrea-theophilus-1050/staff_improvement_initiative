@@ -29,12 +29,10 @@
         <div class="container-fluid page-body-wrapper">
 
             @if (Auth::user()->role_id == 1)
-                @include('partials._sidebar_admin_role')
-            @elseif (Auth::user()->role_id == 2)
                 @include('partials._sidebar_qaleaders_role')
-            @elseif (Auth::user()->role_id == 3)
+            @elseif (Auth::user()->role_id == 2)
                 @include('partials._sidebar_qacoordinators_role')
-            @elseif (Auth::user()->role_id == 4)
+            @elseif (Auth::user()->role_id == 3)
                 @include('partials._sidebar_staff_role')
             @endif
 

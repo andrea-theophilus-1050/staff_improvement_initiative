@@ -45,7 +45,7 @@
 
                     {{-- NOTE: notification part NOTE: --}}
                     @foreach ($notifications as $notification)
-                        @if ($notification->user->role_id == 4)
+                        @if ($notification->user->role_id == 3)
                             {{-- NOTE: Role staff --}}
                             @if ($notification->type_notification == 'topicNew')
                                 <a href="{{ route('notification.handler', ['topicNew', $notification->url, $notification->id]) }}"
@@ -99,7 +99,7 @@
                                     </div>
                                 </a>
                             @endif
-                        @elseif($notification->user->role_id == 3)
+                        @elseif($notification->user->role_id == 2)
                             @if ($notification->type_notification == 'postIdeas')
                                 {{-- NOTE: Role QA Coordinators --}}
                                 <a href="{{ route('notification.handler', ['postIdeas', $notification->url, $notification->id]) }}"

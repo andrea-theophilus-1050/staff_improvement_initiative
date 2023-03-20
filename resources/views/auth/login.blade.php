@@ -23,7 +23,7 @@
     <div class="container-scroller">
         <div class="container-fluid page-body-wrapper full-page-wrapper">
             <div class="content-wrapper d-flex align-items-center auth px-0"
-                style="background: url('{{ asset('images/university-of-greenwich-2.jpg') }}'); background-position: center; background-size: cover; background-repeat: no-repeat;">
+                style="background: url('{{ asset('images/background.png') }}'); background-position: center; background-size: cover; background-repeat: no-repeat;">
                 <div class="row w-100 mx-0">
                     <div class="col-lg-4 mx-auto">
                         <div class="auth-form-light text-left py-5 px-4 px-sm-5">

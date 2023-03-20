@@ -41,7 +41,6 @@
                                 <tr>
                                     <th style="position: sticky; left: 0; z-index: 1; background: white">Action</th>
                                     <th>Status</th>
-                                    <th>Category</th>
                                     <th>Topic name</th>
                                     <th>Ideas count</th>
                                     <th>Topic Description</th>
@@ -65,8 +64,7 @@
                                                         data-topicName="{{ $topic->topic_name }}"
                                                         data-description="{{ $topic->topic_description }}"
                                                         data-firstClosureDate="{{ $topic->firstClosureDate }}"
-                                                        data-finalClosureDate="{{ $topic->finalClosureDate }}"
-                                                        data-categoryID="category{{ $topic->category->category_id }}">Edit</button>
+                                                        data-finalClosureDate="{{ $topic->finalClosureDate }}">Edit</button>
                                                 </form>
                                             @else
                                                 <form method="POST"
@@ -86,9 +84,7 @@
                                             @endif
                                         </td>
 
-                                        <td title="{{ $topic->category->category_name }}"
-                                            style="white-space: no-wrap; overflow: hidden; text-overflow:ellipsis; max-width: 150px; line-height: 1.5; text-align: justify">
-                                            {{ $topic->category->category_name }}</td>
+                                        
                                         <td>{{ $topic->topic_name }}</td>
                                         <td class="text-center font-weight-bold">{{ $topic->ideaPosts->count() }}</td>
                                         <td title="{{ $topic->topic_description }}"
@@ -129,25 +125,6 @@
                                 <form class="form-sample" method="POST" action="{{ route('qa-leaders.topics.store') }}">
                                     @csrf
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="col-sm-3 col-form-label">Category name</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="category" id="category"
-                                                        style="color: black">
-                                                        <option value="" selected>
-                                                            ---Choose a category---
-                                                        </option>
-                                                        @foreach ($categories as $category)
-                                                            <option value="{{ $category->category_id }}">
-                                                                {{ $category->category_name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <div class="col-md-6">
                                             <div class="form-group row">
                                                 <label class="col-sm-3 col-form-label">First closure date</label>
@@ -236,26 +213,6 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group row">
-                                                <label class="col-sm-3 col-form-label">Category name</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="category" id="category_edit"
-                                                        style="color: black">
-                                                        <option value="" selected>
-                                                            ---Choose a category---
-                                                        </option>
-                                                        @foreach ($categories as $category)
-                                                            <option value="{{ $category->category_id }}"
-                                                                id="category{{ $category->category_id }}">
-                                                                {{ $category->category_name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
                                                 <label class="col-sm-3 col-form-label">First closure date</label>
                                                 <div class="col-sm-9">
                                                     <input type="datetime-local" id="firstClosureDate_edit"
@@ -333,7 +290,7 @@
                     var description = e.getAttribute('data-description');
                     var firstClosureDate = e.getAttribute('data-firstClosureDate');
                     var finalClosureDate = e.getAttribute('data-finalClosureDate');
-                    var categoryID = e.getAttribute('data-categoryID');
+                    
 
                     var inputTopicName = document.getElementById('topicName_edit');
                     var inputDescription = document.getElementById('description_edit');
@@ -343,9 +300,7 @@
                     inputTopicName.value = topicName;
                     inputDescription.value = description;
                     inputFirstClosureDate.value = firstClosureDate;
-                    inputFinalClosureDate.value = finalClosureDate;
-
-                    document.getElementById(categoryID).selected = true;
+                    inputFinalClosureDate.value = finalClosureDate;                    
 
                     var formUpdateTopic = document.getElementById('form-update-topic');
                     formUpdateTopic.action = "{{ route('qa-leaders.topics.update', ':id') }}"

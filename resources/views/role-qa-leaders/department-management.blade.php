@@ -65,7 +65,7 @@
                                                 data-ID="{{ $dept->dept_id }}"
                                                 data-deptName="{{ $dept->dept_name }}">Edit</button>
                                             @if (collect($accounts)->where('dept_id', $dept->dept_id)->count() == 0)
-                                                <form action="{{ route('admin.department.delete', $dept->dept_id) }}"
+                                                <form action="{{ route('department.delete', $dept->dept_id) }}"
                                                     method="POST">
                                                     @csrf
                                                     <button type="submit" class="btn btn-danger btn-sm"
@@ -95,7 +95,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="{{ route('admin.department.store') }}">
+                    <form method="POST" action="{{ route('department.store') }}">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
@@ -111,8 +111,8 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6"></div>
-                            <div class="col-md-">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-9">
                                 <button type="submit" class="btn btn-primary">Add department</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
@@ -152,9 +152,9 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6"></div>
-                            <div class="col-md-">
-                                <button type="submit" class="btn btn-primary">Update</button>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-9">
+                                <button type="submit" class="btn btn-primary">Update department</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
@@ -180,7 +180,7 @@
 
 
                     var formUpdateAccount = document.getElementById('form-update-dept');
-                    formUpdateAccount.action = "{{ route('admin.department.update', ':id') }}"
+                    formUpdateAccount.action = "{{ route('department.update', ':id') }}"
                         .replace(':id', id);
 
 

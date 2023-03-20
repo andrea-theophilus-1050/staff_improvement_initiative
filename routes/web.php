@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\DownloadFileController;
 use App\Http\Controllers\LikeDislikeController;
 use App\Http\Controllers\NotifyController;
@@ -32,30 +31,23 @@ Route::get('login', function () {
 
 Route::post('login', [AuthController::class, 'login_action'])->name('login.action');
 
+Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+
+
+
 Route::middleware(['auth'])->group(function () {
-    Route::middleware(['userRole:1'])->group(function () {
-        Route::group(['prefix' => 'administrator'], function () {
-            Route::get('department-management', [AdminController::class, 'department_management'])->name('admin.department.management');
-            Route::post('department-management/create', [AdminController::class, 'createDepartment'])->name('admin.department.store');
-            Route::post('department-management/update/{id}', [AdminController::class, 'updateDepartment'])->name('admin.department.update');
-            Route::post('department-management/delete/{id}', [AdminController::class, 'deleteDepartment'])->name('admin.department.delete');
 
-            Route::get('account-management', [AdminController::class, 'account_management'])->name('admin.account.management');
-            Route::post('account-management/create', [AdminController::class, 'storeAccount'])->name('account.store');
-            Route::post('account-management/update/{id}', [AdminController::class, 'updateAccount'])->name('account.update');
-            Route::post('account-management/delete/{id}', [AdminController::class, 'deleteAccount'])->name('account.delete');
-
-            Route::get('topics-management', [AdminController::class, 'topics'])->name('admin.index');
-            Route::post('topic-update-deadline/{id}', [AdminController::class, 'updateDeadline'])->name('topic.update.deadline');
-        });
-    });
-
-    Route::middleware(['userRole:2', 'passwordChanged'])->group(function () {
+    Route::middleware(['userRole:1', 'passwordChanged'])->group(function () {
         Route::group(['prefix' => 'quality-assurance-manager'], function () {
-            Route::get('category-management', [QALeadersController::class, 'category'])->name('qa-leaders.category.management');
-            Route::post('category-management/create', [QALeadersController::class, 'createCategory'])->name('qa-leaders.category.store');
-            Route::post('category-management/update/{id}', [QALeadersController::class, 'updateCategory'])->name('qa-leaders.category.update');
-            Route::post('category-management/delete/{id}', [QALeadersController::class, 'deleteCategory'])->name('qa-leaders.category.delete');
+            Route::get('department-management', [QALeadersController::class, 'department_management'])->name('qa-leaders.department.management');
+            Route::post('department-management/create', [QALeadersController::class, 'createDepartment'])->name('department.store');
+            Route::post('department-management/update/{id}', [QALeadersController::class, 'updateDepartment'])->name('department.update');
+            Route::post('department-management/delete/{id}', [QALeadersController::class, 'deleteDepartment'])->name('department.delete');
+
+            Route::get('account-management', [QALeadersController::class, 'account_management'])->name('qa-leaders.account.management');
+            Route::post('account-management/create', [QALeadersController::class, 'storeAccount'])->name('account.store');
+            Route::post('account-management/update/{id}', [QALeadersController::class, 'updateAccount'])->name('account.update');
+            Route::post('account-management/delete/{id}', [QALeadersController::class, 'deleteAccount'])->name('account.delete');
 
             Route::get('topics-management', [QALeadersController::class, 'topics'])->name('qa-leaders.topics.management');
             Route::post('topics-management/create', [QALeadersController::class, 'createTopics'])->name('qa-leaders.topics.store');
@@ -70,7 +62,7 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 
-    Route::middleware(['userRole:3', 'passwordChanged'])->group(function () {
+    Route::middleware(['userRole:2', 'passwordChanged'])->group(function () {
         Route::group(['prefix' => 'quality-assurance-coordinators'], function () {
             Route::get('staff-management', [QACoordinatorsController::class, 'index'])->name('qa-coordinators.index');
             Route::get('topics', [QACoordinatorsController::class, 'topics'])->name('qa-coordinators.topics');
@@ -79,7 +71,7 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 
-    Route::middleware(['userRole:4', 'passwordChanged'])->group(function () {
+    Route::middleware(['userRole:3', 'passwordChanged'])->group(function () {
         Route::group(['prefix' => 'staff'], function () {
             Route::get('index', [StaffController::class, 'index'])->name('staff.index');
             Route::get('topics/idea-posts/{id}', [StaffController::class, 'topicIdeaPosts'])->name('staff.topics.idea.posts');
@@ -101,10 +93,3 @@ Route::middleware(['auth'])->group(function () {
     Route::get('download-file/{id}', [DownloadFileController::class, 'downloadFile'])->name('download.idea.file');
     Route::get('list-of-top-ideas/{topicID}', [TopIdeasController::class, 'listOfTopIdeas'])->name('list.of.top-ideas');
 });
-
-Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-
-
-// Route::get('test', function () {
-//     return view('index');
-// });

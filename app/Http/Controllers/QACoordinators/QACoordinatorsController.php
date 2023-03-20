@@ -38,7 +38,7 @@ class QACoordinatorsController extends Controller
 
     public function sendNotification($id)
     {
-        $staffs = User::where('role_id', 4)->where('dept_id', auth()->user()->dept_id)->get();
+        $staffs = User::where('role_id', 3)->where('dept_id', auth()->user()->dept_id)->get();
 
         foreach ($staffs as $staff) {
             if (collect($staff->posts)->where('topic_id', $id)->count() == 0) {

@@ -4,97 +4,86 @@ namespace App\Http\Controllers\QALeaders;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Category;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AccountInformationNotification;
+use App\Models\Department;
+use App\Models\Role;
 use App\Models\IdeaPosts;
 use App\Models\Notification;
-use App\Models\PostsLikeDislike;
 use App\Models\Topics;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
+
 
 class QALeadersController extends Controller
 {
-    public function category()
-    {
-        $categories = Category::all();
-        return view('role-qa-leaders.category', compact(['categories']))->with('title', 'Category');
-    }
+    // public function category()
+    // {
+    //     $categories = Category::all();
+    //     return view('role-qa-leaders.category', compact(['categories']))->with('title', 'Category');
+    // }
 
-    public function createCategory(Request $request)
-    {
-        $request->validate([
-            'categoryName' => 'required',
-        ]);
+    // public function createCategory(Request $request)
+    // {
+    //     $request->validate([
+    //         'categoryName' => 'required',
+    //     ]);
 
-        $category = new Category();
-        $category->category_name = $request->categoryName;
-        $category->description = $request->description;
-        $category->save();
+    //     $category = new Category();
+    //     $category->category_name = $request->categoryName;
+    //     $category->description = $request->description;
+    //     $category->save();
 
-        return redirect()->route('qa-leaders.category.management')->with('success', 'Category has been created');
-    }
+    //     return redirect()->route('qa-leaders.category.management')->with('success', 'Category has been created');
+    // }
 
-    public function updateCategory(Request $request, $id)
-    {
-        $request->validate([
-            'categoryName' => 'required',
-        ]);
+    // public function updateCategory(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'categoryName' => 'required',
+    //     ]);
 
-        $category = Category::where('category_id', $id)->first();
-        $category->category_name = $request->categoryName;
-        $category->description = $request->description;
-        $category->save();
+    //     $category = Category::where('category_id', $id)->first();
+    //     $category->category_name = $request->categoryName;
+    //     $category->description = $request->description;
+    //     $category->save();
 
-        return redirect()->route('qa-leaders.category.management')->with('success', 'Category has been updated');
-    }
+    //     return redirect()->route('qa-leaders.category.management')->with('success', 'Category has been updated');
+    // }
 
-    public function deleteCategory($id)
-    {
-        $category = Category::where('category_id', $id)->first();
-        $category->delete();
+    // public function deleteCategory($id)
+    // {
+    //     $category = Category::where('category_id', $id)->first();
+    //     $category->delete();
 
-        return redirect()->route('qa-leaders.category.management')->with('success', 'Category has been deleted');
-    }
-
-
-
-
+    //     return redirect()->route('qa-leaders.category.management')->with('success', 'Category has been deleted');
+    // }
     public function topics()
     {
         $topics = Topics::orderBy('created_at', 'desc')->paginate(20);
-        $categories = Category::all();
 
-        return view('role-qa-leaders.topics', compact(['topics', 'categories']))->with('title', 'QA Leaders');
+        return view('role-qa-leaders.topics', compact(['topics']))->with('title', 'QA Leaders');
     }
 
     public function createTopics(Request $request)
     {
         $request->validate([
             'topicName' => 'required',
-            'category' => 'required',
             'firstClosureDate' => 'required',
             'finalClosureDate' => 'required',
         ]);
 
         $topic = new Topics();
         $topic->topic_name = $request->topicName;
-        $topic->category_id = $request->category;
         $topic->topic_description = $request->description;
         $topic->firstClosureDate = $request->firstClosureDate;
         $topic->finalClosureDate = $request->finalClosureDate;
         $topic->save();
 
-        $notifyUsers = User::where('role_id', '!=', 2)->where('role_id', '!=', 1)->get();
+        $notifyUsers = User::where('role_id', '!=', 1)->get();
         foreach ($notifyUsers as $user) {
-            // DB::table('notification')->insert([
-            //     'user_id' => $user->user_id,
-            //     'notify_content' => 'New topic has been created: "' . $topic->topic_name . '"',
-            //     'url' => $topic->topic_id,
-            //     'type_notification' => 'topicNew',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ]);
-            if ($user->role_id == 4) {
+            if ($user->role_id == 3) {
                 Notification::insert([
                     'user_id' => $user->user_id,
                     'notify_content' => 'New topic has been created: "' . $topic->topic_name . '"',
@@ -103,7 +92,7 @@ class QALeadersController extends Controller
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
-            } elseif ($user->role_id == 3) {
+            } elseif ($user->role_id == 2) {
                 Notification::insert([
                     'user_id' => $user->user_id,
                     'notify_content' => 'New topic has been created: "' . $topic->topic_name . '"',
@@ -122,14 +111,12 @@ class QALeadersController extends Controller
     {
         $request->validate([
             'topicName' => 'required',
-            'category' => 'required',
             'firstClosureDate' => 'required',
             'finalClosureDate' => 'required',
         ]);
 
         $topic = Topics::where('topic_id', $id)->first();
         $topic->topic_name = $request->topicName;
-        $topic->category_id = $request->category;
         $topic->topic_description = $request->description;
         $topic->firstClosureDate = $request->firstClosureDate;
         $topic->finalClosureDate = $request->finalClosureDate;
@@ -158,5 +145,134 @@ class QALeadersController extends Controller
         $posts = IdeaPosts::where('topic_id', $id)->orderBy('created_at', 'desc')->paginate(20);
         $onTopic = Topics::where('topic_id', $id)->first();
         return view('role-qa-leaders.idea-posts', compact(['posts', 'onTopic']))->with('title', 'Idea Posts');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function department_management()
+    {
+        $accounts = User::all();
+        $depts = Department::all();
+        return view('role-qa-leaders.department-management', compact(['depts', 'accounts']))->with('title', 'Department Management');
+    }
+
+    public function createDepartment(Request $request)
+    {
+        $dept = new Department();
+        $dept->dept_name = $request->department;
+        $dept->save();
+
+        return redirect()->route('qa-leaders.department.management')->with('success', 'Department has been created');
+    }
+
+    public function updateDepartment(Request $request, $id)
+    {
+        $dept = Department::find($id);
+        $dept->dept_name = $request->department;
+        $dept->save();
+
+        return redirect()->route('qa-leaders.department.management')->with('success', 'Department has been updated');
+    }
+
+    public function deleteDepartment($id)
+    {
+        $dept = Department::find($id);
+        $dept->delete();
+
+        return redirect()->route('qa-leaders.department.management')->with('success', 'Department has been deleted');
+    }
+
+
+    public function account_management()
+    {
+        $accounts = User::where('user_id', '!=', auth()->user()->user_id)->orderBy('role_id', 'asc')->paginate(25);
+        $depts = Department::all();
+        $roles = Role::all();
+
+        return view('role-qa-leaders.account-management', compact(['accounts', 'depts', 'roles']))->with('title', 'Account Management');
+    }
+
+    public function storeAccount(Request $request)
+    {
+
+        //validate 
+        $validator = Validator::make($request->all(), [
+            'fullname' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8',
+            'role' => 'required',
+            'department' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $user = new User();
+        $user->fullName = $request->fullname;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->role_id = $request->role;
+        $user->dept_id = $request->department;
+        $user->save();
+
+        if ($user->save()) {
+            $user->plainPassword = $request->password;
+            $user->role_name = Role::where('role_id', $request->role)->first()->role_name;
+            $user->dept_name = Department::where('dept_id', $request->department)->first()->dept_name;
+        }
+
+        // send account information notification email
+        Mail::to($request->email)->send(new AccountInformationNotification($user));
+
+        return redirect()->route('qa-leaders.account.management')->with('success', 'Account has been created');
+    }
+
+    public function updateAccount(Request $request, $id)
+    {
+
+
+        $user = User::find($id);
+        $user->fullName = $request->fullname;
+        $user->email = $request->email;
+        $user->role_id = $request->role;
+        $user->dept_id = $request->department;
+        if ($request->password != null) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->route('qa-leaders.account.management')->with('success', 'Account has been updated');
+    }
+
+    public function deleteAccount($id)
+    {
+        try {
+            $user = User::find($id);
+            $user->delete();
+            return redirect()->route('qa-leaders.account.management')->with('success', 'Account has been deleted');
+        } catch (\Exception $e) {
+            return redirect()->route('qa-leaders.account.management')->with('error', 'Account cannot be deleted');
+        }
     }
 }

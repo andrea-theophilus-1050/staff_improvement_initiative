@@ -72,7 +72,7 @@ class StaffController extends Controller
             }
         }
 
-        $notifyForQACoordinator = User::where('role_id', 3)->where('dept_id', auth()->user()->dept_id)->get();
+        $notifyForQACoordinator = User::where('role_id', 2)->where('dept_id', auth()->user()->dept_id)->get();
         foreach ($notifyForQACoordinator as $notify) {
             DB::table('notification')->insert([
                 'user_id' => $notify->user_id,
