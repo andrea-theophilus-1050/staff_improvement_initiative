@@ -179,12 +179,11 @@
                                         </div>
 
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <button type="submit" class="btn btn-primary">Create account</button>
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Close</button>
-                                        </div>
+
+
+                                    <div class="row modal-footer">
+                                        <button type="submit" class="btn btn-primary">Create account</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     </div>
                                 </form>
                             </div>
@@ -288,14 +287,10 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <button type="submit" class="btn btn-primary">Update account</button>
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Close</button>
-                                        </div>
+                                    <div class="row modal-footer">
+                                        <button type="submit" class="btn btn-primary">Update account</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     </div>
                                 </form>
                             </div>

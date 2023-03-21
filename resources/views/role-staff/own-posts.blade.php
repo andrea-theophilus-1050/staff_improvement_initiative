@@ -93,7 +93,7 @@
                                         </div>
                                     @endforeach
                                 </div>
-                                @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($post->topic->finalClosureDate)))
+                                @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($post->topic->topicDeadline->finalClosureDate)))
                                     <hr>
                                     <form method="POST" id="comment-form-{{ $post->post_id }}"
                                         data-post-id="{{ $post->post_id }}"

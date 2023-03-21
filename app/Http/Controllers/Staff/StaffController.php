@@ -22,7 +22,7 @@ class StaffController extends Controller
 {
     public function index()
     {
-        $topics = Topics::orderBy('created_at', 'desc')->get();
+        $topics = Topics::where('deadline_id', '!=', null)->orderBy('created_at', 'desc')->get();
 
         return view('role-staff.index', compact(['topics']))->with('title', 'Staff Dashboard');
     }

@@ -18,7 +18,7 @@
                     </div>
                     <form method="POST" action="{{ route('staff.posts.submit.idea', $id) }}" enctype="multipart/form-data">
                         @csrf
-                        @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($onTopic->firstClosureDate)))
+                        @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($onTopic->topicDeadline->firstClosureDate)))
                             <div class="form-group">
                                 <h5 class="font-weight-bold text-center"
                                     style="background: red; color: white; padding: 10px; border-radius: 10px">
@@ -37,7 +37,7 @@
                             <textarea class="form-control" rows="10" id="topicDesc" placeholder="Enter title" readonly
                                 style="line-height: 1.5">{{ $onTopic->topic_description }}</textarea>
                         </div>
-                        @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($onTopic->firstClosureDate)))
+                        @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($onTopic->topicDeadline->firstClosureDate)))
                             <div class="form-group">
                                 {{-- alert --}}
                                 @if ($errors->any())

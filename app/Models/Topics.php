@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Category;
 use App\Models\IdeaPosts;
+use App\Models\TopicDeadline;
 
 class Topics extends Model
 {
@@ -17,13 +17,16 @@ class Topics extends Model
     protected $fillable = [
         'topic_name',
         'topic_description',
-        'firstClosureDate',
-        'finalClosureDate',
-        'status',
+        'deadline_id',
     ];
 
     public function ideaPosts()
     {
         return $this->hasMany(IdeaPosts::class, 'topic_id', 'topic_id');
+    }
+
+    public function topicDeadline()
+    {
+        return $this->belongsTo(TopicDeadline::class, 'deadline_id', 'deadline_id');
     }
 }

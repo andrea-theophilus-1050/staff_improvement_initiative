@@ -103,19 +103,15 @@
                                     <label class="col-sm-4 col-form-label">Department name</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="department"
-                                            value="{{ old('department') }}" required/>
+                                            value="{{ old('department') }}" required />
                                     </div>
                                 </div>
                             </div>
 
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-3"></div>
-                            <div class="col-md-9">
-                                <button type="submit" class="btn btn-primary">Add department</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
+                        <div class="row modal-footer">
+                            <button type="submit" class="btn btn-primary">Add department</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
                 </div>
@@ -144,19 +140,16 @@
                                     <label class="col-sm-4 col-form-label">Department name</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="department" id="dept-name"
-                                            value="{{ old('department') }}" required/>
+                                            value="{{ old('department') }}" required />
                                     </div>
                                 </div>
                             </div>
 
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-3"></div>
-                            <div class="col-md-9">
-                                <button type="submit" class="btn btn-primary">Update department</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
+                        <div class="row modal-footer">
+                            <button type="submit" class="btn btn-primary">Update department</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
                 </div>

@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('topics', function (Blueprint $table) {
-            $table->id('topic_id');
-            $table->string('topic_name');
-            $table->text('topic_description')->nullable();
+        Schema::create('topic_deadline', function (Blueprint $table) {
+            $table->id('deadline_id');
+            $table->string('firstClosureDate');
+            $table->string('finalClosureDate');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('topics');
+        Schema::dropIfExists('tb_deadline');
     }
 };

@@ -51,6 +51,8 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('topics-management', [QALeadersController::class, 'topics'])->name('qa-leaders.topics.management');
             Route::post('topics-management/create', [QALeadersController::class, 'createTopics'])->name('qa-leaders.topics.store');
+            Route::post('assign-deadline-to-topic', [QALeadersController::class, 'assignDeadlineToTopic'])->name('qa-leaders.assign.deadline.topic');
+            
             Route::post('topics-management/update/{id}', [QALeadersController::class, 'updateTopics'])->name('qa-leaders.topics.update');
             Route::post('delete-topic/{id}', [QALeadersController::class, 'deleteTopics'])->name('qa-leaders.delete.topic');
 

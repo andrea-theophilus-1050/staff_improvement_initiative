@@ -14,112 +14,83 @@ use App\Models\IdeaPosts;
 use App\Models\Notification;
 use App\Models\Topics;
 use App\Models\User;
+use App\Models\TopicDeadline;
 
 
 class QALeadersController extends Controller
 {
-    // public function category()
-    // {
-    //     $categories = Category::all();
-    //     return view('role-qa-leaders.category', compact(['categories']))->with('title', 'Category');
-    // }
-
-    // public function createCategory(Request $request)
-    // {
-    //     $request->validate([
-    //         'categoryName' => 'required',
-    //     ]);
-
-    //     $category = new Category();
-    //     $category->category_name = $request->categoryName;
-    //     $category->description = $request->description;
-    //     $category->save();
-
-    //     return redirect()->route('qa-leaders.category.management')->with('success', 'Category has been created');
-    // }
-
-    // public function updateCategory(Request $request, $id)
-    // {
-    //     $request->validate([
-    //         'categoryName' => 'required',
-    //     ]);
-
-    //     $category = Category::where('category_id', $id)->first();
-    //     $category->category_name = $request->categoryName;
-    //     $category->description = $request->description;
-    //     $category->save();
-
-    //     return redirect()->route('qa-leaders.category.management')->with('success', 'Category has been updated');
-    // }
-
-    // public function deleteCategory($id)
-    // {
-    //     $category = Category::where('category_id', $id)->first();
-    //     $category->delete();
-
-    //     return redirect()->route('qa-leaders.category.management')->with('success', 'Category has been deleted');
-    // }
     public function topics()
     {
-        $topics = Topics::orderBy('created_at', 'desc')->paginate(20);
+        $deadlines = TopicDeadline::orderBy('firstClosureDate', 'desc')->get();
+        $nonDeadline_topics = Topics::where('deadline_id', null)->orderBy('created_at', 'desc')->get();
 
-        return view('role-qa-leaders.topics', compact(['topics']))->with('title', 'QA Leaders');
+        return view('role-qa-leaders.topics', compact(['deadlines', 'nonDeadline_topics']))->with('title', 'QA Leaders');
     }
 
     public function createTopics(Request $request)
     {
         $request->validate([
             'topicName' => 'required',
-            'firstClosureDate' => 'required',
-            'finalClosureDate' => 'required',
         ]);
 
         $topic = new Topics();
         $topic->topic_name = $request->topicName;
         $topic->topic_description = $request->description;
-        $topic->firstClosureDate = $request->firstClosureDate;
-        $topic->finalClosureDate = $request->finalClosureDate;
         $topic->save();
 
-        $notifyUsers = User::where('role_id', '!=', 1)->get();
-        foreach ($notifyUsers as $user) {
-            if ($user->role_id == 3) {
-                Notification::insert([
-                    'user_id' => $user->user_id,
-                    'notify_content' => 'New topic has been created: "' . $topic->topic_name . '"',
-                    'url' => $topic->topic_id,
-                    'type_notification' => 'topicNew',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            } elseif ($user->role_id == 2) {
-                Notification::insert([
-                    'user_id' => $user->user_id,
-                    'notify_content' => 'New topic has been created: "' . $topic->topic_name . '"',
-                    'url' => $topic->topic_id,
-                    'type_notification' => 'NewTopicFromQALeaders',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+        return redirect()->route('qa-leaders.topics.management')->with('success', 'Topic has been created');
+    }
+
+    public function assignDeadlineToTopic(Request $request)
+    {
+        $deadline = new TopicDeadline();
+        $deadline->firstClosureDate = $request->firstClosureDate;
+        $deadline->finalClosureDate = $request->finalClosureDate;
+        $deadline->save();
+
+        $topicID = $request->input('topicID');
+
+        foreach ($topicID as $id) {
+            $topic = Topics::where('topic_id', $id)->first();
+            $topic->deadline_id = $deadline->deadline_id;
+            $topic->save();
+
+            $notifyUsers = User::where('role_id', '!=', 1)->get();
+            foreach ($notifyUsers as $user) {
+                if ($user->role_id == 3) {
+                    Notification::insert([
+                        'user_id' => $user->user_id,
+                        'notify_content' => 'New topic has been created: "' . $topic->topic_name . '"',
+                        'url' => $topic->topic_id,
+                        'type_notification' => 'topicNew',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                } elseif ($user->role_id == 2) {
+                    Notification::insert([
+                        'user_id' => $user->user_id,
+                        'notify_content' => 'New topic has been created: "' . $topic->topic_name . '"',
+                        'url' => $topic->topic_id,
+                        'type_notification' => 'NewTopicFromQALeaders',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
             }
         }
 
-        return redirect()->route('qa-leaders.topics.management')->with('success', 'Topic has been created');
+        return back()->with('success', 'Deadline has been assigned to topic');
     }
 
     public function updateTopics(Request $request, $id)
     {
         $request->validate([
             'topicName' => 'required',
-            'firstClosureDate' => 'required',
-            'finalClosureDate' => 'required',
         ]);
 
         $topic = Topics::where('topic_id', $id)->first();
         $topic->topic_name = $request->topicName;
         $topic->topic_description = $request->description;
-        $topic->firstClosureDate = $request->firstClosureDate;
-        $topic->finalClosureDate = $request->finalClosureDate;
         $topic->save();
 
         return redirect()->route('qa-leaders.topics.management')->with('success', 'Topic has been updated');

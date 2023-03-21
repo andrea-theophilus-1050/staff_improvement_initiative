@@ -13,11 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('topics', function (Blueprint $table) {
-            $table->id('topic_id');
-            $table->string('topic_name');
-            $table->text('topic_description')->nullable();
-            $table->timestamps();
+        Schema::table('topics', function (Blueprint $table) {
+            $table->unsignedBigInteger('deadline_id')->nullable();
+            $table->foreign('deadline_id')->references('deadline_id')->on('topic_deadline');
         });
     }
 
@@ -28,6 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('topics');
+        Schema::table('topic', function (Blueprint $table) {
+            //
+        });
     }
 };

@@ -12,7 +12,7 @@
 
     <div class="row">
         @foreach ($topics as $topic)
-            @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($topic->firstClosureDate)))
+            @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($topic->topicDeadline->firstClosureDate)))
                 <div class="col-md-4 grid-margin stretch-card">
                     <div class="card" id="card">
                         <div class="card-body">
@@ -25,13 +25,13 @@
                                 <div style="font-size: 13px">
                                     <li><b>Deadline for submit:</b> <span>
                                             <i class="mdi mdi-calendar-clock"></i>
-                                            {{ date('M-d-Y - h:i:s a', strtotime($topic->firstClosureDate)) }}
+                                            {{ date('M-d-Y - h:i:s a', strtotime($topic->topicDeadline->firstClosureDate)) }}
                                         </span></li>
 
 
                                     <li><b>Final deadline:</b> <span>
                                             <i class="mdi mdi-calendar-clock"></i>
-                                            {{ date('M-d-Y - h:i:s a', strtotime($topic->finalClosureDate)) }}
+                                            {{ date('M-d-Y - h:i:s a', strtotime($topic->topicDeadline->finalClosureDate)) }}
                                         </span></li>
 
 
@@ -70,7 +70,7 @@
 
     <div class="row">
         @foreach ($topics as $topic)
-            @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($topic->firstClosureDate)))
+            @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($topic->topicDeadline->firstClosureDate)))
                 <div class="col-md-4 grid-margin stretch-card">
                     <div class="card" id="card">
                         <div class="card-body">
@@ -83,13 +83,13 @@
                                 <div style="font-size: 13px">
                                     <li><b>Deadline for submit:</b> <span>
                                             <i class="mdi mdi-calendar-clock"></i>
-                                            {{ date('M-d-Y - h:i:s a', strtotime($topic->firstClosureDate)) }}
+                                            {{ date('M-d-Y - h:i:s a', strtotime($topic->topicDeadline->firstClosureDate)) }}
                                         </span></li>
 
 
                                     <li><b>Final deadline:</b> <span>
                                             <i class="mdi mdi-calendar-clock"></i>
-                                            {{ date('M-d-Y - h:i:s a', strtotime($topic->finalClosureDate)) }}
+                                            {{ date('M-d-Y - h:i:s a', strtotime($topic->topicDeadline->finalClosureDate)) }}
                                         </span></li>
 
 
