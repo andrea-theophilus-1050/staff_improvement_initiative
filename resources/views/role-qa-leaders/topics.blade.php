@@ -489,6 +489,7 @@
             assignBtn.disabled = !checked;
         }
 
+        
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('click', checkboxAssignButton);
         });
