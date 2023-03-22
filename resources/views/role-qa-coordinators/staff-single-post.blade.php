@@ -39,7 +39,7 @@
                                     {{ $post->user->fullName }}
                                 @endif
                             </h5>
-                            <div class="mb-2" style="font-size: 12px">
+                            <div class="mb-4" style="font-size: 12px">
                                 <i class="mdi mdi-calendar-clock"></i>&nbsp;&nbsp;Created on
                                 {{ date('F d, Y', strtotime($post->created_at)) }} at
                                 {{ date('h:i A', strtotime($post->created_at)) }}

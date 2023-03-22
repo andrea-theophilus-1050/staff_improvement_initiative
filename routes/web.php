@@ -70,6 +70,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('staff-management', [QACoordinatorsController::class, 'index'])->name('qa-coordinators.index');
             Route::get('topics', [QACoordinatorsController::class, 'topics'])->name('qa-coordinators.topics');
             Route::get('topics/idea-posts/{id}', [QACoordinatorsController::class, 'topicIdeaPosts'])->name('qa-coordinators.topics.idea.posts');
+            Route::get('topics/all-idea-posts/{id}', [QACoordinatorsController::class, 'topicAllIdeaPosts'])->name('qa-coordinators.view.all');
             Route::get('send-notification/{id}', [QACoordinatorsController::class, 'sendNotification'])->name('qa-coordinators.send.notify');
         });
     });

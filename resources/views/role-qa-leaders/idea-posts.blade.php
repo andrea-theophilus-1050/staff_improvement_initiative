@@ -1,52 +1,96 @@
 @extends('layouts.main')
 @section('content')
     <div class="row">
-        <div class="col-md-3 mb-4">
-            <div class="card mb-4 shadow text-center h4 font-weight-bold">
-                {{-- alert --}}
-                {{-- @if (session('errorDownload'))
-                    <script>
-                        alert('No files to download');
-                    </script>
-                @endif --}}
+        <div class="col-md-4">
+            <div class="card mb-4 shadow ">
                 <div class="card-body">
-                    {{-- alert --}}
-
-                    @if (session('errorDownload'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Error!</strong> {{ session('errorDownload') }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                    <div class="media mb-2">
+                        <div class="media-body">
+                            @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($onTopic->topicDeadline->firstClosureDate)))
+                                <div class="form-group">
+                                    <h5 class="font-weight-bold text-center"
+                                        style="background: red; color: white; padding: 10px; border-radius: 10px">
+                                        The topic has closed for submission of ideas
+                                    </h5>
+                                </div>
+                            @endif
+                            <h5 class="card-title" style="text-transform: none; line-height: 1.5">Topic name:
+                                {{ $onTopic->topic_name }}
+                            </h5>
+                            <p>Topic description: {{ $onTopic->topic_description }}</p>
+                            <div class="template-demo">
+                                <div style="font-size: 13px">
+                                    <li>
+                                        <b>Deadline for submit:</b>
+                                        <span>
+                                            <i class="mdi mdi-calendar-clock"></i>
+                                            {{ date('M-d-Y - h:i:s a', strtotime($onTopic->topicDeadline->firstClosureDate)) }}
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <b>Final deadline:</b>
+                                        <span>
+                                            <i class="mdi mdi-calendar-clock"></i>
+                                            {{ date('M-d-Y - h:i:s a', strtotime($onTopic->topicDeadline->finalClosureDate)) }}
+                                        </span>
+                                    </li>
+                                </div>
+                            </div>
                         </div>
-                    @endif
-                    <a class="btn btn-primary btn-icon-text"
-                        href="{{ route('qa-leaders.download.all.files', $onTopic->topic_id) }}">Download all files (.zip)
-                        <i class="ti-download btn-icon-append ml-3"></i></a>
-                    <a class="btn btn-success btn-icon-text mt-2"
-                        href="{{ route('qa-leaders.export.csv', $onTopic->topic_id) }}">Export ideas (.csv) <i
-                            class="ti-file btn-icon-append ml-3"></i></a>
-
-
+                    </div>
                 </div>
             </div>
+
             <div class="card mb-4 shadow text-center h4 font-weight-bold">
                 <div class="card-body">
                     <b style="font-weight: normal">Number of ideas:</b> {{ $posts->count() }}
                 </div>
             </div>
-            <div class="card mb-4 shadow text-center h4 font-weight-bold">
-                <div class="card-body">
-                    <a class="btn btn-success btn-icon-text"
-                        href="{{ route('list.of.top-ideas', $onTopic->topic_id) }}">List of TOP Ideas
-                        <i class="ti-stats-up btn-icon-append ml-3"></i></a>
+
+            @if ($posts->count() != 0)
+                <div class="card mb-4 shadow text-center h4 font-weight-bold">
+                    {{-- alert --}}
+                    {{-- @if (session('errorDownload'))
+                    <script>
+                        alert('No files to download');
+                    </script>
+                @endif --}}
+                    <div class="card-body">
+                        {{-- alert --}}
+
+                        @if (session('errorDownload'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Error!</strong> {{ session('errorDownload') }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif
+                        <a class="btn btn-primary btn-icon-text"
+                            href="{{ route('qa-leaders.download.all.files', $onTopic->topic_id) }}">Download all files
+                            (.zip)
+                            <i class="ti-download btn-icon-append ml-3"></i></a>
+                        <a class="btn btn-success btn-icon-text mt-2"
+                            href="{{ route('qa-leaders.export.csv', $onTopic->topic_id) }}">Export ideas (.csv) <i
+                                class="ti-file btn-icon-append ml-3"></i></a>
+
+
+                    </div>
                 </div>
-            </div>
+
+                <div class="card mb-4 shadow text-center h4 font-weight-bold">
+                    <div class="card-body">
+                        <a class="btn btn-success btn-icon-text"
+                            href="{{ route('list.of.top-ideas', $onTopic->topic_id) }}">List of TOP Ideas
+                            <i class="ti-stats-up btn-icon-append ml-3"></i></a>
+                    </div>
+                </div>
+            @endif
         </div>
 
 
 
-        <div class="col-md-9">
+        <div class="col-md-8">
             @if ($posts->count() != 0)
                 @foreach ($posts as $post)
                     <div class="card mb-4">
@@ -67,18 +111,12 @@
                                             {{ $post->user->fullName }}
                                         @endif
                                     </h5>
-                                    <div class="mb-2" style="font-size: 12px">
+                                    <div class="mb-4" style="font-size: 12px">
                                         <i class="mdi mdi-calendar-clock"></i>&nbsp;&nbsp;Created on
                                         {{ date('F d, Y', strtotime($post->created_at)) }} at
                                         {{ date('h:i A', strtotime($post->created_at)) }}
                                     </div>
 
-                                    <h5 style="font-weight: bold; font-size: 13px"><u>Topic name:</u>
-                                        {{ $post->topic->topic_name }}</h5>
-                                    <p class="card-text" style="font-size: 13px; text-align: justify"><u
-                                            class="font-weight-bold">Topic description:</u>
-                                        {{ $post->topic->topic_description }}</p>
-                                    <hr>
                                     <p class="card-text" style="font-size: 15px">{{ $post->content }}</p>
                                     @if ($post->documents->count() != 0)
                                         <a href="{{ route('download.idea.file', $post->post_id) }}"

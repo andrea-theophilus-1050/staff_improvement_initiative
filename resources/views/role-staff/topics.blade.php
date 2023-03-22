@@ -22,7 +22,7 @@
                             <div class="form-group">
                                 <h5 class="font-weight-bold text-center"
                                     style="background: red; color: white; padding: 10px; border-radius: 10px">
-                                    The topic has expired for submission of ideas
+                                    The topic has closed for submission of ideas
                                 </h5>
                             </div>
                         @endif
@@ -130,7 +130,7 @@
 
 
                                     </h5>
-                                    <div class="mb-2" style="font-size: 12px">
+                                    <div class="mb-4" style="font-size: 12px">
                                         <i class="mdi mdi-calendar-clock"></i>&nbsp;&nbsp;Created on
                                         {{ date('F d, Y', strtotime($post->created_at)) }} at
                                         {{ date('h:i A', strtotime($post->created_at)) }}

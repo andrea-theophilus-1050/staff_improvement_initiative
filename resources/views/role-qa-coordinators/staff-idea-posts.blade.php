@@ -2,33 +2,81 @@
 @section('content')
     <div class="row">
         <div class="col-md-4 mb-4">
+            @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($onTopic->topicDeadline->firstClosureDate)))
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="media mb-2">
+                            <div class="media-body d-flex justify-content-between align-items-center">
+                                <h5 class="card-title" style="text-transform: none">Send notification for staffs</h5>
+                                <a href="{{ route('qa-coordinators.send.notify', $onTopic->topic_id) }}"
+                                    class="btn btn-primary" title="Send notify for staff who has no submited ideas yet"><i
+                                        class="mdi mdi-bell-alert"></i></a>
+                            </div>
+                        </div>
+                        @if (session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>Success!</strong> {{ session('success') }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endif
+
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="media mb-2">
-                        <div class="media-body d-flex justify-content-between align-items-center">
-                            <h5 class="card-title" style="text-transform: none">Send notification for staffs</h5>
-                            <a href="{{ route('qa-coordinators.send.notify', $onTopic->topic_id) }}" class="btn btn-primary"
-                                title="Send notify for staff who has no submited ideas yet"><i
-                                    class="mdi mdi-bell-alert"></i></a>
+                        <div class="media-body">
+                            <a href="{{ route('qa-coordinators.view.all', $onTopic->topic_id) }}"
+                                class="col-md-12 btn btn-outline-primary  btn-icon-text mb-1">
+                                View all idea posts<i class="ti-files btn-icon-append"></i>
+                            </a>
+
+                            <a href="{{ route('qa-coordinators.topics.idea.posts', $onTopic->topic_id) }}"
+                                class="col-md-12 btn btn-outline-success btn-icon-text mt-1">
+                                View by deparment <i class="ti-menu-alt btn-icon-append"></i>
+                            </a>
                         </div>
                     </div>
-                    @if (session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> {{ session('success') }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    @endif
                 </div>
             </div>
+
             <div class="card">
                 <div class="card-body">
                     <div class="media mb-2">
                         <div class="media-body">
-                            <h5 class="card-title" style="text-transform: none; line-height: 1.5">Topic name: {{ $onTopic->topic_name }}
+                            @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($onTopic->topicDeadline->firstClosureDate)))
+                                <div class="form-group">
+                                    <h5 class="font-weight-bold text-center"
+                                        style="background: red; color: white; padding: 10px; border-radius: 10px">
+                                        The topic has closed for submission of ideas
+                                    </h5>
+                                </div>
+                            @endif
+                            <h5 class="card-title" style="text-transform: none; line-height: 1.5">Topic name:
+                                {{ $onTopic->topic_name }}
                             </h5>
                             <p>Topic description: {{ $onTopic->topic_description }}</p>
+                            <div class="template-demo">
+                                <div style="font-size: 13px">
+                                    <li>
+                                        <b>Deadline for submit:</b>
+                                        <span>
+                                            <i class="mdi mdi-calendar-clock"></i>
+                                            {{ date('M-d-Y - h:i:s a', strtotime($onTopic->topicDeadline->firstClosureDate)) }}
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <b>Final deadline:</b>
+                                        <span>
+                                            <i class="mdi mdi-calendar-clock"></i>
+                                            {{ date('M-d-Y - h:i:s a', strtotime($onTopic->topicDeadline->finalClosureDate)) }}
+                                        </span>
+                                    </li>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -57,7 +105,7 @@
 
 
                                     </h5>
-                                    <div class="mb-2" style="font-size: 12px">
+                                    <div class="mb-4" style="font-size: 12px">
                                         <i class="mdi mdi-calendar-clock"></i>&nbsp;&nbsp;Created on
                                         {{ date('F d, Y', strtotime($post->created_at)) }} at
                                         {{ date('h:i A', strtotime($post->created_at)) }}
