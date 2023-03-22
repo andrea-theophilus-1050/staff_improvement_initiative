@@ -31,7 +31,7 @@ class StaffController extends Controller
     {
         $posts = IdeaPosts::where('topic_id', $id)->orderBy('created_at', 'desc')->paginate(5);
         $onTopic = Topics::where('topic_id', $id)->first();
-        $relatedTopic = Topics::where('topic_id', '!=', $id)->orderBy('created_at', 'desc')->take(5)->get();
+        $relatedTopic = Topics::where('topic_id', '!=', $id)->where('deadline_id', '!=', null)->orderBy('created_at', 'desc')->take(5)->get();
         return view('role-staff.topics', compact(['posts', 'id', 'onTopic', 'relatedTopic']))->with('title', 'Topics');
     }
 
@@ -87,6 +87,4 @@ class StaffController extends Controller
         return redirect()->route('staff.topics.idea.posts', $id)->with('success', 'Post has been submitted');
         // dd($request->all());
     }
-
-    
 }

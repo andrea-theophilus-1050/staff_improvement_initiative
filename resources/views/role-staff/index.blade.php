@@ -15,7 +15,7 @@
                 <div class="col-md-4 grid-margin stretch-card">
                     <div class="card" id="card">
                         <div class="card-body">
-                            <h4 class="card-title">{{ $topic->topic_name }} </h4>
+                            <h4 class="card-title" style="line-height: 1.5">{{ $topic->topic_name }} </h4>
                             <h4 class="card-title" id="topicID" hidden>{{ $topic->topic_id }}</h4>
                             <p class="card-description font-weight-bold">
                                 {{ $topic->topic_description }}
@@ -62,7 +62,7 @@
                 <div class="col-md-4 grid-margin stretch-card">
                     <div class="card" id="card">
                         <div class="card-body">
-                            <h4 class="card-title">{{ $topic->topic_name }} </h4>
+                            <h4 class="card-title" style="line-height: 1.5">{{ $topic->topic_name }} </h4>
                             <h4 class="card-title" id="topicID" hidden>{{ $topic->topic_id }}</h4>
                             <p class="card-description font-weight-bold">
                                 {{ $topic->topic_description }}
@@ -109,7 +109,7 @@
                 <div class="col-md-4 grid-margin stretch-card">
                     <div class="card" id="card">
                         <div class="card-body">
-                            <h4 class="card-title">{{ $topic->topic_name }} </h4>
+                            <h4 class="card-title" style="line-height: 1.5">{{ $topic->topic_name }} </h4>
                             <h4 class="card-title" id="topicID" hidden>{{ $topic->topic_id }}</h4>
                             <p class="card-description font-weight-bold">
                                 {{ $topic->topic_description }}

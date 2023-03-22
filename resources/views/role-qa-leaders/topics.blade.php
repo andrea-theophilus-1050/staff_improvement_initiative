@@ -98,6 +98,33 @@
 
     @foreach ($deadlines as $topicDeadline)
         @if ($topicDeadline->topics->count() > 0)
+            {{-- @php
+                $now = \Carbon\Carbon::now();
+                $deadline1 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($topicDeadline->firstClosureDate)));
+                $deadline2 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($topicDeadline->finalClosureDate)));
+                $diffFirstClosureDate = $now->diff($deadline1, false);
+                $diffFinalClosureDate = $now->diff($deadline2, false);
+            @endphp --}}
+            @php
+                $now = \Carbon\Carbon::now();
+                $deadline1 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($topicDeadline->firstClosureDate)));
+                $deadline2 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($topicDeadline->finalClosureDate)));
+                
+                $diffFirstClosureDate = $deadline1->diffForHumans($now, [
+                    'parts' => 2,
+                    'join' => true,
+                    'short' => false,
+                    'syntax' => \Carbon\CarbonInterface::DIFF_ABSOLUTE,
+                ]);
+                
+                $diffFinalClosureDate = $deadline2->diffForHumans($now, [
+                    'parts' => 2,
+                    'join' => true,
+                    'short' => false,
+                    'syntax' => \Carbon\CarbonInterface::DIFF_ABSOLUTE,
+                ]);
+            @endphp
+
             <div class="row">
                 <div class="col-lg-12 grid-margin stretch-card">
                     <div class="card">
@@ -105,15 +132,40 @@
                             <div class="table-responsive">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="ml-3">
-                                        <li style="font-weight: normal; text-transform:none">
+                                        <li class="mb-1"style="font-weight: normal; text-transform:none">
                                             Deadline for idea submition: &nbsp;
-                                            <b>{{ date('F d, Y - h:i A', strtotime($topicDeadline->firstClosureDate)) }}</b>
+                                            <b>
+                                                {{ date('F d, Y - h:i A', strtotime($topicDeadline->firstClosureDate)) }}
+
+                                                @if ($deadline1->isPast())
+                                                    <span class="badge badge-warning">The deadline has passed</span>
+                                                @else
+                                                    <span class="badge badge-info">{{ $diffFirstClosureDate }} left</span>
+                                                @endif
+
+                                            </b>
                                         </li>
 
                                         <li class="mb-2" style="font-weight: normal; text-transform:none">
                                             Deadline to close comments: &nbsp;
-                                            <b>{{ date('F d, Y - h:i A', strtotime($topicDeadline->finalClosureDate)) }}</b>
+                                            <b>
+                                                {{ date('F d, Y - h:i A', strtotime($topicDeadline->finalClosureDate)) }}
+
+                                                @if ($deadline2->isPast())
+                                                    <span class="badge badge-warning">The deadline has passed</span>
+                                                @else
+                                                    <span class="badge badge-info">{{ $diffFinalClosureDate }} left</span>
+                                                @endif
+                                            </b>
                                         </li>
+                                    </div>
+
+                                    <div>
+                                        <button type="button" class="btn btn-primary btn-icon-text btn-sm"
+                                            id="edit-deadline-btn" data-id="{{ $topicDeadline->deadline_id }}"
+                                            data-firstClosureDate="{{ $topicDeadline->firstClosureDate }}"
+                                            data-finalClosureDate="{{ $topicDeadline->finalClosureDate }}">
+                                            <i class="ti-pencil btn-icon-append mr-2"></i>Change deadline</button>
                                     </div>
                                 </div>
                                 <table class="table table-hover table-bordered" id="topic-table">
@@ -135,12 +187,18 @@
                                                     <form method="POST"
                                                         action="{{ route('qa-leaders.delete.topic', $topic->topic_id) }}">
                                                         @csrf
-                                                        <button type="submit" type="button" class="btn btn-danger btn-sm"
-                                                            onclick="return confirm('Are you sure to delete this topic?')">Delete</button>
+                                                        @if ($topic->ideaPosts->count() == 0)
+                                                            <button type="submit" type="button"
+                                                                class="btn btn-danger btn-sm"
+                                                                onclick="return confirm('Are you sure to delete this topic?')">Delete</button>
+                                                        @endif
+
                                                         <button type="button" class="btn btn-primary btn-sm"
-                                                            id="topic-edit-modal" data-id="{{ $topic->topic_id }}"
+                                                            id="topic-edit-btn" data-id="{{ $topic->topic_id }}"
                                                             data-topicName="{{ $topic->topic_name }}"
-                                                            data-description="{{ $topic->topic_description }}">Edit</button>
+                                                            data-description="{{ $topic->topic_description }}"
+                                                            data-firstClosureDate="{{ $topic->topicDeadline->firstClosureDate }}"
+                                                            data-finalClosureDate="{{ $topic->topicDeadline->finalClosureDate }}">Edit</button>
                                                     </form>
                                                 </td>
 
@@ -148,10 +206,10 @@
                                                     @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($topic->topicDeadline->firstClosureDate)))
                                                         @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($topic->topicDeadline->finalClosureDate)))
                                                             <span
-                                                                class="badge badge-danger text-black font-weight-bold">Completely closed</span>
+                                                                class="badge badge-danger text-black font-weight-bold">Completely
+                                                                closed</span>
                                                         @else
-                                                            <span
-                                                                class="badge badge-danger font-weight-bold">Closed
+                                                            <span class="badge badge-danger font-weight-bold">Closed
                                                                 submision</span>
                                                         @endif
                                                     @else
@@ -276,8 +334,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label">Topics</label>
-                                    <div class="col-sm-9" id="section_topicID">
+                                    <label class="col-sm-5 col-form-label">Topics</label>
+                                    <div class="col-sm-7" id="section_topicID">
                                         {{-- Topic ID - hidden --}}
                                     </div>
                                 </div>
@@ -290,6 +348,58 @@
                         </div>
                     </form>
 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- NOTE: edit deadline modal --}}
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
+        id="edit-deadline-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Change deadline</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditDeadline" method="POST" action="">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="col-sm-5 col-form-label">First closure
+                                        date</label>
+                                    <div class="col-sm-7">
+                                        <input type="datetime-local" id="firstDeadline_edit" name="firstClosureDate"
+                                            class="form-control" value="{{ old('firstClosureDate') }}" required>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="col-sm-5 col-form-label">Final closure
+                                        date</label>
+                                    <div class="col-sm-7">
+                                        <input type="datetime-local" id="finalDeadline_edit" name="finalClosureDate"
+                                            class="form-control" value="{{ old('finalClosureDate') }}" required>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row modal-footer">
+                            <button type="submit" class="btn btn-primary">Create the topic</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -312,6 +422,17 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Topic
+                                        name</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" name="topicName" id="topicName_edit"
+                                            value="{{ old('topicName') }}" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">First closure
                                         date</label>
                                     <div class="col-sm-9">
@@ -321,15 +442,17 @@
                                     </div>
                                 </div>
                             </div>
+
+
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Topic
-                                        name</label>
+                                        description</label>
                                     <div class="col-sm-9">
-                                        <input class="form-control" type="text" name="topicName" id="topicName_edit"
-                                            value="{{ old('topicName') }}" required />
+                                        <textarea name="description" id="description_edit" value="{{ old('description') }}" class="form-control"
+                                            cols="30" rows="10" required></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -345,27 +468,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label">Topic
-                                        description</label>
-                                    <div class="col-sm-9">
-                                        <textarea name="description" id="description_edit" value="{{ old('description') }}" class="form-control"
-                                            cols="30" rows="10" required></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label"></label>
-                                    <button type="submit" class="btn btn-primary mr-2">Update the
-                                        topic</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
+                        <div class="row modal-footer">
+                            <button type="submit" class="btn btn-primary">Update thetopic</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
                 </div>
@@ -406,42 +511,63 @@
 
             $('#topic-deadline-modal').modal('show');
         });
-
-
-
-
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     //NOTE: passing value to update house modal
-        //     var editTopicBtn = document.querySelectorAll('#topic-edit-modal');
-        //     editTopicBtn.forEach(function(e) {
-        //         e.addEventListener('click', function() {
-        //             var topicID = e.getAttribute('data-id');
-        //             var topicName = e.getAttribute('data-topicName');
-        //             var description = e.getAttribute('data-description');
-        //             var firstClosureDate = e.getAttribute('data-firstClosureDate');
-        //             var finalClosureDate = e.getAttribute('data-finalClosureDate');
-
-        //             var inputTopicName = document.getElementById('topicName_edit');
-        //             var inputDescription = document.getElementById('description_edit');
-        //             var inputFirstClosureDate = document.getElementById('firstClosureDate_edit');
-        //             var inputFinalClosureDate = document.getElementById('finalClosureDate_edit');
-
-        //             inputTopicName.value = topicName;
-        //             inputDescription.value = description;
-        //             inputFirstClosureDate.value = firstClosureDate;
-        //             inputFinalClosureDate.value = finalClosureDate;
-
-        //             var formUpdateTopic = document.getElementById('form-update-topic');
-        //             formUpdateTopic.action = "{{ route('qa-leaders.topics.update', ':id') }}"
-        //                 .replace(':id', topicID);
-
-
-        //             // console.log(userID + fullName + email + deptID + roleID)
-        //             $('#topic-update-modal').modal('show');
-        //         });
-        //     });
-        // });
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            //NOTE: passing value to update house modal
+            var editDeadlineBtn = document.querySelectorAll('#edit-deadline-btn');
+            editDeadlineBtn.forEach(function(e) {
+                e.addEventListener('click', function() {
+                    var id = e.getAttribute('data-id');
+                    var firstClosureDate = e.getAttribute('data-firstClosureDate');
+                    var finalClosureDate = e.getAttribute('data-finalClosureDate');
+
+                    var inputFirstClosureDate = document.getElementById('firstDeadline_edit');
+                    var inputFinalClosureDate = document.getElementById('finalDeadline_edit');
+
+                    inputFirstClosureDate.value = firstClosureDate;
+                    inputFinalClosureDate.value = finalClosureDate;
+
+                    var formUpdateDeadline = document.getElementById('formEditDeadline');
+                    formUpdateDeadline.action = "{{ route('qa-leaders.update.deadline', ':id') }}"
+                        .replace(':id', id);
+
+
+                    // console.log(userID + fullName + email + deptID + roleID)
+                    $('#edit-deadline-modal').modal('show');
+                });
+            });
+
+            var editTopicBtn = document.querySelectorAll('#topic-edit-btn');
+            editTopicBtn.forEach(function(e) {
+                e.addEventListener('click', function() {
+                    var id = e.getAttribute('data-id');
+                    var topicName = e.getAttribute('data-topicName');
+                    var description = e.getAttribute('data-description');
+                    var firstClosureDate = e.getAttribute('data-firstClosureDate');
+                    var finalClosureDate = e.getAttribute('data-finalClosureDate');
+
+                    var inputTopicName = document.getElementById('topicName_edit');
+                    var inputDescription = document.getElementById('description_edit');
+                    var inputFirstClosureDate = document.getElementById('firstClosureDate_edit');
+                    var inputFinalClosureDate = document.getElementById('finalClosureDate_edit');
+
+                    inputTopicName.value = topicName;
+                    inputFirstClosureDate.value = firstClosureDate;
+                    inputFinalClosureDate.value = finalClosureDate;
+                    inputDescription.value = description;
+
+                    var formUpdateTopic = document.getElementById('form-update-topic');
+                    formUpdateTopic.action = "{{ route('qa-leaders.topics.update', ':id') }}"
+                        .replace(':id', id);
+
+                    $('#topic-update-modal').modal('show');
+                });
+            });
+        });
+    </script>
+
 
     <script>
         var rows = document.querySelectorAll('#topic-table tbody tr');

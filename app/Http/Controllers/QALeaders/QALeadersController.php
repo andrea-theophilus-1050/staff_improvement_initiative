@@ -82,6 +82,16 @@ class QALeadersController extends Controller
         return back()->with('success', 'Deadline has been assigned to topic');
     }
 
+    public function updateDeadline(Request $request, $id)
+    {
+        $deadline = TopicDeadline::where('deadline_id', $id)->first();
+        $deadline->firstClosureDate = $request->firstClosureDate;
+        $deadline->finalClosureDate = $request->finalClosureDate;
+        $deadline->save();
+
+        return back()->with('success', 'Deadline has been updated');
+    }
+
     public function updateTopics(Request $request, $id)
     {
         $request->validate([
@@ -91,7 +101,20 @@ class QALeadersController extends Controller
         $topic = Topics::where('topic_id', $id)->first();
         $topic->topic_name = $request->topicName;
         $topic->topic_description = $request->description;
+
+
+        $deadline = TopicDeadline::where('firstClosureDate', $request->firstClosureDate)->where('finalClosureDate', $request->finalClosureDate)->first();
+        
+        if (!$deadline) {
+            $deadline = new TopicDeadline();
+            $deadline->firstClosureDate = $request->firstClosureDate;
+            $deadline->finalClosureDate = $request->finalClosureDate;
+            $deadline->save();
+        }
+
+        $topic->deadline_id = $deadline->deadline_id;
         $topic->save();
+
 
         return redirect()->route('qa-leaders.topics.management')->with('success', 'Topic has been updated');
     }

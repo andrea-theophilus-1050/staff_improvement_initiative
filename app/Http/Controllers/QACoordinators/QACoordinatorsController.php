@@ -14,13 +14,13 @@ class QACoordinatorsController extends Controller
 {
     public function index()
     {
-        $staffs = User::where('role_id', 4)->where('dept_id', auth()->user()->dept_id)->get();
+        $staffs = User::where('role_id', 3)->where('dept_id', auth()->user()->dept_id)->get();
         return view('role-qa-coordinators.staff-management', compact(['staffs']))->with('title', 'QA Coordinators');
     }
 
     public function topics()
     {
-        $topics = Topics::orderBy('created_at', 'desc')->get();
+        $topics = Topics::where('deadline_id', '!=', null)->orderBy('created_at', 'desc')->get();
         return view('role-qa-coordinators.topics', compact(['topics']))->with('title', 'Topics Management');
     }
 

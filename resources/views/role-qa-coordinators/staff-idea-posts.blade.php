@@ -26,7 +26,7 @@
                 <div class="card-body">
                     <div class="media mb-2">
                         <div class="media-body">
-                            <h5 class="card-title" style="text-transform: none">Topic name: {{ $onTopic->topic_name }}
+                            <h5 class="card-title" style="text-transform: none; line-height: 1.5">Topic name: {{ $onTopic->topic_name }}
                             </h5>
                             <p>Topic description: {{ $onTopic->topic_description }}</p>
                         </div>
