@@ -343,7 +343,7 @@
                         </div>
 
                         <div class="row modal-footer">
-                            <button type="submit" class="btn btn-primary">Create the topic</button>
+                            <button type="submit" class="btn btn-primary">Assign</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
@@ -396,7 +396,7 @@
                         </div>
 
                         <div class="row modal-footer">
-                            <button type="submit" class="btn btn-primary">Create the topic</button>
+                            <button type="submit" class="btn btn-primary">Change</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
@@ -469,7 +469,7 @@
                             </div>
                         </div>
                         <div class="row modal-footer">
-                            <button type="submit" class="btn btn-primary">Update thetopic</button>
+                            <button type="submit" class="btn btn-primary">Update topic</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
