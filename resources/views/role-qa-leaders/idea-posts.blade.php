@@ -43,7 +43,7 @@
 
             <div class="card mb-4 shadow text-center h4 font-weight-bold">
                 <div class="card-body">
-                    <b style="font-weight: normal">Number of ideas:</b> {{ $posts->count() }}
+                    <b style="font-weight: normal">Number of ideas:</b> {{ $count }}
                 </div>
             </div>
 

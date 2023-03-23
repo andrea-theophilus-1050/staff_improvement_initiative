@@ -136,9 +136,10 @@ class QALeadersController extends Controller
 
     public function ideaPosts($id)
     {
-        $posts = IdeaPosts::where('topic_id', $id)->orderBy('created_at', 'desc')->paginate(20);
+        $posts = IdeaPosts::where('topic_id', $id)->orderBy('created_at', 'desc')->paginate(5);
+        $count = IdeaPosts::where('topic_id', $id)->count();
         $onTopic = Topics::where('topic_id', $id)->first();
-        return view('role-qa-leaders.idea-posts', compact(['posts', 'onTopic']))->with('title', 'Idea Posts');
+        return view('role-qa-leaders.idea-posts', compact(['posts', 'count', 'onTopic']))->with('title', 'Idea Posts');
     }
 
 

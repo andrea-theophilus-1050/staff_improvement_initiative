@@ -301,7 +301,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="{{ route('qa-leaders.assign.deadline.topic') }}">
+                    <form id="assignDeadlineForm" method="POST"
+                        action="{{ route('qa-leaders.assign.deadline.topic') }}">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
@@ -343,7 +344,8 @@
                         </div>
 
                         <div class="row modal-footer">
-                            <button type="submit" class="btn btn-primary">Assign</button>
+                            <button type="submit" class="btn btn-primary"
+                                onclick="validateForm('#assignDeadlineForm')">Assign</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
@@ -396,7 +398,8 @@
                         </div>
 
                         <div class="row modal-footer">
-                            <button type="submit" class="btn btn-primary">Change</button>
+                            <button type="submit" class="btn btn-primary"
+                                onclick="validateForm('#formEditDeadline')">Change</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
@@ -469,7 +472,8 @@
                             </div>
                         </div>
                         <div class="row modal-footer">
-                            <button type="submit" class="btn btn-primary">Update topic</button>
+                            <button type="submit" class="btn btn-primary"
+                                onclick="validateForm('#form-update-topic')">Update topic</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
@@ -478,18 +482,17 @@
         </div>
     </div>
 
+
     <script>
         // NOTE: check there is at least one checkbox checked to enable assign button
         const checkboxes = document.querySelectorAll('#nonDeadlineTopic_table input[type="checkbox"]');
         const assignBtn = document.querySelector('#assignBtn');
-
 
         function checkboxAssignButton() {
             const checked = Array.from(checkboxes).some(checkbox => checkbox.checked);
             assignBtn.disabled = !checked;
         }
 
-        
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('click', checkboxAssignButton);
         });
@@ -571,6 +574,23 @@
 
 
     <script>
+        function validateForm(formSelector) {
+            var form = document.querySelector(formSelector);
+            var datetimeInputs = form.querySelectorAll('input[type="datetime-local"]');
+
+            var datetime1 = new Date(datetimeInputs[0].value);
+            var datetime2 = new Date(datetimeInputs[1].value);
+
+            if (datetime1 > datetime2) {
+                datetimeInputs[1].setCustomValidity(
+                    'Final closure date must be greater than first closure date');
+                return false;
+            } else {
+                datetimeInputs[1].setCustomValidity('');
+                return true;
+            }
+        }
+
         var rows = document.querySelectorAll('#topic-table tbody tr');
         rows.forEach(function(row) {
             // NOTE: Add a mouseover event listener to change the background color and cursor style
