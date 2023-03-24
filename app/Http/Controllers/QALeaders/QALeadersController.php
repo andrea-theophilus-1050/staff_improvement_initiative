@@ -41,6 +41,19 @@ class QALeadersController extends Controller
         return redirect()->route('qa-leaders.topics.management')->with('success', 'Topic has been created');
     }
 
+    public function update_nonDeadlineTopics(Request $request, $id){
+        $request->validate([
+            'topicName' => 'required',
+        ]);
+
+        $topic = Topics::where('topic_id', $id)->first();
+        $topic->topic_name = $request->topicName;
+        $topic->topic_description = $request->description;
+        $topic->save();
+
+        return redirect()->route('qa-leaders.topics.management')->with('success', 'Topic has been updated');
+    }
+
     public function assignDeadlineToTopic(Request $request)
     {
         $deadline = new TopicDeadline();

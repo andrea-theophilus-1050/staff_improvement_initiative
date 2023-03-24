@@ -71,7 +71,7 @@
                                                     <button type="submit" type="button" class="btn btn-danger btn-sm"
                                                         onclick="return confirm('Are you sure to delete this topic?')">Delete</button>
                                                     <button type="button" class="btn btn-primary btn-sm"
-                                                        id="topic-edit-modal" data-id="{{ $topic->topic_id }}"
+                                                        id="nonDeadlineTopic-edit-btn" data-id="{{ $topic->topic_id }}"
                                                         data-topicName="{{ $topic->topic_name }}"
                                                         data-description="{{ $topic->topic_description }}">Edit</button>
                                                 </form>
@@ -282,6 +282,54 @@
 
                         <div class="row modal-footer">
                             <button type="submit" class="btn btn-primary">Create the topic</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- NOTE: Add topic modal --}}
+    <div class="modal fade" id="nonDeadlineTopic-edit-modal" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update the topic</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="" id="formUpdateTheTopic">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="col-sm-4 col-form-label">Topic name</label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" type="text" name="topicName" id="nonDeadlineTopicName_edit"
+                                            value="{{ old('topicName') }}" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="col-sm-4 col-form-label">Topic description</label>
+                                    <div class="col-sm-8">
+                                        <textarea name="description" id="nonDeadlineTopicDescription_edit" class="form-control" cols="30" rows="10"
+                                            style="line-height: 1.5">{{ old('description') }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row modal-footer">
+                            <button type="submit" class="btn btn-primary">Update topic</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
@@ -567,6 +615,28 @@
                         .replace(':id', id);
 
                     $('#topic-update-modal').modal('show');
+                });
+            });
+
+            var editNonDeadlineTopic = document.querySelectorAll('#nonDeadlineTopic-edit-btn');
+            editNonDeadlineTopic.forEach(function(e) {
+                e.addEventListener('click', function() {
+                    var id = e.getAttribute('data-id');
+                    var topicName = e.getAttribute('data-topicName');
+                    var description = e.getAttribute('data-description');
+                    
+
+                    var inputTopicName = document.getElementById('nonDeadlineTopicName_edit');
+                    var inputDescription = document.getElementById('nonDeadlineTopicDescription_edit');
+
+                    inputTopicName.value = topicName;
+                    inputDescription.value = description;
+
+                    var formUpdateTopic = document.getElementById('formUpdateTheTopic');
+                    formUpdateTopic.action = "{{ route('qa-leaders.nonDeadlineTopics.update', ':id') }}"
+                        .replace(':id', id);
+
+                    $('#nonDeadlineTopic-edit-modal').modal('show');
                 });
             });
         });
