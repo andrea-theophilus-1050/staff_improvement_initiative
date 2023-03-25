@@ -33,8 +33,6 @@ Route::post('login', [AuthController::class, 'login_action'])->name('login.actio
 
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
-
-
 Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['userRole:1', 'passwordChanged'])->group(function () {
@@ -95,6 +93,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('notification-handler/{type}/{url}/{notifyID}', [NotifyController::class, 'notificationHandlerTopic'])->name('notification.handler');
     Route::get('clear-notification/{userID}', [NotifyController::class, 'clearNotification'])->name('clear.all.notify');
+    
     Route::get('download-file/{id}', [DownloadFileController::class, 'downloadFile'])->name('download.idea.file');
     Route::get('list-of-top-ideas/{topicID}', [TopIdeasController::class, 'listOfTopIdeas'])->name('list.of.top-ideas');
 });

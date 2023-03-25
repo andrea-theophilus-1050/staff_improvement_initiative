@@ -23,7 +23,7 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="media mb-4">
-                        @if ($post->user->avatar == null)
+                        @if ($post->user->avatar == null || $post->anonymous == 1)
                             <img src="{{ asset('img/default-avt.jpg') }}" class="mr-3" alt="Profile Image"
                                 style="height: 50px; width: 50px">
                         @else

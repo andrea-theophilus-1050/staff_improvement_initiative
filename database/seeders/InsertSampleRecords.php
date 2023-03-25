@@ -36,7 +36,7 @@ class InsertSampleRecords extends Seeder
 
 
         $departments = range(1, 6);
-        $avt = range(1, 27);
+        $avt = range(2, 25);
 
         // insert into tb users
         DB::table('users')->insert([
