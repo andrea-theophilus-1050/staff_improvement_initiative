@@ -203,18 +203,18 @@
                                                 </td>
 
                                                 <td class="text-center font-weight-bold">
-                                                    @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($topic->topicDeadline->firstClosureDate)))
-                                                        @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($topic->topicDeadline->finalClosureDate)))
-                                                            <span
-                                                                class="badge badge-danger text-black font-weight-bold">Completely
-                                                                closed</span>
-                                                        @else
-                                                            <span class="badge badge-danger font-weight-bold">Closed
-                                                                submision</span>
-                                                        @endif
+                                                    @if ($deadline1->isPast() && $deadline2->isFuture())
+                                                        <span class="badge badge-danger font-weight-bold">Closed submision</span>
+                                                    @elseif ($deadline2->isPast() && $deadline1->isPast())
+                                                        <span class="badge badge-danger text-black font-weight-bold">
+                                                            Completely closed
+                                                        </span>
                                                     @else
                                                         <span class="badge badge-success">Opening</span>
                                                     @endif
+                                                    {{-- @else
+                                                    <span class="badge badge-success">Opening</span> --}}
+
                                                 </td>
                                                 <td>{{ $topic->topic_name }}</td>
                                                 <td title="{{ $topic->topic_description }}"
@@ -309,8 +309,8 @@
                                 <div class="form-group row">
                                     <label class="col-sm-4 col-form-label">Topic name</label>
                                     <div class="col-sm-8">
-                                        <input class="form-control" type="text" name="topicName" id="nonDeadlineTopicName_edit"
-                                            value="{{ old('topicName') }}" required />
+                                        <input class="form-control" type="text" name="topicName"
+                                            id="nonDeadlineTopicName_edit" value="{{ old('topicName') }}" required />
                                     </div>
                                 </div>
                             </div>
@@ -321,8 +321,8 @@
                                 <div class="form-group row">
                                     <label class="col-sm-4 col-form-label">Topic description</label>
                                     <div class="col-sm-8">
-                                        <textarea name="description" id="nonDeadlineTopicDescription_edit" class="form-control" cols="30" rows="10"
-                                            style="line-height: 1.5">{{ old('description') }}</textarea>
+                                        <textarea name="description" id="nonDeadlineTopicDescription_edit" class="form-control" cols="30"
+                                            rows="10" style="line-height: 1.5">{{ old('description') }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -624,16 +624,18 @@
                     var id = e.getAttribute('data-id');
                     var topicName = e.getAttribute('data-topicName');
                     var description = e.getAttribute('data-description');
-                    
+
 
                     var inputTopicName = document.getElementById('nonDeadlineTopicName_edit');
-                    var inputDescription = document.getElementById('nonDeadlineTopicDescription_edit');
+                    var inputDescription = document.getElementById(
+                        'nonDeadlineTopicDescription_edit');
 
                     inputTopicName.value = topicName;
                     inputDescription.value = description;
 
                     var formUpdateTopic = document.getElementById('formUpdateTheTopic');
-                    formUpdateTopic.action = "{{ route('qa-leaders.nonDeadlineTopics.update', ':id') }}"
+                    formUpdateTopic.action =
+                        "{{ route('qa-leaders.nonDeadlineTopics.update', ':id') }}"
                         .replace(':id', id);
 
                     $('#nonDeadlineTopic-edit-modal').modal('show');
