@@ -8,7 +8,7 @@
 
     <div class="row">
         <div class="col-md-4 mb-4">
-            @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($onTopic->topicDeadline->firstClosureDate)))
+            @if ($deadline1->isFuture() && $deadline2->isFuture())
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="media mb-2">
@@ -53,7 +53,7 @@
                 <div class="card-body">
                     <div class="media mb-2">
                         <div class="media-body">
-                            @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($onTopic->topicDeadline->firstClosureDate)))
+                            @if ($deadline1->isPast())
                                 <div class="form-group">
                                     <h5 class="font-weight-bold text-center"
                                         style="background: red; color: white; padding: 10px; border-radius: 10px">

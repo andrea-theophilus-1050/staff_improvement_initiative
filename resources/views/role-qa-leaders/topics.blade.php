@@ -98,13 +98,6 @@
 
     @foreach ($deadlines as $topicDeadline)
         @if ($topicDeadline->topics->count() > 0)
-            {{-- @php
-                $now = \Carbon\Carbon::now();
-                $deadline1 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($topicDeadline->firstClosureDate)));
-                $deadline2 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($topicDeadline->finalClosureDate)));
-                $diffFirstClosureDate = $now->diff($deadline1, false);
-                $diffFinalClosureDate = $now->diff($deadline2, false);
-            @endphp --}}
             @php
                 $now = \Carbon\Carbon::now();
                 $deadline1 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($topicDeadline->firstClosureDate)));
@@ -176,8 +169,6 @@
                                             <th>Topic name</th>
                                             <th>Topic Description</th>
                                             <th class="text-center" style="width: 80px">Ideas count</th>
-                                            {{-- <th>Deadline for idea submission</th>
-                                            <th>Deadline for close comments</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -204,7 +195,8 @@
 
                                                 <td class="text-center font-weight-bold">
                                                     @if ($deadline1->isPast() && $deadline2->isFuture())
-                                                        <span class="badge badge-danger font-weight-bold">Closed submision</span>
+                                                        <span class="badge badge-danger font-weight-bold">Closed
+                                                            submision</span>
                                                     @elseif ($deadline2->isPast() && $deadline1->isPast())
                                                         <span class="badge badge-danger text-black font-weight-bold">
                                                             Completely closed
