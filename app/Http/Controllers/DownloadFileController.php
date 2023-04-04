@@ -20,6 +20,8 @@ class DownloadFileController extends Controller
 
         $zip = new ZipArchive;
         $filename = $document[0]->post->topic->topic_name . '_Post_' . $postID . '.zip';
+        $forbidden_chars = array("/", "\\", ":", "*", "?", "\"", "<", ">", "|");
+        $filename = str_replace($forbidden_chars, "", $filename);
 
         if ($zip->open(storage_path('app/public/idea_files/' . $filename), ZipArchive::CREATE) === TRUE) {
             foreach ($document as $doc) {
@@ -41,6 +43,8 @@ class DownloadFileController extends Controller
         if ($document->count() > 0) {
             $zip = new ZipArchive;
             $filename = $document[0]->post->topic->topic_name . '_All_Posts.zip';
+            $forbidden_chars = array("/", "\\", ":", "*", "?", "\"", "<", ">", "|");
+            $filename = str_replace($forbidden_chars, "", $filename);
 
             if ($zip->open(storage_path('app/public/idea_files/' . $filename), ZipArchive::CREATE) === TRUE) {
                 foreach ($document as $doc) {
