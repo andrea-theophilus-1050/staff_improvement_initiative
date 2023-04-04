@@ -1,5 +1,11 @@
 @extends('layouts.main')
 @section('content')
+    @php
+        $now = \Carbon\Carbon::now();
+        $deadline2 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($post->topic->topicDeadline->finalClosureDate)));
+        $deadline1 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($post->topic->topicDeadline->firstClosureDate)));
+    @endphp
+
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">

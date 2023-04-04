@@ -1,24 +1,11 @@
 @extends('layouts.main')
 @section('content')
+    @php
+        $now = \Carbon\Carbon::now();
+        $deadline2 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($onTopic->topicDeadline->finalClosureDate)));
+        $deadline1 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($onTopic->topicDeadline->firstClosureDate)));
+    @endphp
     <div class="row">
-        {{-- <div class="col-md-3 mb-4">
-            <div class="card mb-4 shadow text-center h4 font-weight-bold">
-                <div class="card-body">
-                    Number of ideas: 200
-                </div>
-            </div>
-            <div class="card mb-4 shadow text-center h4 font-weight-bold">
-                <div class="card-body">
-                    Number of ideas: 200
-                </div>
-            </div>
-            <div class="card mb-4 shadow text-center h4 font-weight-bold">
-                <div class="card-body">
-                    Number of ideas: 200
-                </div>
-            </div>
-        </div> --}}
-
         <div class="col-md-12 mb-4">
             <div class="card mb-4">
                 <div class="card-body">

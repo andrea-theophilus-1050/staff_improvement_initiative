@@ -11,7 +11,12 @@
     </div>
     <div class="row">
         @foreach ($topics as $topic)
-            @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($topic->topicDeadline->firstClosureDate)))
+            @php
+                $now = \Carbon\Carbon::now();
+                $deadline2 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($topic->topicDeadline->finalClosureDate)));
+                $deadline1 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($topic->topicDeadline->firstClosureDate)));
+            @endphp
+            @if ($deadline1->isFuture() && $deadline2->isFuture())
                 <div class="col-md-4 grid-margin stretch-card">
                     <div class="card" id="card">
                         <div class="card-body">
@@ -57,8 +62,12 @@
     </div>
     <div class="row">
         @foreach ($topics as $topic)
-            @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($topic->topicDeadline->firstClosureDate)) &&
-                    date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($topic->topicDeadline->finalClosureDate)))
+            @php
+                $now = \Carbon\Carbon::now();
+                $deadline2 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($topic->topicDeadline->finalClosureDate)));
+                $deadline1 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($topic->topicDeadline->firstClosureDate)));
+            @endphp
+            @if ($deadline1->isPast() && $deadline2->isFuture())
                 <div class="col-md-4 grid-margin stretch-card">
                     <div class="card" id="card">
                         <div class="card-body">
@@ -104,8 +113,12 @@
 
     <div class="row">
         @foreach ($topics as $topic)
-            @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($topic->topicDeadline->firstClosureDate)) &&
-                    date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($topic->topicDeadline->finalClosureDate)))
+            @php
+                $now = \Carbon\Carbon::now();
+                $deadline2 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($topic->topicDeadline->finalClosureDate)));
+                $deadline1 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($topic->topicDeadline->firstClosureDate)));
+            @endphp
+            @if ($deadline1->isPast() && $deadline2->isPast())
                 <div class="col-md-4 grid-margin stretch-card">
                     <div class="card" id="card">
                         <div class="card-body">

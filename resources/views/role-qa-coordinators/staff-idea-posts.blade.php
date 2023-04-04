@@ -1,5 +1,11 @@
 @extends('layouts.main')
 @section('content')
+    @php
+        $now = \Carbon\Carbon::now();
+        $deadline2 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($onTopic->topicDeadline->finalClosureDate)));
+        $deadline1 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($onTopic->topicDeadline->firstClosureDate)));
+    @endphp
+
     <div class="row">
         <div class="col-md-4 mb-4">
             @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($onTopic->topicDeadline->firstClosureDate)))

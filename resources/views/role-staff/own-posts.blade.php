@@ -4,6 +4,12 @@
         <div class="col-md-12">
             @if ($ownPosts->count() != 0)
                 @foreach ($ownPosts as $post)
+                    @php
+                        $now = \Carbon\Carbon::now();
+                        $deadline2 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($post->topic->topicDeadline->finalClosureDate)));
+                        $deadline1 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($post->topic->topicDeadline->firstClosureDate)));
+                    @endphp
+
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="media mb-5">
@@ -93,7 +99,7 @@
                                         </div>
                                     @endforeach
                                 </div>
-                                @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($post->topic->topicDeadline->finalClosureDate)))
+                                @if ($deadline2->isFuture())
                                     <hr>
                                     <form method="POST" id="comment-form-{{ $post->post_id }}"
                                         data-post-id="{{ $post->post_id }}"
