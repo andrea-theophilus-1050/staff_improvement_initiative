@@ -40,7 +40,7 @@ class DownloadFileController extends Controller
             ->where('idea_posts.topic_id', $topicID)
             ->get();
 
-        if ($document->count() > 0) {
+        if ($document->count() > 0) { 
             $zip = new ZipArchive;
             $filename = $document[0]->post->topic->topic_name . '_All_Posts.zip';
             $forbidden_chars = array("/", "\\", ":", "*", "?", "\"", "<", ">", "|");
