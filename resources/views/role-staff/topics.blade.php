@@ -1,5 +1,10 @@
 @extends('layouts.main')
 @section('content')
+    @php
+        $now = \Carbon\Carbon::now();
+        $deadline2 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($onTopic->topicDeadline->finalClosureDate)));
+        $deadline1 = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', strtotime($onTopic->topicDeadline->firstClosureDate)));
+    @endphp
     <div class="row">
         <div class="col-md-4 mb-4">
             <div class="card mb-4">
@@ -18,7 +23,7 @@
                     </div>
                     <form method="POST" action="{{ route('staff.posts.submit.idea', $id) }}" enctype="multipart/form-data">
                         @csrf
-                        @if (date('M-d-Y h:i:s a') > date('M-d-Y h:i:s a', strtotime($onTopic->topicDeadline->firstClosureDate)))
+                        @if ($deadline1->isPast())
                             <div class="form-group">
                                 <h5 class="font-weight-bold text-center"
                                     style="background: red; color: white; padding: 10px; border-radius: 10px">
@@ -37,7 +42,7 @@
                             <textarea class="form-control" rows="10" id="topicDesc" placeholder="Enter title" readonly
                                 style="line-height: 1.5">{{ $onTopic->topic_description }}</textarea>
                         </div>
-                        @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($onTopic->topicDeadline->firstClosureDate)))
+                        @if ($deadline1->isFuture())
                             <div class="form-group">
                                 {{-- alert --}}
                                 @if ($errors->any())
@@ -202,17 +207,20 @@
 
                     <div class="h4 font-weight-bold mt-3">3. Idea Submission</div>
                     <div>To submit an idea, staff members must complete the idea submission form provided by the
-                        organization. The form must include a description of the idea and any supporting materials. Staff
+                        organization. The form must include a description of the idea and any supporting materials.
+                        Staff
                         members may submit multiple ideas.
                     </div>
 
                     <div class="h4 font-weight-bold mt-3">4. Idea Ownership</div>
-                    <div>All submitted ideas remain the property of the organization. By submitting an idea, staff members
+                    <div>All submitted ideas remain the property of the organization. By submitting an idea, staff
+                        members
                         acknowledge that they are not entitled to any compensation or recognition for the idea.
                     </div>
 
                     <div class="h4 font-weight-bold mt-3">5. Idea Evaluation</div>
-                    <div>All ideas will be evaluated by a designated team within the organization. The team will assess the
+                    <div>All ideas will be evaluated by a designated team within the organization. The team will assess
+                        the
                         feasibility, cost-effectiveness, and potential impact of each idea. Staff members will not be
                         provided with feedback on the evaluation of their idea.
                     </div>
@@ -240,7 +248,8 @@
 
                     <div class="h4 font-weight-bold mt-3">10. Governing Law</div>
                     <div>These terms and conditions shall be governed by and construed in accordance with the laws of
-                        [insert governing jurisdiction]. Any disputes arising out of or in connection with these terms and
+                        [insert governing jurisdiction]. Any disputes arising out of or in connection with these terms
+                        and
                         conditions shall be subject to the exclusive jurisdiction of the courts of [insert governing
                         jurisdiction]</div>
 

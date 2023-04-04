@@ -37,7 +37,7 @@
             </div>
         @endforeach
     </div>
-    @if (date('M-d-Y h:i:s a') < date('M-d-Y h:i:s a', strtotime($onTopic->topicDeadline->finalClosureDate)))
+    @if ($deadline2->isFuture())
         <hr>
         <form method="POST" id="comment-form-{{ $post->post_id }}" data-post-id="{{ $post->post_id }}"
             action="{{ route('staff.posts.comments.submit', [$post->post_id]) }}">
