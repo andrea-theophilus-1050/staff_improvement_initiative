@@ -41,7 +41,8 @@ class QALeadersController extends Controller
         return redirect()->route('qa-leaders.topics.management')->with('success', 'Topic has been created');
     }
 
-    public function update_nonDeadlineTopics(Request $request, $id){
+    public function update_nonDeadlineTopics(Request $request, $id)
+    {
         $request->validate([
             'topicName' => 'required',
         ]);
@@ -117,7 +118,7 @@ class QALeadersController extends Controller
 
 
         $deadline = TopicDeadline::where('firstClosureDate', $request->firstClosureDate)->where('finalClosureDate', $request->finalClosureDate)->first();
-        
+
         if (!$deadline) {
             $deadline = new TopicDeadline();
             $deadline->firstClosureDate = $request->firstClosureDate;
@@ -182,6 +183,10 @@ class QALeadersController extends Controller
 
     public function createDepartment(Request $request)
     {
+        $request->validate([
+            'department' => 'required',
+        ]);
+
         $dept = new Department();
         $dept->dept_name = $request->department;
         $dept->save();
@@ -191,6 +196,10 @@ class QALeadersController extends Controller
 
     public function updateDepartment(Request $request, $id)
     {
+        $request->validate([
+            'department' => 'required',
+        ]);
+
         $dept = Department::find($id);
         $dept->dept_name = $request->department;
         $dept->save();
@@ -258,6 +267,20 @@ class QALeadersController extends Controller
     public function updateAccount(Request $request, $id)
     {
 
+        //validate
+        $validator = Validator::make($request->all(), [
+            'fullname' => 'required',
+            'email' => 'required|email',
+            'role' => 'required',
+            'department' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         $user = User::find($id);
         $user->fullName = $request->fullname;
