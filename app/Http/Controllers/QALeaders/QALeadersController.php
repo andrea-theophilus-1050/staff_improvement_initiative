@@ -307,3 +307,4 @@ class QALeadersController extends Controller
         }
     }
 }
+ 
