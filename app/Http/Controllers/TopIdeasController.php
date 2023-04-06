@@ -15,7 +15,7 @@ class TopIdeasController extends Controller
             ->leftJoin('like_dislike', 'like_dislike.post_id', '=', 'idea_posts.post_id')
             ->where('idea_posts.topic_id', $topicID)
             ->where('like_dislike.status', 'liked')
-            ->groupBy('idea_posts.post_id')
+            ->groupBy('idea_posts.post_id', 'idea_posts.content', 'idea_posts.created_at', 'idea_posts.updated_at')
             ->orderBy('like_count', 'desc')
             ->take(5)
             ->get();
@@ -23,7 +23,7 @@ class TopIdeasController extends Controller
         $topCommentPosts = IdeaPosts::select('idea_posts.*', DB::raw('count(comments.comment_id) as comment_count'))
             ->leftJoin('comments', 'comments.post_id', '=', 'idea_posts.post_id')
             ->where('idea_posts.topic_id', $topicID)
-            ->groupBy('idea_posts.post_id')
+            ->groupBy('idea_posts.post_id', 'idea_posts.content', 'idea_posts.created_at', 'idea_posts.updated_at')
             ->orderBy('comment_count', 'desc')
             ->take(5)
             ->get();
