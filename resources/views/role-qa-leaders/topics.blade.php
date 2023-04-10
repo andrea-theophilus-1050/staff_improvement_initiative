@@ -158,7 +158,9 @@
                                             id="edit-deadline-btn" data-id="{{ $topicDeadline->deadline_id }}"
                                             data-firstClosureDate="{{ $topicDeadline->firstClosureDate }}"
                                             data-finalClosureDate="{{ $topicDeadline->finalClosureDate }}">
-                                            <i class="ti-pencil btn-icon-append mr-2"></i>Change deadline</button>
+                                            <i class="ti-pencil btn-icon-append mr-2"></i>
+                                            Change deadline
+                                        </button>
                                     </div>
                                 </div>
                                 <table class="table table-hover table-bordered" id="topic-table">
@@ -192,7 +194,6 @@
                                                             data-finalClosureDate="{{ $topic->topicDeadline->finalClosureDate }}">Edit</button>
                                                     </form>
                                                 </td>
-
                                                 <td class="text-center font-weight-bold">
                                                     @if ($deadline1->isPast() && $deadline2->isFuture())
                                                         <span class="badge badge-danger font-weight-bold">Closed
@@ -204,9 +205,6 @@
                                                     @else
                                                         <span class="badge badge-success">Opening</span>
                                                     @endif
-                                                    {{-- @else
-                                                    <span class="badge badge-success">Opening</span> --}}
-
                                                 </td>
                                                 <td>{{ $topic->topic_name }}</td>
                                                 <td title="{{ $topic->topic_description }}"
@@ -214,15 +212,10 @@
                                                     {{ $topic->topic_description }}</td>
                                                 <td class="text-center font-weight-bold">{{ $topic->ideaPosts->count() }}
                                                 </td>
-                                                {{-- <td>{{ date('F d, Y - h:i A', strtotime($topic->topicDeadline->firstClosureDate)) }}
-                                                </td>
-                                                <td>{{ date('F d, Y - h:i A', strtotime($topic->topicDeadline->finalClosureDate)) }}
-                                                </td> --}}
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                     </div>
@@ -347,8 +340,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group row">
-                                    <label class="col-sm-5 col-form-label">First closure
-                                        date</label>
+                                    <label class="col-sm-5 col-form-label">Deadline for close submission</label>
                                     <div class="col-sm-7">
                                         <input type="datetime-local" id="firstClosureDate" name="firstClosureDate"
                                             class="form-control" value="{{ old('firstClosureDate') }}" required>
@@ -361,8 +353,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group row">
-                                    <label class="col-sm-5 col-form-label">Final closure
-                                        date</label>
+                                    <label class="col-sm-5 col-form-label">Deadline for close comments</label>
                                     <div class="col-sm-7">
                                         <input type="datetime-local" id="finalClosureDate" name="finalClosureDate"
                                             class="form-control" value="{{ old('finalClosureDate') }}" required>
@@ -412,8 +403,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group row">
-                                    <label class="col-sm-5 col-form-label">First closure
-                                        date</label>
+                                    <label class="col-sm-5 col-form-label">Deadline for close submission</label>
                                     <div class="col-sm-7">
                                         <input type="datetime-local" id="firstDeadline_edit" name="firstClosureDate"
                                             class="form-control" value="{{ old('firstClosureDate') }}" required>
@@ -426,8 +416,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group row">
-                                    <label class="col-sm-5 col-form-label">Final closure
-                                        date</label>
+                                    <label class="col-sm-5 col-form-label">Deadline for close comments</label>
                                     <div class="col-sm-7">
                                         <input type="datetime-local" id="finalDeadline_edit" name="finalClosureDate"
                                             class="form-control" value="{{ old('finalClosureDate') }}" required>
@@ -476,8 +465,7 @@
 
                             <div class="col-md-6">
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label">First closure
-                                        date</label>
+                                    <label class="col-sm-3 col-form-label">Deadline for close submission</label>
                                     <div class="col-sm-9">
                                         <input type="datetime-local" id="firstClosureDate_edit" name="firstClosureDate"
                                             class="form-control" value="{{ old('firstClosureDate') }}" required>
@@ -502,8 +490,7 @@
 
                             <div class="col-md-6">
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label">Final closure
-                                        date</label>
+                                    <label class="col-sm-3 col-form-label">Deadline for close comments</label>
                                     <div class="col-sm-9">
                                         <input class="form-control" type="datetime-local" name="finalClosureDate"
                                             id="finalClosureDate_edit" value="{{ old('finalClosureDate') }}" required />
@@ -521,7 +508,6 @@
             </div>
         </div>
     </div>
-
 
     <script>
         // NOTE: check there is at least one checkbox checked to enable assign button

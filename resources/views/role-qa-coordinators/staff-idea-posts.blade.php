@@ -35,15 +35,29 @@
                 <div class="card-body">
                     <div class="media mb-2">
                         <div class="media-body">
-                            <a href="{{ route('qa-coordinators.view.all', $onTopic->topic_id) }}"
-                                class="col-md-12 btn btn-outline-primary  btn-icon-text mb-1">
-                                View all idea posts<i class="ti-files btn-icon-append"></i>
-                            </a>
+                            @if (request()->routeIs('qa-coordinators.view.all'))
+                                <a href="{{ route('qa-coordinators.view.all', $onTopic->topic_id) }}"
+                                    class="col-md-12 btn btn-primary  btn-icon-text mb-1">
+                                    View all idea posts<i class="ti-files btn-icon-append"></i>
+                                </a>
+                            @else
+                                <a href="{{ route('qa-coordinators.view.all', $onTopic->topic_id) }}"
+                                    class="col-md-12 btn btn-outline-primary  btn-icon-text mb-1">
+                                    View all idea posts<i class="ti-files btn-icon-append"></i>
+                                </a>
+                            @endif
 
-                            <a href="{{ route('qa-coordinators.topics.idea.posts', $onTopic->topic_id) }}"
-                                class="col-md-12 btn btn-outline-success btn-icon-text mt-1">
-                                View by deparment <i class="ti-menu-alt btn-icon-append"></i>
-                            </a>
+                            @if (request()->routeIs('qa-coordinators.topics.idea.posts'))
+                                <a href="{{ route('qa-coordinators.topics.idea.posts', $onTopic->topic_id) }}"
+                                    class="col-md-12 btn btn-success btn-icon-text mt-1">
+                                    View by deparment <i class="ti-menu-alt btn-icon-append"></i>
+                                </a>
+                            @else
+                                <a href="{{ route('qa-coordinators.topics.idea.posts', $onTopic->topic_id) }}"
+                                    class="col-md-12 btn btn-outline-success btn-icon-text mt-1">
+                                    View by deparment <i class="ti-menu-alt btn-icon-append"></i>
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
